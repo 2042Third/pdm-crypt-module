@@ -1,0 +1,13 @@
+#!/bin/bash
+
+make 12en 
+echo "build 12en completed"
+make 12de
+echo "build 12de completed"
+make en
+echo "build en completed"
+make de
+echo "build de completed"
+
+BSIZE=$(cat cc20_multi.cpp | grep "const int BLOCK_SIZE" | cut -d" " -f-7)
+echo $BSIZE

@@ -1,0 +1,1 @@
+printf "1234\n1234\n"|(openssl enc -chacha20 -iter 1 -in msg -out test.openssl)
