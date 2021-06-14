@@ -1,5 +1,10 @@
 pdm cryptography core module<br /><br />
+CURRENT STATUS:<br />
+disabled sha3 checking<br />
+using boost thread (stl pthread also avaliable)<br />
+hardcoded nonce (random generator is setup)<br />
 
+<br />
 usage:<br />
 goto src folder<br />
 run shall script "sh build_t"<br />
