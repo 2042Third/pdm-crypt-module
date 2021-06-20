@@ -53,7 +53,7 @@ long int arg_track[THREAD_COUNT][6];
                                        arg_track[THREAD_COUNT][3] ---> Remaining plain size
                                        arg_track[THREAD_COUNT][4] ---> NOT USED*/
 
-// SHA3 hashing; // A rolling hash of the input data.
+SHA3 hashing; // A rolling hash of the input data.
 
 uint8_t * arg_line[THREAD_COUNT]; // Addresses of memory mapped plain text from disk.
 
@@ -106,6 +106,77 @@ void Cc20::one_block(int thrd, uint32_t count) {
 }
 
 /*
+    Reads from line writes to linew, encryptes the same as rd_file_encr().
+
+*/
+
+void Cc20::encr(uint8_t*line,uint8_t*linew,unsigned long int fsize) {
+  
+  unsigned long int n = fsize;
+
+  long int tn = 0;
+  uint32_t count = 0;
+  for (long int i = 0; i < THREAD_COUNT; i++) {
+    writing_track[i] = 0;
+  }
+  long int tracker = 0;
+  long int np = 0, tmpn = np % THREAD_COUNT;
+  set_thread_arg(np % THREAD_COUNT, (long int)linew, tracker, n, 0, line, count, this);
+  threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
+  np++;
+  
+  for (unsigned long int k = 0; k < ((unsigned long int)(fsize / 64) + 1); k++) { // If leak, try add -1
+
+    if (n >= 64) {
+      tracker += 64;
+      if (tn % (BLOCK_SIZE) == 0 && (k != 0)) {
+        if (threads[np % THREAD_COUNT].joinable()) {
+          #ifdef VERBOSE
+          cout << "[main] Possible join, waiting " <<np % THREAD_COUNT<< endl;
+          #endif
+          threads[np % THREAD_COUNT].join();
+        }
+        set_thread_arg(np % THREAD_COUNT, (long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
+        threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
+
+        tracker = 0;
+        np++;
+      }
+    } else {
+      if (threads[np % THREAD_COUNT].joinable() && final_line_written != 1) {
+          #ifdef VERBOSE
+          cout << "[main] Last Possible join, waiting " <<np % THREAD_COUNT<< endl;
+          #endif
+        threads[np % THREAD_COUNT].join();
+      }
+      set_thread_arg(np % THREAD_COUNT, (long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
+      threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
+    }
+    count += 1;
+    n -= 64;
+    tn += 64;
+  }
+  #ifdef VERBOSE
+  cout << "[main] Finished dispatching joining" << endl;
+  #endif
+  
+  for (int i = 0; i < THREAD_COUNT; i++) {
+    // cout<<"Trying"<<endl;
+    if (threads[i].joinable()){
+
+      // cout << "[main] thread joining "<< i << endl;
+      threads[i].join();
+
+    }
+  }
+  #ifndef DE
+  hashing.add(line,fsize );
+  #else 
+  hashing.add(linew,fsize );
+  #endif // DE
+}
+
+/*
     Creates one thread for writing and THREAD_COUNT threads for calculating the 
     cypher text. It also handles disk mapping for reading, and opens oufile for 
     writing. After, it will dispatch threads when there are vacancy in threads[].
@@ -118,21 +189,13 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   unsigned long int n = 0;
 
   struct stat sb;
-  long int fd, fdw;
+  long int fd;
   uint8_t * data;
-  uint8_t * dataw;
   uint8_t * line; 
   fd = open(file_name.data(), O_RDONLY); // Reading file
   if (fd == -1) {
     perror("Cannot open file ");
     cout << file_name << " ";
-    exit(1);
-  }
-  fdw = open(oufile_name.data(), O_RDWR|O_CREAT|O_TRUNC|O_NONBLOCK
-              ,S_IRWXU); // Writing file
-  if (fdw == -1) {
-    perror("Cannot open file ");
-    cout << oufile_name << " ";
     exit(1);
   }
 
@@ -143,9 +206,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   #endif
   linew = new char[sb.st_size];
   data = (uint8_t * )(mmap( 0, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0));
-  // dataw = (uint8_t * )(mmap( 0, sb.st_size, PROT_WRITE, MAP_SHARED, fdw, 0));
   line = data;
-  // linew = dataw;
   long int tn = 0;
   n = sb.st_size;
 
@@ -155,23 +216,6 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   }
   long int tracker = 0;
   long int np = 0, tmpn = np % THREAD_COUNT;
-  // thread rthread;
-  // // cout << "Reaching out" << endl;
-  // if (oufile_name == "a") {
-  //   cout << "MEM creating: " << sb.st_size / BLOCK_SIZE + 2 << endl;
-  //   // uint8_t tmpthread[sb.st_size/BLOCK_SIZE+1][BLOCK_SIZE] = {{0}};
-  //   outthreads = (char ** ) new uint8_t * [sb.st_size / BLOCK_SIZE + 1];
-  //   for (unsigned int i = 0; i < sb.st_size / BLOCK_SIZE + 1; i++) {
-  //     outthreads[i] = (char * ) new uint8_t[BLOCK_SIZE];
-  //   }
-  //   // cout<<"MEM created: "<< outthreads[0][0]<<endl; 
-  //   set_thread_arg(np % THREAD_COUNT, np, tracker, n, 0, line, count, this);
-  //   rthread = thread(enc_writing_nw);
-  // } else {
-
-  //   // rthread = std::thread(enc_writing, oufile_name);
-
-  // }
   set_thread_arg(np % THREAD_COUNT, (long int)linew, tracker, n, 0, line, count, this);
   threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
   np++;
@@ -194,7 +238,6 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
         np++;
       }
     } else {
-      // cout << "Uneven data reached, offset " << n << endl;
       if (threads[np % THREAD_COUNT].joinable() && final_line_written != 1) {
           #ifdef VERBOSE
           cout << "[main] Last Possible join, waiting " <<np % THREAD_COUNT<< endl;
@@ -211,12 +254,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   #ifdef VERBOSE
   cout << "[main] Finished dispatching joining" << endl;
   #endif
-  #ifndef DE
-  // hashing.add(line,sb.st_size );
-  // cout<<"SHA3 of the input file: "<< hashing.getHash()<<endl;
-  // #else 
-  // hashing.add(linew,sb.st_size );
-  #endif // DE
+  
   for (int i = 0; i < THREAD_COUNT; i++) {
     // cout<<"Trying"<<endl;
     if (threads[i].joinable()){
@@ -226,16 +264,11 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
 
     }
   }
-
-  // #ifdef VERBOSE
-  // cout << "[main] All calc threads joined" << endl;
-  // #endif
-  // if (oufile_name.size() != 0)
-  // {
-  //   rthread.join();
-    
-  //   // cout << "[main] Writing thread joined" << endl;
-  // }
+  #ifndef DE
+  hashing.add(line,sb.st_size );
+  #else 
+  hashing.add(linew,sb.st_size );
+  #endif // DE
   FILE * oufile;
   oufile = fopen(oufile_name.data(), "wb");
   fclose(oufile);
@@ -246,7 +279,6 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   #ifdef VERBOSE
   cout << "[main] Writing thread joined" << endl;
   #endif
-  // cout << "Cleaning mem" << endl;
   if (oufile_name == "a") {
     for (unsigned int i = 0; i < sb.st_size / BLOCK_SIZE + 1; i++) {
       delete[] outthreads[i];
@@ -258,10 +290,6 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
     fprintf(stderr,"Cannot close");
   close(fd);
 
-  // if (munmap(dataw,sb.st_size)!=0)
-  //   fprintf(stderr,"Cannot close");
-  // close(fdw);
-  // cout << "finished" << endl;
 }
 
 /*
@@ -291,19 +319,11 @@ void multi_enc_pthrd(int thrd) {
   #ifdef VERBOSE
           cout<<"[calc] "<<thrd<<" locks, starting write " << endl;
   #endif
-  // if (thrd==0){
-  //   cout<<"Trying to lock"<<endl;
-  // }
-  // locks[thrd].lock();
-  // if (thrd==0){
-  //   cout<<"locked"<<endl;
-  // }
   for (unsigned long int k = 0; k < BLOCK_SIZE / 64; k++) {
     ptr -> one_block((int) thrd, (int) count);
 
     if (n >= 64) {
       for (long int i = 0; i < 64; i++) {
-        // thread_track[thrd][tracker + i] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
         linew[i + tracker] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
       }
 
@@ -311,43 +331,25 @@ void multi_enc_pthrd(int thrd) {
       if (tracker >= (BLOCK_SIZE)) { // Notifies the writing tread when data can be read
         if (msync(linew, tracker, MS_SYNC) == -1)
         {
-            // #ifdef VERBOSE
-            //   cout<<"[calc] "<<thrd<<" Error found " << endl;
-            // #endif
-            // perror("Could not sync the file to disk");
         }
         writing_track[thrd] = tracker;
-        // hashing.add(line,tracker);
-        // cout<< "SHA3 new state: " << hashing.getHash()<<endl;
         tracker = 0;
-        // np++;
         #ifdef VERBOSE
           cout<<"[calc] "<<thrd<<" returning lock, calling write, size "<<writing_track[thrd] << endl;
         #endif
       }
-      // locks[np].unlock();
-      // mtx.unlock();
     } else {
       for (int i = 0; i < n; i++) {
-        // thread_track[thrd][tracker + i] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
         linew[i+tracker] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
       }
       tracker += n;
       writing_track[thrd] = tracker; // Notifies the writing tread when data can be read
       if (msync(linew, tracker, MS_SYNC) == -1)
       {
-          //   #ifdef VERBOSE
-          //     cout<<"[calc] "<<thrd<<" Error found " << endl;
-          //   #endif
-          // perror("Could not sync the file to disk");
       }
         #ifdef VERBOSE
         cout<<"[calc] "<<thrd<<" on last lock, size "<<writing_track[thrd]<< endl;
         #endif
-      // hashing.add(line,tracker);
-      //   cout<< "SHA3 new state: " << hashing.getHash()<<endl;
-      // locks[np].unlock();
-      // return ;
       break;
     }
     count += 1;
@@ -356,91 +358,8 @@ void multi_enc_pthrd(int thrd) {
   #ifdef VERBOSE
           cout<<"[calc] "<<thrd<<" unlocks " << endl;
   #endif
-  // locks[thrd].unlock();
 }
 
-
-void enc_writing(string oufile_name) {
-  FILE * oufile;
-  oufile = fopen(oufile_name.data(), "wb");
-  fclose(oufile);
-  oufile = fopen(oufile_name.data(), "ab");
-  long int local_np = 0;
-  int mutex_num;
-  while (final_line_written != 1) {
-    mutex_num = local_np % THREAD_COUNT;
-    // locks[mutex_num].lock();
-    if (local_np % THREAD_COUNT==0){
-      cout<<"Write trying to lock"<<endl;
-    }
-    if (writing_track[local_np % THREAD_COUNT] != 0) {
-
-      if (writing_track[local_np % THREAD_COUNT] >= BLOCK_SIZE) {
-        // mtx.lock();
-        #ifdef VERBOSE
-        cout << "[writ] "<<local_np% THREAD_COUNT << " Writing started " << writing_track[local_np % THREAD_COUNT] << endl;
-        #endif
-        fwrite(thread_track[local_np % THREAD_COUNT], sizeof(char), writing_track[local_np % THREAD_COUNT], oufile);
-        #ifdef DE
-        // hashing.add(thread_track[local_np % THREAD_COUNT],writing_track[local_np % THREAD_COUNT]);
-        #endif //DE
-        writing_track[local_np % THREAD_COUNT] = 0;
-        // mtx.unlock();
-        local_np++;
-      } else {
-        // mtx.lock();
-
-        #ifdef VERBOSE
-        cout <<"[writ] "<< local_np% THREAD_COUNT << " Writing ended " << writing_track[local_np % THREAD_COUNT] << endl;
-        #endif
-        fwrite(thread_track[local_np % THREAD_COUNT], sizeof(char), writing_track[local_np % THREAD_COUNT], oufile);
-        #ifdef DE
-        // hashing.add(thread_track[local_np % THREAD_COUNT],writing_track[local_np % THREAD_COUNT]);
-        #endif // DE
-        final_line_written = 1;
-        fflush(oufile);
-        // break;
-        // mtx.unlock();
-      }
-    }
-    if (local_np % THREAD_COUNT==0){
-      cout<<"unlock"<<endl;
-    }
-    // locks[mutex_num].unlock();
-  }
-  fclose(oufile);
-  #ifdef VERBOSE
-  cout << "[writ] Writing thread closed" << endl;
-  #endif
-}
-
-void enc_writing_nw() {
-
-  long int local_np = 0;
-  while (final_line_written != 1) {
-    if (writing_track[local_np % THREAD_COUNT] != 0) {
-
-      if (writing_track[local_np % THREAD_COUNT] >= BLOCK_SIZE) {
-        // mtx.lock();
-
-        #ifdef VERBOSE
-        cout << local_np << " Writing started " << writing_track[local_np % THREAD_COUNT] << endl;
-        #endif
-        memcpy(outthreads[local_np], thread_track[local_np % THREAD_COUNT], sizeof(thread_track[local_np % THREAD_COUNT]));
-        writing_track[local_np % THREAD_COUNT] = 0;
-        
-        local_np++;
-      } else {
-        #ifdef VERBOSE
-        cout << local_np << " Writing ended " << writing_track[local_np % THREAD_COUNT] << endl;
-        #endif
-        memcpy(outthreads[local_np], thread_track[local_np % THREAD_COUNT], sizeof(thread_track[local_np % THREAD_COUNT]));
-        final_line_written = 1;
-      }
-    }
-  }
-  // cout << "Writing thread closed" << endl;
-}
 
 void Cc20::set_vals(uint8_t * nonce, uint8_t * key) {
   this -> nonce = nonce;
@@ -520,29 +439,73 @@ int new_way(string usr_input) {
   }
   SHA3 key_hash;
   key_hash.add(stob(text_key).data(),text_key.size());
-  // printf("plai of the key %s\n",text_key.data());
-  // printf("hash of the key %s\n", key_hash.getHash().data());
-  // text_key = pad_to_key(text_key, 32);
 
 
   auto start = std::chrono::high_resolution_clock::now();
 
   test.set_vals(nonce.data(), (uint8_t *)key_hash.getHash().data());
-  cout << "Read/Write encryption from file: " << infile_name << endl;
+
+  #ifdef MEMONLY // Memory only testing part
+
+  struct stat sb;
+  long int fd;
+
+  #ifdef DE
+  infile_name = infile_name+".pdm";
+  fd = open(infile_name.data(), O_RDONLY); // Reading file
+  #else
+  fd = open(infile_name.data(), O_RDONLY); // Reading file
+  #endif // DE
+
+  if (fd == -1) {
+    perror("Cannot open file ");
+    cout << infile_name << " ";
+    exit(1);
+  }
+  fstat(fd, & sb);
+  uint8_t *line = new uint8_t[sb.st_size+1];
+  uint8_t *linew = new uint8_t[sb.st_size+1];
+  unsigned long int fsize= sb.st_size;
+  close(fd);
+  FILE * infile = fopen(infile_name.data(), "rb");
+  if (fread(line,sizeof(char), fsize,infile)!=fsize){
+    cout<<"File not opening correctly"<<endl;
+  }
+
+
+  #ifdef DE
+  test.encr(line,linew,fsize);
+  
+  cout <<"SHA3 of the entire file: "<<hashing.getHash()<<endl;
+
+  #else
+  test.encr(line,linew,fsize);
+  
+  cout <<"SHA3 of the entire file: "<<hashing.getHash()<<endl;
+  #endif // DE
+
+  delete(line);
+  delete(linew);
+  fclose(infile);
+
+
+  cout << "Mem-only complete: " << infile_name << endl;
+  #else
 
   #ifdef DE
   test.rd_file_encr(infile_name + ".pdm", "dec-" + infile_name);
   
-  // cout <<"SHA3 of the entire file: "<<hashing.getHash()<<endl;
+  cout <<"SHA3 of the entire file: "<<hashing.getHash()<<endl;
   cout << "已解密: " << "dec-" + infile_name << endl;
 
   #else
   test.rd_file_encr(infile_name, infile_name+".pdm");
   
-  // cout <<"SHA3 of the entire file: "<<hashing.getHash()<<endl;
+  cout <<"SHA3 of the entire file: "<<hashing.getHash()<<endl;
   // test.rd_file_encr(infile_name, infile_name + ".pdm");
   cout << "完成加密: " << infile_name + ".pdm" << endl;
-  #endif
+  #endif // DE
+  #endif // MEMONLY
 
   auto end = std::chrono::high_resolution_clock::now();
 

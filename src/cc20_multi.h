@@ -28,11 +28,13 @@ class Cc20{
 public:
 
   void start_seq();
+  void encr(uint8_t*line,uint8_t*linew,unsigned long int fsize);
   void rd_file_encr (const std::string file_name, string oufile_name);
   void stream( uint8_t*plain,unsigned int len);
   void set_vals(uint8_t * nonce, uint8_t*key);
   void one_block (int thrd, uint32_t count);
   void endicha(uint8_t *a, uint32_t *b);
+
 
   // Make sure this number is same as THREAD_COUNT
   //           *

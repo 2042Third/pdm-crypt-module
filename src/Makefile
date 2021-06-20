@@ -7,7 +7,7 @@ file3 = cc20_multi.cpp
 sys1 = -D WINDOWS
 sys2 = -D LINUX -pthread
 sys3 = -D MAC
-hash = ../lib/sha3.cpp -g
+hash = ../lib/sha3.cpp -g 
 boost= -O2
 inc = -lboost_thread -lpthread -fconcepts
 release_en= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX  -o c20.o
