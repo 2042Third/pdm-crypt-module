@@ -27,7 +27,7 @@ using boost::thread;
 
 // string hashing = "00000000000000000000000000000000"; // A rolling hash of the the input data.
 
-const int BLOCK_SIZE = 9216000;
+const int BLOCK_SIZE = 4608000;
 /* Invariant: BLOCK_SIZE % 64 == 0
                                  115200, 256000, 576000, 1152000,2304000,4608000,6912000,9216000 ...
                                  Block size*/
@@ -258,9 +258,9 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
     fprintf(stderr,"Cannot close");
   close(fd);
 
-  if (munmap(dataw,sb.st_size)!=0)
-    fprintf(stderr,"Cannot close");
-  close(fdw);
+  // if (munmap(dataw,sb.st_size)!=0)
+  //   fprintf(stderr,"Cannot close");
+  // close(fdw);
   // cout << "finished" << endl;
 }
 
