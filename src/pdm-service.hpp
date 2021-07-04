@@ -68,6 +68,7 @@ std::string bts (TYP*inp){
     return ot;
 }
 
+
 std::string bts(uint8_t *inp,unsigned int n){
     std::vector<char> otvec;
     for(unsigned int i=0;i<n;i++) otvec.push_back(inp[i]);

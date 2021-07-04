@@ -47,6 +47,8 @@ private:
 
   uint32_t count;
 
+  uint8_t nonce_orig[13]={0};
+
   // Make sure this number is same as THREAD_COUNT
   //          *
   uint32_t cy[41][17];

@@ -205,6 +205,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
     exit(1);
   }
 
+
   fstat(fd, & sb);
 
   #ifdef VERBOSE
@@ -215,18 +216,24 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   line = data;
   long int tn = 0;
   n = sb.st_size;
-
+  unsigned int ttn = sb.st_size;
   uint32_t count = 0;
   for (long int i = 0; i < THREAD_COUNT; i++) {
     writing_track[i] = 0;
   }
   long int tracker = 0;
   long int np = 0, tmpn = np % THREAD_COUNT;
+  
+  #ifdef DE
+  ttn-=12;
+  line=line+12;
+  #endif
+  
   set_thread_arg(np % THREAD_COUNT, (long int)linew, tracker, n, 0, line, count, this);
   threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
   np++;
   
-  for (unsigned long int k = 0; k < ((unsigned long int)(sb.st_size / 64) + 1); k++) { // If leak, try add -1
+  for (unsigned long int k = 0; k < ((unsigned long int)(ttn / 64) + 1); k++) { // If leak, try add -1
 
     if (n >= 64) {
       tracker += 64;
@@ -271,28 +278,35 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
     }
   }
   #ifndef DE
-  hashing.add(line,sb.st_size );
+  hashing.add(line,ttn );
   #else 
-  hashing.add(linew,sb.st_size );
+  hashing.add(linew,ttn );
   #endif // DE
   FILE * oufile;
   oufile = fopen(oufile_name.data(), "wb");
   fclose(oufile);
   oufile = fopen(oufile_name.data(), "ab");
-  fwrite(linew, sizeof(char), sb.st_size, oufile);
+  #ifndef DE
+  // cout<<"nonce_orig: "<<this->nonce_orig <<endl;
+  fwrite(this->nonce_orig, sizeof(char), 12, oufile);
+
+  #else
+
+  #endif
+  fwrite(linew, sizeof(char), ttn, oufile);
   fclose(oufile);
 
   #ifdef VERBOSE
   cout << "[main] Writing thread joined" << endl;
   #endif
   if (oufile_name == "a") {
-    for (unsigned int i = 0; i < sb.st_size / BLOCK_SIZE + 1; i++) {
+    for (unsigned int i = 0; i < ttn / BLOCK_SIZE + 1; i++) {
       delete[] outthreads[i];
     }
     delete[] outthreads;
   }
   delete[] linew;
-  if (munmap(data,sb.st_size)!=0)
+  if (munmap(data,ttn)!=0)
     fprintf(stderr,"Cannot close");
   close(fd);
 
@@ -369,6 +383,7 @@ void multi_enc_pthrd(int thrd) {
 
 void Cc20::set_vals(uint8_t * nonce, uint8_t * key) {
   this -> nonce = nonce;
+  copy(nonce,nonce+12,this -> nonce_orig );
   this -> count = 0;
   for (unsigned int i = 0; i < THREAD_COUNT; i++) {
     // this -> cy[i][0] = 0x617178e5;
@@ -409,7 +424,7 @@ void Cc20::endicha(uint8_t * a, uint32_t * b) {
  * 
  * */
 void cmd_enc(string infile_name, string oufile_name, string text_nonce){
-  cout<<infile_name<<","<<oufile_name<<","<<text_nonce<<"\n"<<endl;
+  // cout<<infile_name<<","<<oufile_name<<","<<text_nonce<<"\n"<<endl;
   Cc20 cry_obj;
   string text_key;
   Bytes key;
@@ -438,69 +453,40 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
   std::getline(std::cin, text_key);
   #endif
 
-  SHA3 num_hash;
-  num_hash.add(stob(text_nonce).data(),text_nonce.size());
-  num_hash.add(stob(text_nonce).data(),text_nonce.size());
-
+  
   SHA3 key_hash;
   key_hash.add(stob(text_key).data(),text_key.size());
   key_hash.add(stob(text_key).data(),text_key.size());
 
-  // Timer
-  auto start = std::chrono::high_resolution_clock::now();
-  cry_obj.set_vals((uint8_t*)num_hash.getHash().data(), (uint8_t *)key_hash.getHash().data());
-
-  #ifdef MEMONLY
-  struct stat sb;
-  long int fd;
-
   #ifdef DE
+  uint8_t *line1[13]={0};
   infile_name = infile_name+".pdm";
-  fd = open(infile_name.data(), O_RDONLY);
-  #else
-  fd = open(infile_name.data(), O_RDONLY);
-  #endif // END DE
-  if (fd == -1) {
-    perror("Cannot open file ");
-    cout << infile_name << " ";
-    exit(1);
-  }
-  fstat(fd, & sb);
-  uint8_t *line1 = new uint8_t[sb.st_size+1];
-  uint8_t *line2 = new uint8_t[sb.st_size+1];
-  unsigned long int fsize= sb.st_size;
-  close(fd);
   FILE * infile = fopen(infile_name.data(), "rb");
-  if (fread(line1,sizeof(char), fsize,infile)!=fsize){
-    cout<<"File not opening correctly"<<endl;
-  }
-
-
-  // Ended reading file
-  #ifdef DE
-  test.encr(line,linew1,fsize);
-  
-  cout <<"SHA3 of the entire file: "<<hashing.getHash()<<endl;
-
-  #else
-  test.encr(line,linew1,fsize);
-  
-  #endif // DE
-
-  delete(line1);
-  delete(line2);
+  fread(line1,sizeof(char), 12,infile);
+  if(line1!=NULL)
+    text_nonce=(char*)line1;
   fclose(infile);
 
-  // End of mem only
-  #else
+  #endif
+
+  if (text_nonce.size() != 0) {
+    text_nonce = pad_to_key((string) text_nonce, 12);
+  }
+
+  // Timer
+  auto start = std::chrono::high_resolution_clock::now();
+  // cout<<"before: "<<text_nonce.data()<<endl;
+  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
+
+
   #ifdef DE
-  cry_obj.rd_file_encr(infile_name+".pdm","dec-"+infile_name);
+  cry_obj.rd_file_encr(infile_name,"dec-"+infile_name);
   cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
+
   #else
   cry_obj.rd_file_encr(infile_name, infile_name+".pdm");
   cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
   #endif //END DE
-  #endif //END MEMONLY
   auto end = std::chrono::high_resolution_clock::now();
   auto dur = end - start;
   auto i_millis = std::chrono::duration_cast < std::chrono::milliseconds > (dur);
@@ -525,7 +511,9 @@ int main(int argc, char ** argv) {
   }
   string infile,oufile,nonce;
   infile=argv[1];
+  Bytes cur ;
+  init_byte_rand_cc20(cur,12);
   nonce="1";
-  cmd_enc(infile,"",nonce);
+  cmd_enc(infile,"",btos(cur));
   return 0;
 }
