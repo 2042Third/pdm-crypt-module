@@ -7,7 +7,7 @@ author:     Yi Yang
             5/2021
 */
 
-#include "pdm-service.h"
+#include "pdm-service.hpp"
 #include <iostream>
 #include <climits>
 #include <ostream>
@@ -163,7 +163,7 @@ void state_cpy(NT *a,NT*b,unsigned int n){
 void init_byte (Bytes & a, int n){
     for (int i=0;i<n;i++) a.push_back((uint8_t) 0);
 } 
-void init_byte_rand (Bytes & a, int n){
+void init_byte_rand_cc20 (Bytes & a, int n){
     for (int i=0;i<n;i++) {
         random_device rd;   // non-deterministic generator
         mt19937 gen(rd());

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-make 12en 
-echo "build 12en completed"
-make 12de
-echo "build 12de completed"
+#make 12en 
+#echo "build 12en completed"
+#make 12de
+#echo "build 12de completed"
 make en
 echo "build en completed"
 make de

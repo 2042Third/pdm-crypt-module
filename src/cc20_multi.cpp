@@ -13,8 +13,9 @@ author:     Yi Yang
 // #ifndef BOOST_STRING_TRIM_HPP
 // #define BOOST_STRING_TRIM_HPP
 
+#include "cc20_dev.cpp"
 #include "cc20_multi.h"
-#include "../lib/sha3.h"
+#include "../lib/sha3.cpp"
 // #include <condition_variable>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/thread/thread.hpp>
@@ -23,7 +24,12 @@ author:     Yi Yang
 using namespace std;
 using boost::thread;
 
-
+void enc_writing(string oufile_name);
+void enc_writing_nw();
+void multi_enc_pthrd(int thrd);
+void multi_enc_pthrd_nw(int thrd);
+void set_thread_arg(int thrd, long int np,long int tracker,long int n, long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
+       
 
 // string hashing = "00000000000000000000000000000000"; // A rolling hash of the the input data.
 
@@ -297,9 +303,9 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
 
 */
 
-void set_thread_arg(int thrd, long int linew, long int tracker, long int n, long int tn, uint8_t * line, uint32_t count, Cc20 * ptr) {
+void set_thread_arg(int thrd, long int linew1, long int tracker, long int n, long int tn, uint8_t * line, uint32_t count, Cc20 * ptr) {
   arg_track[thrd][0] = thrd;
-  arg_track[thrd][1] = linew; 
+  arg_track[thrd][1] = linew1; 
   arg_track[thrd][2] = tracker; 
   arg_track[thrd][3] = n;
 
@@ -309,7 +315,7 @@ void set_thread_arg(int thrd, long int linew, long int tracker, long int n, long
 }
 
 void multi_enc_pthrd(int thrd) {
-  uint8_t * linew = (uint8_t*)arg_track[thrd][1]; // Set but not used
+  uint8_t * linew1 = (uint8_t*)arg_track[thrd][1]; // Set but not used
   long int tracker = 0; // Used
   long int n = arg_track[thrd][3]; // Used 
   uint8_t * line = arg_line[thrd]; // Used
@@ -324,12 +330,12 @@ void multi_enc_pthrd(int thrd) {
 
     if (n >= 64) {
       for (long int i = 0; i < 64; i++) {
-        linew[i + tracker] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
+        linew1[i + tracker] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
       }
 
       tracker += 64;
       if (tracker >= (BLOCK_SIZE)) { // Notifies the writing tread when data can be read
-        if (msync(linew, tracker, MS_SYNC) == -1)
+        if (msync(linew1, tracker, MS_SYNC) == -1)
         {
         }
         writing_track[thrd] = tracker;
@@ -340,11 +346,11 @@ void multi_enc_pthrd(int thrd) {
       }
     } else {
       for (int i = 0; i < n; i++) {
-        linew[i+tracker] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
+        linew1[i+tracker] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
       }
       tracker += n;
       writing_track[thrd] = tracker; // Notifies the writing tread when data can be read
-      if (msync(linew, tracker, MS_SYNC) == -1)
+      if (msync(linew1, tracker, MS_SYNC) == -1)
       {
       }
         #ifdef VERBOSE
@@ -405,7 +411,6 @@ int new_way(string usr_input) {
   std::getline(std::cin, infile_name);
   cout<<infile_name<<endl;
   boost::algorithm::trim(infile_name);
-  cout<<infile_name<<endl;
 
 
   #ifdef LINUX
@@ -464,7 +469,7 @@ int new_way(string usr_input) {
   }
   fstat(fd, & sb);
   uint8_t *line = new uint8_t[sb.st_size+1];
-  uint8_t *linew = new uint8_t[sb.st_size+1];
+  uint8_t *linew1 = new uint8_t[sb.st_size+1];
   unsigned long int fsize= sb.st_size;
   close(fd);
   FILE * infile = fopen(infile_name.data(), "rb");
@@ -474,18 +479,18 @@ int new_way(string usr_input) {
 
 
   #ifdef DE
-  test.encr(line,linew,fsize);
+  test.encr(line,linew1,fsize);
   
   cout <<"SHA3 of the entire file: "<<hashing.getHash()<<endl;
 
   #else
-  test.encr(line,linew,fsize);
+  test.encr(line,linew1,fsize);
   
   cout <<"SHA3 of the entire file: "<<hashing.getHash()<<endl;
   #endif // DE
 
   delete(line);
-  delete(linew);
+  delete(linew1 );
   fclose(infile);
 
 
@@ -513,7 +518,6 @@ int new_way(string usr_input) {
   auto i_millis = std::chrono::duration_cast < std::chrono::milliseconds > (dur);
   auto f_secs = std::chrono::duration_cast < std::chrono::duration < float >> (dur);
   std::cout << f_secs.count() << '\n';
-  start = std::chrono::high_resolution_clock::now();
 
   // #endif
 

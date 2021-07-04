@@ -6,9 +6,9 @@ pdm/Personal Data Management system is a encrypted and multiplatform data search
 author:     Yi Yang
             5/2021
 */
+#ifndef _cc20_multi_
+#define _cc20_multi_
 
-#include "cc20_dev.cpp"
-#include "cc20_poly.h"
 #include <stdio.h>
 #include <chrono>
 // Added 
@@ -61,8 +61,9 @@ private:
 };
 
 
-void enc_writing(string oufile_name);
-void enc_writing_nw();
-void multi_enc_pthrd(int thrd);
-void multi_enc_pthrd_nw(int thrd);
-void set_thread_arg(int thrd, long int np,long int tracker,long int n, long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
+// void enc_writing(string oufile_name);
+// void enc_writing_nw();
+// void multi_enc_pthrd(int thrd);
+// void multi_enc_pthrd_nw(int thrd);
+// void set_thread_arg(int thrd, long int np,long int tracker,long int n, long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
+#endif
