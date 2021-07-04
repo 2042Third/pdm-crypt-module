@@ -393,25 +393,29 @@ void Cc20::endicha(uint8_t * a, uint32_t * b) {
   }
 }
 
-int new_way(string usr_input) {
-
-  //Encryption
-  Cc20 test;
-  std::string infile_name, oufile_name, text_key;
+/**
+ * Init encryption.
+ * 
+ * This version of pdm-crypt interfaces within memory, which means 
+ * entire file will be read before the encryption. 
+ * Thus, this version is not recommended for large files (more than half 
+ * of your computer's memory).
+ * For a memory effecient version, please use a history version (that version 
+ * uses at most ~320 mb for an arbitrary-size file).
+ * 
+ * @param infile_name input file name
+ * @param oufile_name output file name
+ * @param nonce the nonce of this encryption
+ * 
+ * */
+void cmd_enc(string infile_name, string oufile_name, string text_nonce){
+  cout<<infile_name<<","<<oufile_name<<","<<text_nonce<<"\n"<<endl;
+  Cc20 cry_obj;
+  string text_key;
   Bytes key;
   Bytes nonce;
 
-  oufile_name = "encrypted.pdm";
-
-  #ifdef DE
-  cout << "输入加密文件名： " << endl;
-  #else
-  cout << "输入文件名进行加密： " << endl;
-  #endif
-  std::getline(std::cin, infile_name);
-  cout<<infile_name<<endl;
   boost::algorithm::trim(infile_name);
-
 
   #ifdef LINUX
   termios oldt;
@@ -419,7 +423,7 @@ int new_way(string usr_input) {
   termios newt = oldt;
   newt.c_lflag &= ~ECHO;
   tcsetattr(STDIN_FILENO, TCSANOW, & newt);
-  cout << "输入密码： " << endl;
+  cout << "Password/密码： " << endl;
   std::getline(std::cin, text_key);
   tcsetattr(STDIN_FILENO, TCSANOW, & oldt);
   cout << endl;
@@ -430,54 +434,49 @@ int new_way(string usr_input) {
   DWORD mode = 0;
   GetConsoleMode(hStdin, & mode);
   SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
-  cout << "输入密码： " << endl;
+  cout << "Password/密码： " << endl;
   std::getline(std::cin, text_key);
   #endif
 
-  string tmp;
-  cout << "输入独立数字：" << endl;
-  getline(cin, tmp);
-
-  if (tmp.size() != 0) {
-    tmp = pad_to_key((string) tmp, 13);
-    nonce = stob(tmp);
+  if (text_nonce.size() != 0) {
+    text_nonce = pad_to_key((string) text_nonce, 13);
+    nonce = stob(text_nonce);
   }
   SHA3 key_hash;
   key_hash.add(stob(text_key).data(),text_key.size());
+  key_hash.add(stob(text_key).data(),text_key.size());
 
-
+  // Timer
   auto start = std::chrono::high_resolution_clock::now();
+  cry_obj.set_vals(nonce.data(), (uint8_t *)key_hash.getHash().data());
 
-  test.set_vals(nonce.data(), (uint8_t *)key_hash.getHash().data());
-
-  #ifdef MEMONLY // Memory only testing part
-
+  #ifdef MEMONLY
   struct stat sb;
   long int fd;
 
   #ifdef DE
   infile_name = infile_name+".pdm";
-  fd = open(infile_name.data(), O_RDONLY); // Reading file
+  fd = open(infile_name.data(), O_RDONLY);
   #else
-  fd = open(infile_name.data(), O_RDONLY); // Reading file
-  #endif // DE
-
+  fd = open(infile_name.data(), O_RDONLY);
+  #endif // END DE
   if (fd == -1) {
     perror("Cannot open file ");
     cout << infile_name << " ";
     exit(1);
   }
   fstat(fd, & sb);
-  uint8_t *line = new uint8_t[sb.st_size+1];
-  uint8_t *linew1 = new uint8_t[sb.st_size+1];
+  uint8_t *line1 = new uint8_t[sb.st_size+1];
+  uint8_t *line2 = new uint8_t[sb.st_size+1];
   unsigned long int fsize= sb.st_size;
   close(fd);
   FILE * infile = fopen(infile_name.data(), "rb");
-  if (fread(line,sizeof(char), fsize,infile)!=fsize){
+  if (fread(line1,sizeof(char), fsize,infile)!=fsize){
     cout<<"File not opening correctly"<<endl;
   }
 
 
+  // Ended reading file
   #ifdef DE
   test.encr(line,linew1,fsize);
   
@@ -486,51 +485,47 @@ int new_way(string usr_input) {
   #else
   test.encr(line,linew1,fsize);
   
-  cout <<"SHA3 of the entire file: "<<hashing.getHash()<<endl;
   #endif // DE
 
-  delete(line);
-  delete(linew1 );
+  delete(line1);
+  delete(line2);
   fclose(infile);
 
-
-  cout << "Mem-only complete: " << infile_name << endl;
+  // End of mem only
   #else
-
   #ifdef DE
-  test.rd_file_encr(infile_name + ".pdm", "dec-" + infile_name);
-  
-  cout <<"SHA3 of the entire file: "<<hashing.getHash()<<endl;
-  cout << "已解密: " << "dec-" + infile_name << endl;
-
+  cry_obj.rd_file_encr(infile_name+".pdm","dec-"+infile_name);
+  cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
   #else
-  test.rd_file_encr(infile_name, infile_name+".pdm");
-  
-  cout <<"SHA3 of the entire file: "<<hashing.getHash()<<endl;
-  // test.rd_file_encr(infile_name, infile_name + ".pdm");
-  cout << "完成加密: " << infile_name + ".pdm" << endl;
-  #endif // DE
-  #endif // MEMONLY
-
+  cry_obj.rd_file_encr(infile_name, infile_name+".pdm");
+  cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
+  #endif //END DE
+  #endif //END MEMONLY
   auto end = std::chrono::high_resolution_clock::now();
-
   auto dur = end - start;
   auto i_millis = std::chrono::duration_cast < std::chrono::milliseconds > (dur);
   auto f_secs = std::chrono::duration_cast < std::chrono::duration < float >> (dur);
   std::cout << f_secs.count() << '\n';
+}
 
-  // #endif
-
-  return 0;
+string convertToString(char* a, int size)
+{
+    int i;
+    string s = "";
+    for (i = 0; i < size; i++) {
+        s = s + a[i];
+    }
+    return s;
 }
 
 int main(int argc, char ** argv) {
-  if (argc != 2) {
-    string usr_input = "";
-    cout << "new method: \n" << new_way(usr_input) << "\n\n";
-  } else {
-    string usr_input(argv[1], (int) sizeof(argv[1]) / sizeof(char));
-    cout << "new method: \n" << new_way(usr_input) << "\n\n";
+  if (argc!=2){
+    cout<<argc<<" Wrong input; Should have 1 input!\n"<<endl;
+    return 0;
   }
+  string infile,oufile,nonce;
+  infile=argv[1];
+  nonce="1";
+  cmd_enc(infile,"",nonce);
   return 0;
 }
