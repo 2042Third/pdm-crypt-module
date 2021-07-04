@@ -9,7 +9,7 @@ sys2 = -D LINUX -pthread
 sys3 = -D MAC
 hash =  -g 
 boost= -O2
-inc = -lboost_thread -lpthread -fconcepts
+inc = -lboost_thread -lpthread 
 release_en= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX  -o c20.o
 release_de= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX -D DE -o c20de.o
 release_en1= -m64 -std=c++17  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -o c20
