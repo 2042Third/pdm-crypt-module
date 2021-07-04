@@ -438,17 +438,17 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
   std::getline(std::cin, text_key);
   #endif
 
-  if (text_nonce.size() != 0) {
-    text_nonce = pad_to_key((string) text_nonce, 13);
-    nonce = stob(text_nonce);
-  }
+  SHA3 num_hash;
+  num_hash.add(stob(text_nonce).data(),text_nonce.size());
+  num_hash.add(stob(text_nonce).data(),text_nonce.size());
+
   SHA3 key_hash;
   key_hash.add(stob(text_key).data(),text_key.size());
   key_hash.add(stob(text_key).data(),text_key.size());
 
   // Timer
   auto start = std::chrono::high_resolution_clock::now();
-  cry_obj.set_vals(nonce.data(), (uint8_t *)key_hash.getHash().data());
+  cry_obj.set_vals((uint8_t*)num_hash.getHash().data(), (uint8_t *)key_hash.getHash().data());
 
   #ifdef MEMONLY
   struct stat sb;
