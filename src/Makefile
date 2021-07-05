@@ -10,7 +10,7 @@ sys3 = -D MAC
 hash =  -g 
 boost= -O2
 incmac =  -lboost_thread -lpthread 
-inc = -lboost_thread -lpthread 
+inc = -lboost_thread -lpthread -I../lib/boost-linux/ -L../lib/boost-linux/stage/lib
 mac = -D MAC_OS -I../lib/boost-mac/ -L../lib/boost-mac/stage/lib
 release_en= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX  -o c20.o
 release_de= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX -D DE -o c20de.o
