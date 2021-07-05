@@ -31,4 +31,9 @@ module config-cache {
   set "compiler supports SSE4.1-<deduced-address-model>64-<deduced-architecture>x86-<link>static-<threadapi>pthread-<threading>multi-<toolset-gcc:version>8-<toolset>gcc-<variant>release-<visibility>hidden" : "true" ;
   set "has_icu builds-<deduced-address-model>64-<deduced-architecture>x86-<link>static-<threadapi>pthread-<threading>multi-<toolset-gcc:version>8-<toolset>gcc-<variant>release-<visibility>hidden" : "true" ;
   set "lockfree boost::atomic_flag-<deduced-address-model>64-<deduced-architecture>x86-<link>static-<threadapi>pthread-<threading>multi-<toolset-gcc:version>8-<toolset>gcc-<variant>release-<visibility>hidden" : "true" ;
+  set "compiler supports SSE2-<deduced-address-model>64-<deduced-architecture>x86-<link>static-<runtime-link>static-<threadapi>pthread-<threading>multi-<toolset-gcc:version>8-<toolset>gcc-<variant>release-<visibility>hidden" : "true" ;
+  set "compiler supports SSE4.1-<deduced-address-model>64-<deduced-architecture>x86-<link>static-<runtime-link>static-<threadapi>pthread-<threading>multi-<toolset-gcc:version>8-<toolset>gcc-<variant>release-<visibility>hidden" : "true" ;
+  set "has_icu builds-<deduced-address-model>64-<deduced-architecture>x86-<link>static-<runtime-link>static-<threadapi>pthread-<threading>multi-<toolset-gcc:version>8-<toolset>gcc-<variant>release-<visibility>hidden" : "false" ;
+  set "BOOST_COMP_GNUC >= 4.3.0-<deduced-address-model>64-<deduced-architecture>x86-<link>static-<runtime-link>static-<threadapi>pthread-<threading>multi-<toolset-gcc:version>8-<toolset>gcc-<variant>release-<visibility>hidden" : "true" ;
+  set "lockfree boost::atomic_flag-<deduced-address-model>64-<deduced-architecture>x86-<link>static-<runtime-link>static-<threadapi>pthread-<threading>multi-<toolset-gcc:version>8-<toolset>gcc-<variant>release-<visibility>hidden" : "false" ;
 }
