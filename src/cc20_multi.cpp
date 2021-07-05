@@ -460,8 +460,8 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
 
   #ifdef DE
   uint8_t *line1[13]={0};
-  infile_name = infile_name+".pdm";
-  FILE * infile = fopen(infile_name.data(), "rb");
+  string infile_name_copy = infile_name+".pdm";
+  FILE * infile = fopen(infile_name_copy.data(), "rb");
   fread(line1,sizeof(char), 12,infile);
   if(line1!=NULL)
     text_nonce=(char*)line1;
@@ -480,7 +480,7 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
 
 
   #ifdef DE
-  cry_obj.rd_file_encr(infile_name,"dec-"+infile_name);
+  cry_obj.rd_file_encr(infile_name_copy,"dec-"+infile_name);
   cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
 
   #else
