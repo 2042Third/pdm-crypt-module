@@ -1,0 +1,36 @@
+#!/bin/bash
+
+
+function dep () {
+  echo $1 | sed "s/^\(.*\)\(\.pdm\)$/\1/" 
+}
+
+function get_dir (){
+  cd $1
+  for f in $(ls)
+  do
+    # wait 5000
+    if [[ -f ${f} ]]; then
+      case $(dep ${f}) in
+      *.pdm)  
+        echo $(dep ${f}) " needs fix"
+        ;;
+      *)
+        
+        # printf "951753\n" | c20de $(dep ${f})
+        # echo $(dep ${f}) "is decrypted"
+        # mv dec-$(dep ${f}) $(dep ${f})
+        # rm ${f}
+        ;;
+      esac
+      
+    elif [[ -d ${f} ]]; then 
+      echo ${PWD}
+      get_dir ${f} &   
+      wait
+    fi
+
+    
+  done 
+}
+get_dir $1

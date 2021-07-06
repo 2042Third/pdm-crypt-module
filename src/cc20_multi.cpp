@@ -17,12 +17,12 @@ author:     Yi Yang
 #include "cc20_multi.h"
 #include "../lib/sha3.cpp"
 // #include <condition_variable>
-#include <boost/algorithm/string/trim.hpp>
-#include <boost/thread/thread.hpp>
+// #include <boost/algorithm/string/trim.hpp>
+#include <thread>
 
 
 using namespace std;
-using boost::thread;
+// using boost::thread;
 
 void enc_writing(string oufile_name);
 void enc_writing_nw();
@@ -69,7 +69,7 @@ Cc20 * arg_ptr[THREAD_COUNT]; // Parent pointers for each thread.
 
 // recursive_mutex locks[THREAD_COUNT]; // All locks for threads, each waits for the writing is done on file or memory.
 
-boost::thread threads[THREAD_COUNT]; // Threads
+thread threads[THREAD_COUNT]; // Threads
 
 char ** outthreads;
 
@@ -430,7 +430,7 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
   Bytes key;
   Bytes nonce;
 
-  boost::algorithm::trim(infile_name);
+  // boost::algorithm::trim(infile_name);
 
   #ifdef LINUX
   termios oldt;
