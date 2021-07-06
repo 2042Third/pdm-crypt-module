@@ -1,0 +1,24 @@
+#!/bin/bash
+
+ndir="$(ls)"
+
+function get_dir {
+  for f in $(ls)
+  do
+    if [[ -f ${f} ]]; then
+      #statements
+      # echo $PWD
+      echo ${f} "is file"
+      
+    elif [[ -d ${f} ]]; then 
+      echo ${f} "is folder"
+      cd ${f}
+      echo ${PWD}
+      get_dir
+      cd ../
+    fi
+
+    
+  done 
+}
+get_dir
