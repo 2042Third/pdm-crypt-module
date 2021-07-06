@@ -1,6 +1,5 @@
 *.temp
 *.pdf
-c20*
 *.pdm
 dec*
 vgcore*
