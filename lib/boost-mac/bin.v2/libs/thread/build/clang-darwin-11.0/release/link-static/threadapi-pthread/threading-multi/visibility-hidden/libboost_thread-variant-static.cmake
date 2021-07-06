@@ -25,10 +25,10 @@ else()
   endif()
 endif()
 
-# runtime-link=shared
+# runtime-link=static
 
-if(Boost_USE_STATIC_RUNTIME)
-  _BOOST_SKIPPED("libboost_thread.a" "shared runtime, Boost_USE_STATIC_RUNTIME=${Boost_USE_STATIC_RUNTIME}")
+if(NOT Boost_USE_STATIC_RUNTIME)
+  _BOOST_SKIPPED("libboost_thread.a" "static runtime, Boost_USE_STATIC_RUNTIME not ON")
   return()
 endif()
 
@@ -83,4 +83,4 @@ set_target_properties(Boost::thread PROPERTIES
   MAP_IMPORTED_CONFIG_RELWITHDEBINFO Release
   )
 
-list(APPEND _BOOST_THREAD_DEPS headers)
+list(APPEND _BOOST_THREAD_DEPS atomic headers)

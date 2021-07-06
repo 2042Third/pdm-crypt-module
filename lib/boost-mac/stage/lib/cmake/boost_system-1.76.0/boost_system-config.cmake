@@ -15,10 +15,10 @@ mark_as_advanced(boost_system_DIR)
 get_filename_component(_BOOST_CMAKEDIR "${CMAKE_CURRENT_LIST_DIR}/../" REALPATH)
 
 # If the computed and the original directories are symlink-equivalent, use original
-if(EXISTS "/Users/mikeyang/Documents/tooling/pdm-crypt-module/lib/boost/stage/lib/cmake")
-  get_filename_component(_BOOST_CMAKEDIR_ORIGINAL "/Users/mikeyang/Documents/tooling/pdm-crypt-module/lib/boost/stage/lib/cmake" REALPATH)
+if(EXISTS "/Users/mikeyang/Documents/tooling/pdm-crypt-module/lib/boost-mac/stage/lib/cmake")
+  get_filename_component(_BOOST_CMAKEDIR_ORIGINAL "/Users/mikeyang/Documents/tooling/pdm-crypt-module/lib/boost-mac/stage/lib/cmake" REALPATH)
   if(_BOOST_CMAKEDIR STREQUAL _BOOST_CMAKEDIR_ORIGINAL)
-    set(_BOOST_CMAKEDIR "/Users/mikeyang/Documents/tooling/pdm-crypt-module/lib/boost/stage/lib/cmake")
+    set(_BOOST_CMAKEDIR "/Users/mikeyang/Documents/tooling/pdm-crypt-module/lib/boost-mac/stage/lib/cmake")
   endif()
   unset(_BOOST_CMAKEDIR_ORIGINAL)
 endif()
