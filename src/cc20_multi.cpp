@@ -8,21 +8,15 @@ author:     Yi Yang
             5/2021
 */
 
-//cc20_multi.cpp    
 
-// #ifndef BOOST_STRING_TRIM_HPP
-// #define BOOST_STRING_TRIM_HPP
 
 #include "cc20_dev.cpp"
 #include "cc20_multi.h"
 #include "../lib/sha3.cpp"
-// #include <condition_variable>
-// #include <boost/algorithm/string/trim.hpp>
 #include <thread>
 
 
 using namespace std;
-// using boost::thread;
 
 void enc_writing(string oufile_name);
 void enc_writing_nw();
@@ -31,7 +25,7 @@ void multi_enc_pthrd_nw(int thrd);
 void set_thread_arg(int thrd, long int np,long int tracker,long int n, long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
        
 
-// string hashing = "00000000000000000000000000000000"; // A rolling hash of the the input data.
+int ENABLE_SHA3_OUTPUT = 1;
 
 const int BLOCK_SIZE = 4608000;
 /* Invariant: BLOCK_SIZE % 64 == 0
@@ -175,11 +169,13 @@ void Cc20::encr(uint8_t*line,uint8_t*linew,unsigned long int fsize) {
 
     }
   }
-  #ifndef DE
-  hashing.add(line,fsize );
-  #else 
-  hashing.add(linew,fsize );
-  #endif // DE
+  if(ENABLE_SHA3_OUTPUT){
+    #ifndef DE
+    hashing.add(line,fsize );
+    #else 
+    hashing.add(linew,fsize );
+    #endif // DE
+  }
 }
 
 /*
@@ -277,11 +273,13 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
 
     }
   }
-  #ifndef DE
-  hashing.add(line,ttn );
-  #else 
-  hashing.add(linew,ttn );
-  #endif // DE
+  if (ENABLE_SHA3_OUTPUT){
+    #ifndef DE
+    hashing.add(line,ttn );
+    #else 
+    hashing.add(linew,ttn );
+    #endif // DE
+  }
   FILE * oufile;
   oufile = fopen(oufile_name.data(), "wb");
   fclose(oufile);
@@ -341,7 +339,9 @@ void multi_enc_pthrd(int thrd) {
   #endif
   for (unsigned long int k = 0; k < BLOCK_SIZE / 64; k++) {
     ptr -> one_block((int) thrd, (int) count);
-
+    #ifdef VERBOSE
+      cout<<"[calc] "<<thrd<<" 1 iteration, current size "<<n << endl;
+    #endif
     if (n >= 64) {
       for (long int i = 0; i < 64; i++) {
         linew1[i + tracker] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
@@ -481,11 +481,11 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
 
   #ifdef DE
   cry_obj.rd_file_encr(infile_name_copy,"dec-"+infile_name);
-  cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
+  if (ENABLE_SHA3_OUTPUT) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
 
   #else
   cry_obj.rd_file_encr(infile_name, infile_name+".pdm");
-  cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
+  if (ENABLE_SHA3_OUTPUT) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
   #endif //END DE
   auto end = std::chrono::high_resolution_clock::now();
   auto dur = end - start;
@@ -504,13 +504,35 @@ string convertToString(char* a, int size)
     return s;
 }
 
+int rd_inp(unsigned int argc, char ** argv, string *infile){
+  int arg_c=1;
+  for (unsigned int i = 1; i< argc;i++){
+    if (argv[i][0] == '-'){
+      if (argv[i][1] == 's' ){ 
+        ENABLE_SHA3_OUTPUT = 0;
+      }
+    }
+    else{
+      if (infile->empty()){
+        arg_c++;
+        *infile = argv[i];
+      }
+      else
+        return 0;
+    }
+  }
+  if(!ENABLE_SHA3_OUTPUT)
+    cout<<"sha3 output disabled"<<endl;
+  return arg_c;
+}
+
+
 int main(int argc, char ** argv) {
-  if (argc!=2){
-    cout<<argc<<" Wrong input; Should have 1 input!\n"<<endl;
+  string infile,oufile,nonce;
+  if (rd_inp(argc,argv,&infile)!=2){
+    cout<<argc<<" Wrong input; Should have 1 file input!\n"<<endl;
     return 0;
   }
-  string infile,oufile,nonce;
-  infile=argv[1];
   Bytes cur ;
   init_byte_rand_cc20(cur,12);
   nonce="1";

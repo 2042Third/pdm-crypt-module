@@ -12,7 +12,9 @@ author:     Yi Yang
 #include <stdio.h>
 #include <chrono>
 // Added 
+#ifndef WINDOWS
 #include <sys/mman.h>
+#endif
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <fcntl.h>

@@ -26,7 +26,9 @@ author:     Yi Yang
 
 #ifdef LINUX
 #include <unistd.h>
+#ifndef WINDOWS
 #include <termios.h>
+#endif 
 #endif
 
 #ifdef WINDOWS

@@ -19,6 +19,8 @@ release_en= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts 
 release_de= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX -D DE -o c20de.o
 release_en1= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -o c20
 release_de1= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -D DE -o c20de
+en_debug= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -o d20
+de_debug= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -D DE -o d20de
 release_en12= -m64 -std=c++17  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D ROUNDCOUNTTWLV -D LINUX -o c20.c
 release_de12= -m64 -std=c++17  cc20_multi.cpp -lm  -Wall -D DEEP_DEBUG -D PRINTING -D ROUNDCOUNTTWLV -D LINUX -D DE -o c20de.c
 release_en:
@@ -29,6 +31,10 @@ en:
 	g++ $(hash) $(boost) $(release_en1) $(inc)
 de:
 	g++ $(hash) $(boost) $(release_de1) $(inc)
+en_debug:
+	g++ $(hash) -D VERBOSE $(boost) $(en_debug) $(inc)
+de_debug:
+	g++ $(hash) -D VERBOSE $(boost) $(de_debug) $(inc)
 enmac:
 	g++ $(mac) $(hash) $(boost) $(release_en1) $(incmac)
 demac:
