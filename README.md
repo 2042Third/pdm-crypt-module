@@ -30,10 +30,13 @@ using boost thread (stl pthread also avaliable)<br />
 <p>
 goto src folder<br />
 run shall script "sh build_t"<br />
-edit short.sh to setup a encryption and decryption to disk.<br />
-</p>
-<p>
-encrypted files have ORIGINAL_FILE.pdm pattern<br />
-decrypted files have dec-ORIGINAL_FILE pattern<br />
-</p>
+<dl>
+<li>flag "-h": hide the status bar</li>
+<li>flag "-s": disable sha3 hash output</li>
 
+<li>encrypted files have ORIGINAL_FILE.pdm pattern</li>
+<li>decrypted files have dec-ORIGINAL_FILE pattern</li>
+<li>input only ORIGINAL_FILE</li>
+
+</dl>
+</p>
