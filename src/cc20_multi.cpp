@@ -49,6 +49,8 @@ char *linew; // Tracks all the input
 
 int progress_bar[THREAD_COUNT];
 
+int DISPLAY_PROG =1;
+
 long int arg_track[THREAD_COUNT][6];
 /* Passes arguments into threads.
                                        arg_track[THREAD_COUNT][0] ---> Thread number
@@ -228,11 +230,13 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   ttn-=12;
   line=line+12;
   #endif
-  for (unsigned int i=0; i<THREAD_COUNT;i++){
-    progress_bar[i] = 0;
+  thread progress;
+  if (DISPLAY_PROG){
+    for (unsigned int i=0; i<THREAD_COUNT;i++){
+      progress_bar[i] = 0;
+    }
+    progress = thread(display_progress,ttn);
   }
-
-  thread progress = thread(display_progress,ttn);
   
   set_thread_arg(np % THREAD_COUNT, (long int)linew, tracker, n, 0, line, count, this);
   threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
@@ -317,8 +321,10 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   if (munmap(data,ttn)!=0)
     fprintf(stderr,"Cannot close");
   close(fd);
-  if (progress.joinable())
-    progress.join();
+  if(DISPLAY_PROG){
+    if (progress.joinable())
+      progress.join();
+  }
 }
 /**
  * Displays progress
@@ -406,7 +412,7 @@ void multi_enc_pthrd(int thrd) {
     }
     count += 1;
     n -= 64;
-    progress_bar[thrd]+=64;
+    if(DISPLAY_PROG)progress_bar[thrd]+=64;
   }
   #ifdef VERBOSE
           cout<<"[calc] "<<thrd<<" unlocks " << endl;
@@ -537,13 +543,19 @@ string convertToString(char* a, int size)
     return s;
 }
 
+void set_config(char*inp){
+  string a = inp;
+  for(unsigned int i=0;i<a.size();i++){
+    if (a[i] == 's' ) ENABLE_SHA3_OUTPUT = 0;
+    else if (a[i] == 'h' ) DISPLAY_PROG = 0;
+  }
+}
+
 int rd_inp(unsigned int argc, char ** argv, string *infile){
   int arg_c=1;
   for (unsigned int i = 1; i< argc;i++){
     if (argv[i][0] == '-'){
-      if (argv[i][1] == 's' ){ 
-        ENABLE_SHA3_OUTPUT = 0;
-      }
+      set_config(argv[i]);
     }
     else{
       if (infile->empty()){

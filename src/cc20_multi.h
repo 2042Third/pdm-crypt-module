@@ -36,6 +36,7 @@ public:
   void set_vals(uint8_t * nonce, uint8_t*key);
   void one_block (int thrd, uint32_t count);
   void endicha(uint8_t *a, uint32_t *b);
+  
 
   // Make sure this number is same as THREAD_COUNT
   //           *
