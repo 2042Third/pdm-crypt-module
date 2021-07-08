@@ -1,4 +1,7 @@
 <h1>pdm cryptography core module</h1>
+<p>
+This a commandl line encryption tool for linux and macOS, for windwos version please visit my other repository, <a href="https://github.com/2042Third/pdm-crypt-win">pdm-crypt-win</a>
+</p>
 <h2>CURRENT STATUS:</h2>
 enabled sha3 checking<br />
 using boost thread (stl pthread also avaliable)<br />
@@ -16,14 +19,19 @@ using boost thread (stl pthread also avaliable)<br />
   <dd>minor memory fixes</dd>
 </dl>
 <br />
-usage:<br />
+<h2>usage:</h2>
+<p>
 goto src folder<br />
 run shall script "sh build_t"<br />
 edit short.sh to setup a encryption and decryption to disk.<br />
+</p>
+<p>
 <br />encrypted files have ORIGINAL_FILE.pdm pattern<br />
 decrypted files have dec-ORIGINAL_FILE pattern<br />
-<br />
-benchmark:<br />
+</p>
+<h2>benchmark:</h2>
+<dl>
 for a 6 gb video file, reading and writing to disk <br />
 20 round chacha20: ~34sec / ~180 mb/sec<br />
 12 round chacha20: ~30sec <br />
+  <dl>
