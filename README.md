@@ -1,6 +1,6 @@
 <h1>pdm cryptography core module</h1>
 <p>
-This a commandl line encryption tool for linux and macOS, for windwos version please visit my other repository, <a href="https://github.com/2042Third/pdm-crypt-win">pdm-crypt-win</a>.
+This a commandl line encryption tool for linux and macOS, for windwos version please visit my other repository, <a href="https://github.com/2042Third/pdm-crypt-win" target="_blank">pdm-crypt-win</a>.
 </p>
 <h2>CURRENT STATUS:</h2>
 enabled sha3 checking<br />
