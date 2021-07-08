@@ -37,7 +37,6 @@ public:
   void one_block (int thrd, uint32_t count);
   void endicha(uint8_t *a, uint32_t *b);
 
-
   // Make sure this number is same as THREAD_COUNT
   //           *
   uint8_t nex[41][65];
@@ -64,6 +63,7 @@ private:
   unsigned long b4 =  0B01101011001001000110010101110100 ;
 };
 
+void display_progress(unsigned int n);
 
 // void enc_writing(string oufile_name);
 // void enc_writing_nw();

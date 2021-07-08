@@ -14,6 +14,8 @@ author:     Yi Yang
 #include "cc20_multi.h"
 #include "../lib/sha3.cpp"
 #include <thread>
+#include <numeric>
+#include <unistd.h>
 
 
 using namespace std;
@@ -43,7 +45,9 @@ char thread_track[THREAD_COUNT][BLOCK_SIZE] = {{0}};
 
 long int writing_track[THREAD_COUNT]; // Tells the writer thread how much to read; should only be different on the last block.
 
-char *linew;
+char *linew; // Tracks all the input
+
+int progress_bar[THREAD_COUNT];
 
 long int arg_track[THREAD_COUNT][6];
 /* Passes arguments into threads.
@@ -224,6 +228,11 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   ttn-=12;
   line=line+12;
   #endif
+  for (unsigned int i=0; i<THREAD_COUNT;i++){
+    progress_bar[i] = 0;
+  }
+
+  thread progress = thread(display_progress,ttn);
   
   set_thread_arg(np % THREAD_COUNT, (long int)linew, tracker, n, 0, line, count, this);
   threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
@@ -297,6 +306,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   #ifdef VERBOSE
   cout << "[main] Writing thread joined" << endl;
   #endif
+
   if (oufile_name == "a") {
     for (unsigned int i = 0; i < ttn / BLOCK_SIZE + 1; i++) {
       delete[] outthreads[i];
@@ -307,8 +317,30 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   if (munmap(data,ttn)!=0)
     fprintf(stderr,"Cannot close");
   close(fd);
-
+  if (progress.joinable())
+    progress.join();
 }
+/**
+ * Displays progress
+ * 
+ * */
+void display_progress(unsigned int n) {
+  unsigned int current=0;
+  unsigned int acum=0;
+  unsigned int res =50;
+  cout<<endl;
+  while(current<res){
+    acum=0;
+    if(((float)accumulate(progress_bar,progress_bar+THREAD_COUNT,acum)/n) *res>=current){
+      current++;
+      cout<<"-"<<flush;
+    }
+    usleep(10000);
+  }
+  cout<<"100%"<<endl;
+}
+
+
 
 /*
     Sets arguments in arg_track for threads.
@@ -374,6 +406,7 @@ void multi_enc_pthrd(int thrd) {
     }
     count += 1;
     n -= 64;
+    progress_bar[thrd]+=64;
   }
   #ifdef VERBOSE
           cout<<"[calc] "<<thrd<<" unlocks " << endl;
