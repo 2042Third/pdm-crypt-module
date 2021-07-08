@@ -19,6 +19,12 @@ using boost thread (stl pthread also avaliable)<br />
   <dd>minor memory fixes</dd>
 </dl>
 <br />
+<h2>benchmark:</h2>
+<dl>
+<dt>for a 2 gb video file, reading and writing to disk </dt>
+<dd>20 round chacha20: ~5.1sec </dd>
+<dd>12 round chacha20: ~3.10sec </dd>
+  <dl>
 <h2>usage:</h2>
 <p>
 goto src folder<br />
@@ -29,9 +35,4 @@ edit short.sh to setup a encryption and decryption to disk.<br />
 encrypted files have ORIGINAL_FILE.pdm pattern<br />
 decrypted files have dec-ORIGINAL_FILE pattern<br />
 </p>
-<h2>benchmark:</h2>
-<dl>
-<dt>for a 2 gb video file, reading and writing to disk </dt>
-<dd>20 round chacha20: ~5.1sec </dd>
-<dd>12 round chacha20: ~3.10sec </dd>
-  <dl>
+
