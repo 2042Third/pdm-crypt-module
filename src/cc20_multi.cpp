@@ -337,7 +337,7 @@ void display_progress(unsigned int n) {
   cout<<endl;
   while(current<res){
     acum=0;
-    if(((float)accumulate(progress_bar,progress_bar+THREAD_COUNT,acum)/n) *res>=current){
+    if(((float)accumulate(progress_bar,progress_bar+THREAD_COUNT,acum)/n) *res>=current || n<1000){
       current++;
       cout<<"-"<<flush;
     }
