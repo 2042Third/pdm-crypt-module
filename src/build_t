@@ -22,7 +22,7 @@ mchin_c="$(uname -s)"
 case ${mchin_c} in
 	Darwin*) 
 		echo "Darwin"	
-		macbv
+		macb
 		;;
 	Linux*)		
 		echo "Linux"	
