@@ -6,7 +6,17 @@ This a commandl line encryption tool for linux and macOS, for windwos version pl
 <h2>CURRENT STATUS:</h2>
 enabled sha3 checking<br />
 using boost thread (stl pthread also avaliable)<br />
-<h2>updated 7/4/2021: </h2>
+<h2>update 8/2/2021: </h2>
+<dl>
+<dt>Added features</dt>
+<dd>General memory saftey improved. I have being doing crypto-analysis on this implementation, and found a few areas of improvements; including random number generation upgrades, stack allocation improvements, and so on.</dd>
+<dd>MacOs clang compatibility, testing to see if clang can be applied to other versions</dd>
+<dt>Fixes</dt>
+  <dd>Encryption on the same file yield 100% different results, or operation-to-operation random nonce is up-to standards</dd>
+  <dd>Numerous memory fixes</dd>
+</dl>
+<br>
+<h2>update 7/4/2021: </h2>
 <dl>
 <dt>Added features</dt>
 <dd>installation script ("src/update-bin.sh") for macos and linux</dd>
