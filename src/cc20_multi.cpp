@@ -242,7 +242,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
   np++;
   
-  for (unsigned long int k = 0; k < ((unsigned long int)(ttn / 64) + 1); k++) { // If leak, try add -1
+  for (unsigned long int k = 0; k < ((unsigned long int)(ttn / 64) + 0); k++) { // If leak, try add -1
 
     if (n >= 64) {
       tracker += 64;
@@ -253,19 +253,27 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
           #endif
           threads[np % THREAD_COUNT].join();
         }
+
+        #ifdef VERBOSE
+        cout << "[main] " <<np % THREAD_COUNT<< " regular being dispatched"<< endl;
+        #endif
         set_thread_arg(np % THREAD_COUNT, (long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
         threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
 
         tracker = 0;
         np++;
       }
-    } else {
+    } 
+    else {
       if (threads[np % THREAD_COUNT].joinable() && final_line_written != 1) {
           #ifdef VERBOSE
           cout << "[main] Last Possible join, waiting " <<np % THREAD_COUNT<< endl;
           #endif
         threads[np % THREAD_COUNT].join();
       }
+      #ifdef VERBOSE
+      cout << "[main] " <<np % THREAD_COUNT<< " last one being dispatched"<< endl;
+      #endif
       set_thread_arg(np % THREAD_COUNT, (long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
       threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
     }

@@ -5,6 +5,12 @@ function macb {
 	make demac;
 	echo "build demac completed";
 }	
+function macbv {
+	make enmacv;
+	echo "build enmac completed";
+	make demacv;
+	echo "build demac completed";
+}	
 
 function linb {
 	make en;
@@ -16,7 +22,7 @@ mchin_c="$(uname -s)"
 case ${mchin_c} in
 	Darwin*) 
 		echo "Darwin"	
-		macb
+		macbv
 		;;
 	Linux*)		
 		echo "Linux"	

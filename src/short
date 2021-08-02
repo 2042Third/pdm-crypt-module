@@ -1,7 +1,7 @@
 #!/bin/bash
 TXT="bout.temp"
 PDF="test.pdf"
-TEST="index.html"
+TEST=$1
 printf "1234\n"|./c20 ${TEST}
 # printf "msg\n 1\n 1\n"|./c20.c 
 

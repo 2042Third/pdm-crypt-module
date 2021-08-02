@@ -39,6 +39,10 @@ enmac:
 	clang++ $(mac) $(hash) $(boost) $(release_en1) $(incmac)
 demac:
 	clang++ $(mac) $(hash) $(boost) $(release_de1) $(incmac)
+enmacv:
+	clang++ $(mac) $(hash) $(boost) $(release_en1) $(incmac) -D VERBOSE
+demacv:
+	clang++ $(mac) $(hash) $(boost) $(release_de1) $(incmac) -D VERBOSE
 12en:
 	g++ $(hash) $(boost) $(release_en12) $(inc)
 12de:
