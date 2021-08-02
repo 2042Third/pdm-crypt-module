@@ -77,9 +77,12 @@ void endicha(uint8_t *a, uint32_t *b){
 }
 
 void expan(uint32_t * ot, unsigned int off, const uint8_t* in, unsigned int n) {
+
   for(i=0;i<n;i++){
     ot[off+i] = U8T32_S(in+4*i);
+    // std::cout<<ot[off+i]<<" ";
   }
+  // std::cout<<std::endl;
 }
 
 // Operate a quarter-round chacha state on total of 16 bytes or 4 32-bit numbers at a time.

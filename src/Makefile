@@ -36,9 +36,9 @@ en_debug:
 de_debug:
 	g++ $(hash) -D VERBOSE $(boost) $(de_debug) $(inc)
 enmac:
-	g++ $(mac) $(hash) $(boost) $(release_en1) $(incmac)
+	clang++ $(mac) $(hash) $(boost) $(release_en1) $(incmac)
 demac:
-	g++ $(mac) $(hash) $(boost) $(release_de1) $(incmac)
+	clang++ $(mac) $(hash) $(boost) $(release_de1) $(incmac)
 12en:
 	g++ $(hash) $(boost) $(release_en12) $(inc)
 12de:
