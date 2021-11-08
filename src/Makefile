@@ -29,19 +29,20 @@ release_de:
 	g++ $(hash) $(boost) $(release_de) $(inc)
 en:
 	g++ $(boost) $(release_en1) $(inc)
-	g++ $(hash) $(boost) $(release_en1) $(inc)
 de:
 	g++ $(boost) $(release_de1) $(inc)
-	g++ $(hash) $(boost) $(release_de1) $(inc)
 en_debug:
-	g++ $(hash) -D VERBOSE $(boost) $(en_debug_mac) $(inc)
 	g++ $(hash) -D VERBOSE $(boost) $(en_debug) $(inc)
 de_debug:
-	g++ $(hash) -D VERBOSE $(boost) $(de_debug_mac) $(inc)
 	g++ $(hash) -D VERBOSE $(boost) $(de_debug) $(inc)
 enmac:
 	clang++ $(mac) $(hash) $(boost) $(release_en1) $(incmac)
 demac:
+	clang++ $(mac) $(hash) $(boost) $(release_de1) $(incmac)
+enmacv:
+	clang++ $(mac) $(hash) $(boost) $(release_en1) $(incmac) -D VERBOSE
+demacv:
+	clang++ $(mac) $(hash) $(boost) $(release_de1) $(incmac) -D VERBOSE
 12en:
 	g++ $(hash) $(boost) $(release_en12) $(inc)
 12de:
