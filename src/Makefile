@@ -10,17 +10,17 @@ sys3 = -D MAC
 hash =  -g 
 boost= -O2
 # incmac =  -lboost_thread -lpthread 
-incmac =  -lpthread 
+incmac =  -lpthread -arch x86_64
 inc = -pthread
 # inc =-I../lib/boost-linux/ -L../lib/boost-linux/stage/lib -lboost_thread -pthread
 mac = -D MAC_OS  
 # mac = -D MAC_OS -I../lib/boost-mac/ -L../lib/boost-mac/stage/lib -L/usr/lib/system 
 release_en= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX  -o c20.o
 release_de= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX -D DE -o c20de.o
-release_en1= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -o c20
-release_de1= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -D DE -o c20de
-en_debug= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -o d20
-de_debug= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -D DE -o d20de
+release_en1=  -m64 -std=c++17  cc20_multi.cpp  -D LINUX -o c20
+release_de1= -m64 -std=c++17  cc20_multi.cpp  -D LINUX -D DE -o c20de
+en_debug_mac= -arch x86_64 -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -o d20
+de_debug_mac= -arch x86_64 -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -D DE -o d20de
 release_en12= -m64 -std=c++17  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D ROUNDCOUNTTWLV -D LINUX -o c20.c
 release_de12= -m64 -std=c++17  cc20_multi.cpp -lm  -Wall -D DEEP_DEBUG -D PRINTING -D ROUNDCOUNTTWLV -D LINUX -D DE -o c20de.c
 release_en:
@@ -28,15 +28,15 @@ release_en:
 release_de:
 	g++ $(hash) $(boost) $(release_de) $(inc)
 en:
-	g++ $(hash) $(boost) $(release_en1) $(inc)
+	g++ $(boost) $(release_en1) $(inc)
 de:
-	g++ $(hash) $(boost) $(release_de1) $(inc)
+	g++ $(boost) $(release_de1) $(inc)
 en_debug:
-	g++ $(hash) -D VERBOSE $(boost) $(en_debug) $(inc)
+	g++ $(hash) -D VERBOSE $(boost) $(en_debug_mac) $(inc)
 de_debug:
-	g++ $(hash) -D VERBOSE $(boost) $(de_debug) $(inc)
+	g++ $(hash) -D VERBOSE $(boost) $(de_debug_mac) $(inc)
 enmac:
-	g++ $(mac) $(hash) $(boost) $(release_en1) $(incmac)
+	g++ $(mac) $(hash) $(boost) $(release_en1) $(incmac) 
 demac:
 	g++ $(mac) $(hash) $(boost) $(release_de1) $(incmac)
 12en:

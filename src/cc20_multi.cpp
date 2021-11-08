@@ -51,7 +51,7 @@ int progress_bar[THREAD_COUNT];
 
 int DISPLAY_PROG =1;
 
-long int arg_track[THREAD_COUNT][6];
+unsigned long int arg_track[THREAD_COUNT][6];
 /* Passes arguments into threads.
                                        arg_track[THREAD_COUNT][0] ---> Thread number
                                        arg_track[THREAD_COUNT][1] ---> NOT USED
@@ -111,78 +111,7 @@ void Cc20::one_block(int thrd, uint32_t count) {
   endicha(this -> nex[thrd], folow[thrd]);
 }
 
-/*
-    Reads from line writes to linew, encryptes the same as rd_file_encr().
 
-*/
-
-void Cc20::encr(uint8_t*line,uint8_t*linew,unsigned long int fsize) {
-  
-  unsigned long int n = fsize;
-
-  long int tn = 0;
-  uint32_t count = 0;
-  for (long int i = 0; i < THREAD_COUNT; i++) {
-    writing_track[i] = 0;
-  }
-  long int tracker = 0;
-  long int np = 0, tmpn = np % THREAD_COUNT;
-  set_thread_arg(np % THREAD_COUNT, (long int)linew, tracker, n, 0, line, count, this);
-  threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
-  np++;
-  
-  for (unsigned long int k = 0; k < ((unsigned long int)(fsize / 64) + 1); k++) { // If leak, try add -1
-
-    if (n >= 64) {
-      tracker += 64;
-      if (tn % (BLOCK_SIZE) == 0 && (k != 0)) {
-        if (threads[np % THREAD_COUNT].joinable()) {
-          #ifdef VERBOSE
-          cout << "[main] Possible join, waiting " <<np % THREAD_COUNT<< endl;
-          #endif
-          threads[np % THREAD_COUNT].join();
-        }
-        set_thread_arg(np % THREAD_COUNT, (long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
-        threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
-
-        tracker = 0;
-        np++;
-      }
-    } else {
-      if (threads[np % THREAD_COUNT].joinable() && final_line_written != 1) {
-          #ifdef VERBOSE
-          cout << "[main] Last Possible join, waiting " <<np % THREAD_COUNT<< endl;
-          #endif
-        threads[np % THREAD_COUNT].join();
-      }
-      set_thread_arg(np % THREAD_COUNT, (long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
-      threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
-    }
-    count += 1;
-    n -= 64;
-    tn += 64;
-  }
-  #ifdef VERBOSE
-  cout << "[main] Finished dispatching joining" << endl;
-  #endif
-  
-  for (int i = 0; i < THREAD_COUNT; i++) {
-    // cout<<"Trying"<<endl;
-    if (threads[i].joinable()){
-
-      // cout << "[main] thread joining "<< i << endl;
-      threads[i].join();
-
-    }
-  }
-  if(ENABLE_SHA3_OUTPUT){
-    #ifndef DE
-    hashing.add(line,fsize );
-    #else 
-    hashing.add(linew,fsize );
-    #endif // DE
-  }
-}
 
 /*
     Creates one thread for writing and THREAD_COUNT threads for calculating the 
@@ -216,29 +145,30 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   linew = new char[sb.st_size];
   data = (uint8_t * )(mmap( 0, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0));
   line = data;
-  long int tn = 0;
+  unsigned long int tn = 0;
   n = sb.st_size;
-  unsigned int ttn = sb.st_size;
+  unsigned long int ttn = sb.st_size;
   uint32_t count = 0;
-  for (long int i = 0; i < THREAD_COUNT; i++) {
+  for (unsigned long int i = 0; i < THREAD_COUNT; i++) {
     writing_track[i] = 0;
   }
-  long int tracker = 0;
-  long int np = 0, tmpn = np % THREAD_COUNT;
+  unsigned long int tracker = 0;
+  unsigned long int np = 0, tmpn = np % THREAD_COUNT;
   
   #ifdef DE
   ttn-=12;
+    n-=12;
   line=line+12;
   #endif
   thread progress;
   if (DISPLAY_PROG){
-    for (unsigned int i=0; i<THREAD_COUNT;i++){
+    for (unsigned long int i=0; i<THREAD_COUNT;i++){
       progress_bar[i] = 0;
     }
     progress = thread(display_progress,ttn);
   }
   
-  set_thread_arg(np % THREAD_COUNT, (long int)linew, tracker, n, 0, line, count, this);
+  set_thread_arg(np % THREAD_COUNT, (unsigned long int)linew, tracker, n, 0, line, count, this);
   threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
   np++;
   
@@ -253,7 +183,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
           #endif
           threads[np % THREAD_COUNT].join();
         }
-        set_thread_arg(np % THREAD_COUNT, (long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
+        set_thread_arg(np % THREAD_COUNT, (unsigned long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
         threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
 
         tracker = 0;
@@ -266,7 +196,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
           #endif
         threads[np % THREAD_COUNT].join();
       }
-      set_thread_arg(np % THREAD_COUNT, (long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
+      set_thread_arg(np % THREAD_COUNT, (unsigned long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
       threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
     }
     count += 1;
