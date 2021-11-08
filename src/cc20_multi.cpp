@@ -108,7 +108,7 @@ void Cc20::one_block(int thrd, uint32_t count) {
   for (unsigned int i = 0; i < 10; i++) tworounds(folow[thrd]); // 20 rounds
   #endif
   set_conc(cy[thrd], folow[thrd], 16);
-  endicha(this -> nex[thrd], folow[thrd]);
+  endicha(this -> nex[thrd], cy[thrd]);
 }
 
 
@@ -145,11 +145,11 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   linew = new char[sb.st_size];
   data = (uint8_t * )(mmap( 0, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0));
   line = data;
-  unsigned long int tn = 0;
+  long int tn = 0;
   n = sb.st_size;
-  unsigned long int ttn = sb.st_size;
+  unsigned int ttn = sb.st_size;
   uint32_t count = 0;
-  for (unsigned long int i = 0; i < THREAD_COUNT; i++) {
+  for (long int i = 0; i < THREAD_COUNT; i++) {
     writing_track[i] = 0;
   }
   unsigned long int tracker = 0;
@@ -162,17 +162,17 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   #endif
   thread progress;
   if (DISPLAY_PROG){
-    for (unsigned long int i=0; i<THREAD_COUNT;i++){
+    for (unsigned int i=0; i<THREAD_COUNT;i++){
       progress_bar[i] = 0;
     }
     progress = thread(display_progress,ttn);
   }
   
-  set_thread_arg(np % THREAD_COUNT, (unsigned long int)linew, tracker, n, 0, line, count, this);
+  set_thread_arg(np % THREAD_COUNT, (long int)linew, tracker, n, 0, line, count, this);
   threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
   np++;
   
-  for (unsigned long int k = 0; k < ((unsigned long int)(ttn / 64) + 1); k++) { // If leak, try add -1
+  for (unsigned long int k = 0; k < ((unsigned long int)(ttn / 64) + 0); k++) { // If leak, try add -1
 
     if (n >= 64) {
       tracker += 64;
@@ -183,20 +183,28 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
           #endif
           threads[np % THREAD_COUNT].join();
         }
-        set_thread_arg(np % THREAD_COUNT, (unsigned long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
+
+        #ifdef VERBOSE
+        cout << "[main] " <<np % THREAD_COUNT<< " regular being dispatched"<< endl;
+        #endif
+        set_thread_arg(np % THREAD_COUNT, (long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
         threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
 
         tracker = 0;
         np++;
       }
-    } else {
+    } 
+    else {
       if (threads[np % THREAD_COUNT].joinable() && final_line_written != 1) {
           #ifdef VERBOSE
           cout << "[main] Last Possible join, waiting " <<np % THREAD_COUNT<< endl;
           #endif
         threads[np % THREAD_COUNT].join();
       }
-      set_thread_arg(np % THREAD_COUNT, (unsigned long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
+      #ifdef VERBOSE
+      cout << "[main] " <<np % THREAD_COUNT<< " last one being dispatched"<< endl;
+      #endif
+      set_thread_arg(np % THREAD_COUNT, (long int)linew+tn, tracker, n, tn, line + tn, count + 1, this);
       threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
     }
     count += 1;
@@ -267,7 +275,7 @@ void display_progress(unsigned int n) {
   cout<<endl;
   while(current<res){
     acum=0;
-    if(((float)accumulate(progress_bar,progress_bar+THREAD_COUNT,acum)/n) *res>=current){
+    if(((float)accumulate(progress_bar,progress_bar+THREAD_COUNT,acum)/n) *res>=current || n<1000){
       current++;
       cout<<"-"<<flush;
     }
