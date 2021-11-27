@@ -375,6 +375,8 @@ void Cc20::set_vals(uint8_t * nonce, uint8_t * key) {
 
     expan(this -> cy[i], 13, this -> nonce, 3);
     expan(this -> cy[i], 4, key, 8);
+    //algo change #2
+    one_block((int)i, (int)1);
   }
 }
 

@@ -17,8 +17,8 @@ mac = -D MAC_OS
 # mac = -D MAC_OS -I../lib/boost-mac/ -L../lib/boost-mac/stage/lib -L/usr/lib/system 
 release_en= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX  -o c20.o
 release_de= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX -D DE -o c20de.o
-release_en1= -m64 -std=c++17  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -o c20
-release_de1= -m64 -std=c++17  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -D DE -o c20de
+release_en1= -m64 -std=c++17  cc20_multi.cpp   -D LINUX -o c20
+release_de1= -m64 -std=c++17  cc20_multi.cpp   -D LINUX -D DE -o c20de
 en_debug= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -o d20
 de_debug= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -D DE -o d20de
 release_en12= -m64 -std=c++17  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D ROUNDCOUNTTWLV -D LINUX -o c20.c

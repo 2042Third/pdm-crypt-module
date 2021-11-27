@@ -69,28 +69,37 @@ void roln<uint32_t>(uint32_t &val,unsigned int n) {
     val= (val << n) | (val >> (32-n));
 }
 
-void endicha(uint8_t *a, uint32_t *b){
-    for (i=0; i<16;i++){
-        U32T8_S(a+4*i,b[i]);
+//algo change #2
+static inline uint32_t rotl32(uint32_t x, int n)
+{
+  // http://blog.regehr.org/archives/1063
+  return x << n | (x >> (-n & 31));
+}
 
-    }
+void endicha(uint8_t *a, uint32_t *b){
+  for (i=0; i<16;i++){
+    U32T8_S(a+4*i,b[i]);
+
+  }
 }
 
 void expan(uint32_t * ot, unsigned int off, const uint8_t* in, unsigned int n) {
-
   for(i=0;i<n;i++){
     ot[off+i] = U8T32_S(in+4*i);
-    // std::cout<<ot[off+i]<<" ";
   }
-  // std::cout<<std::endl;
 }
 
 // Operate a quarter-round chacha state on total of 16 bytes or 4 32-bit numbers at a time.
-void quarteround(uint32_t * state, uint32_t a, uint32_t b, uint32_t c, uint32_t d){
-    state[a] +=state[b]; state[d] ^=state[a]; roln(state[d] ,16);
-    state[c] +=state[d]; state[b] ^=state[c]; roln(state[b] ,12);
-    state[a] +=state[b]; state[d] ^=state[a]; roln(state[d] ,8);
-    state[c] +=state[d]; state[b] ^=state[c]; roln(state[b] ,7);
+void quarteround(uint32_t * x, uint32_t a, uint32_t b, uint32_t c, uint32_t d){
+
+  x[a] += x[b];
+  x[d] = rotl32(x[d] ^ x[a], 16);
+  x[c] += x[d];
+  x[b] = rotl32(x[b] ^ x[c], 12);
+  x[a] += x[b];
+  x[d] = rotl32(x[d] ^ x[a], 8);
+  x[c] += x[d];
+  x[b] = rotl32(x[b] ^ x[c], 7);
 }
 
 void tworounds(uint32_t * state){
