@@ -12,6 +12,7 @@ author:     Yi Yang
 
 #include "cc20_dev.cpp"
 #include "cc20_multi.h"
+#include "cc20_poly.hpp "
 #include "../lib/sha3.cpp"
 #include <thread>
 #include <numeric>
@@ -74,6 +75,10 @@ thread threads[THREAD_COUNT]; // Threads
 char ** outthreads;
 
 int final_line_written = 0; // Whether or not the fianl line is written
+
+// Crypto config
+
+int cryDE=0; // Sets the encryption is for encryption or decryption.
 
 // mutex mtx;
 
@@ -405,33 +410,35 @@ void Cc20::endicha(uint8_t * a, uint32_t * b) {
 void cmd_enc(string infile_name, string oufile_name, string text_nonce){
   // cout<<infile_name<<","<<oufile_name<<","<<text_nonce<<"\n"<<endl;
   Cc20 cry_obj;
+  cry_obj.DE = cryDE;
   string text_key;
   Bytes key;
   Bytes nonce;
 
   // boost::algorithm::trim(infile_name);
 
-  #ifdef LINUX
-  termios oldt;
-  tcgetattr(STDIN_FILENO, & oldt);
-  termios newt = oldt;
-  newt.c_lflag &= ~ECHO;
-  tcsetattr(STDIN_FILENO, TCSANOW, & newt);
+  // #ifdef LINUX
+  // termios oldt;
+  // tcgetattr(STDIN_FILENO, & oldt);
+  // termios newt = oldt;
+  // newt.c_lflag &= ~ECHO;
+  // tcsetattr(STDIN_FILENO, TCSANOW, & newt);
+  // cout << "Password/密码： " << endl;
+  // std::getline(std::cin, text_key);
+  // tcsetattr(STDIN_FILENO, TCSANOW, & oldt);
+  // cout << endl;
+  // #endif
+
+  // #ifdef WINDOWS
+  // HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+  // DWORD mode = 0;
+  // GetConsoleMode(hStdin, & mode);
+  // SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
+  // cout << "Password/密码： " << endl;
+  // std::getline(std::cin, text_key);
+  // #endif
   cout << "Password/密码： " << endl;
   std::getline(std::cin, text_key);
-  tcsetattr(STDIN_FILENO, TCSANOW, & oldt);
-  cout << endl;
-  #endif
-
-  #ifdef WINDOWS
-  HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-  DWORD mode = 0;
-  GetConsoleMode(hStdin, & mode);
-  SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
-  cout << "Password/密码： " << endl;
-  std::getline(std::cin, text_key);
-  #endif
-
   
   SHA3 key_hash;
   key_hash.add(stob(text_key).data(),text_key.size());
@@ -455,17 +462,18 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
   // Timer
   auto start = std::chrono::high_resolution_clock::now();
   // cout<<"before: "<<text_nonce.data()<<endl;
+
   cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
 
 
-  #ifdef DE
-  cry_obj.rd_file_encr(infile_name_copy,"dec-"+infile_name);
-  if (ENABLE_SHA3_OUTPUT) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
-
-  #else
-  cry_obj.rd_file_encr(infile_name, infile_name+".pdm");
-  if (ENABLE_SHA3_OUTPUT) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
-  #endif //END DE
+  if(cry_obj.DE){
+    cry_obj.rd_file_encr(infile_name_copy,"dec-"+infile_name);
+    if (ENABLE_SHA3_OUTPUT) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
+  }
+  else {
+    cry_obj.rd_file_encr(infile_name, infile_name+".pdm");
+    if (ENABLE_SHA3_OUTPUT) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
+  }
   auto end = std::chrono::high_resolution_clock::now();
   auto dur = end - start;
   auto i_millis = std::chrono::duration_cast < std::chrono::milliseconds > (dur);
@@ -488,6 +496,8 @@ void set_config(char*inp){
   for(unsigned int i=0;i<a.size();i++){
     if (a[i] == 's' ) ENABLE_SHA3_OUTPUT = 0;
     else if (a[i] == 'h' ) DISPLAY_PROG = 0;
+    else if (a[i] == 'E' ) cryDE = 0;
+    else if (a[i] == 'D' ) cryDE = 1;
   }
 }
 

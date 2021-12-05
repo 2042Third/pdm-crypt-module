@@ -12,9 +12,9 @@ author:     Yi Yang
 #include <stdio.h>
 #include <chrono>
 // Added 
-#ifndef WINDOWS
+// #ifndef WINDOWS
 #include <sys/mman.h>
-#endif
+// #endif
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -36,7 +36,7 @@ public:
   void set_vals(uint8_t * nonce, uint8_t*key);
   void one_block (int thrd, uint32_t count);
   void endicha(uint8_t *a, uint32_t *b);
-  
+  int DE = 0;
 
   // Make sure this number is same as THREAD_COUNT
   //           *

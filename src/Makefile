@@ -11,9 +11,10 @@ hash =  -g
 boost= -O2
 # incmac =  -lboost_thread -lpthread 
 incmac =  -lpthread 
-inc = -lpthread
+inc = -lpthread -I../lib/poly1305-donna-master/ -I../lib/ -lrt
 # inc =-I../lib/boost-linux/ -L../lib/boost-linux/stage/lib -lboost_thread -pthread
 mac = -D MAC_OS  
+libr = -I../lib/poly1305-donna-master/ 
 # mac = -D MAC_OS -I../lib/boost-mac/ -L../lib/boost-mac/stage/lib -L/usr/lib/system 
 release_en= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX  -o c20.o
 release_de= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX -D DE -o c20de.o
@@ -23,6 +24,8 @@ en_debug= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING 
 de_debug= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -D DE -o d20de
 release_en12= -m64 -std=c++17  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D ROUNDCOUNTTWLV -D LINUX -o c20.c
 release_de12= -m64 -std=c++17  cc20_multi.cpp -lm  -Wall -D DEEP_DEBUG -D PRINTING -D ROUNDCOUNTTWLV -D LINUX -D DE -o c20de.c
+windows:
+	g++ $(boost) $(release_en1) $(inc) -D WINDOWS
 release_en:
 	g++ $(hash) $(boost) $(release_en) $(inc)
 release_de:
