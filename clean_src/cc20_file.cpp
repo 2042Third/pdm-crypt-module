@@ -48,6 +48,18 @@ void cc20_file::run_test(const char* f_name){
   cout <<"mmf.offset(): \t\t"<<  mmf.offset() << endl;
   cout <<"mmf.mapped_size(): \t"<<  mmf.mapped_size() << endl;
 }
+/*a test*/
+void cc20_file::run_test(){
+  // read_new(f_name);
+  memory_mapped_file::read_only_mmf mmf = get_read();
+  // mmf.open(pathname, false);
+  // mmf.map(0, mmf.file_size());
+  cout <<"mmf.is_open(): \t\t"<< mmf.is_open() << endl;
+  cout <<"mmf.file_size(): \t"<<  mmf.file_size() << endl;
+  cout <<"mmf.offset(): \t\t"<<  mmf.offset() << endl;
+  cout <<"mmf.mapped_size(): \t"<<  mmf.mapped_size() << endl;
+  
+}
 
 
 memory_mapped_file::read_only_mmf cc20_file::get_read(){

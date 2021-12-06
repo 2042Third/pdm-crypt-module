@@ -12,7 +12,7 @@ public:
   uint8_t* line;
   uint8_t* linew;
   uint32_t count;
-  unsigned long int n;
+  size_t n;
 
 };
 #endif //PDM_CC20_PARTS_H

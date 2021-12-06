@@ -34,6 +34,7 @@ public:
   void endicha(uint8_t *a, uint32_t *b);
   void read_original_mac(unsigned char * m, uint8_t* input_file, size_t off);
   int file_written(){return FILE_WRITTEN;}
+  // void display_progress(unsigned int n) ;
   int DE = 0;
 
   // Make sure this number is same as THREAD_COUNT
@@ -63,7 +64,7 @@ private:
   unsigned long b4 =  0B01101011001001000110010101110100 ;
 };
 
-void display_progress(unsigned int n);
+void display_progress(size_t n);
 
 // void enc_writing(string oufile_name);
 // void enc_writing_nw();

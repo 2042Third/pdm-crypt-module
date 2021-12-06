@@ -32,7 +32,8 @@ void enc_writing(string oufile_name);
 void enc_writing_nw();
 void multi_enc_pthrd(int thrd);
 void multi_enc_pthrd_nw(int thrd);
-void set_thread_arg(unsigned long int thrd, uint8_t* np,unsigned long int tracker,unsigned long int n, unsigned long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
+void set_thread_arg(unsigned long int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) ;
+// void set_thread_arg(unsigned long int thrd, uint8_t* np,unsigned long int tracker,unsigned long int n, unsigned long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
        
 cc20_poly* poly;
 
@@ -58,7 +59,7 @@ long int writing_track[THREAD_COUNT]; // Tells the writer thread how much to rea
 
 char *linew; // Tracks all the input
 
-int progress_bar[THREAD_COUNT];
+size_t progress_bar[THREAD_COUNT];
 
 int DISPLAY_PROG =1;
 
@@ -136,7 +137,7 @@ void Cc20::one_block(int thrd, uint32_t count) {
 
 void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   std::vector < uint8_t > content;
-  unsigned long int n = 0;
+  size_t n = 0;
 
   struct stat sb;
   uint8_t * data;
@@ -144,8 +145,6 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
 
   cc20_file r_file;
   r_file.read_new(file_name.data());
-
-
 
   #ifdef VERBOSE
   cout << "Staring file size " << (size_t) r_file.file_size() << endl;
@@ -155,16 +154,20 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   cout << "_WIN64 not defined" << endl;
   #endif
   #endif
-  linew = new char[r_file.file_size()+13];
 
-  // line = (const uint8_t * )(mmap( 0, (size_t) r_file.file_size(), PROT_READ, MAP_PRIVATE, fd, 0));
+  r_file.write_new(oufile_name.data(),1);
+  linew = r_file.get_write_mapping(r_file.file_size()+12+16); // Mapped writting
+  copy(this->nonce_orig, this->nonce_orig+12,
+        linew);
+  if(!DE)
+    linew =linew+12;
   line = (const uint8_t*) r_file.get_mapping();
   #ifdef VERBOSE
   cout << "File mapped " << line[0] << endl;
   #endif
-  long int tn = 0;
+  size_t tn = 0;
   n = r_file.file_size();
-  unsigned int ttn = r_file.file_size();
+  size_t ttn = r_file.file_size();
   if(DE){ // when decrypting
     n-=16;
     ttn-=16;
@@ -193,7 +196,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
     progress = thread(display_progress,ttn);
   }
   
-  set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew, tracker, n, 0, (uint8_t*)line, count, this);
+  set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew, n, (uint8_t*)line, count, this);
   threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
   np++;
   for (unsigned long int k = 0; k < ((unsigned long int)(ttn / 64) + 0); k++) { // If leak, try add -1
@@ -211,7 +214,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
         #ifdef VERBOSE
         cout << "[main] " <<np % THREAD_COUNT<< " regular being dispatched"<< endl;
         #endif
-        set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew+tn, tracker, n, tn, (uint8_t*)line + tn, count + 1, this);
+        set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
         threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
         tracker = 0;
         np++;
@@ -228,7 +231,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
       #ifdef VERBOSE
       cout << "[main] " <<np % THREAD_COUNT<< " last one being dispatched"<< endl;
       #endif
-      set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew+tn, tracker, n, tn, (uint8_t*)line + tn, count + 1, this);
+      set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
       threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
     }
     count += 1;
@@ -260,19 +263,9 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
       else
         hashing.add(linew,ttn );
     }
-    FILE * oufile;
-    oufile = fopen(oufile_name.data(), "wb");
-    fclose(oufile);
-    oufile = fopen(oufile_name.data(), "ab");
-    if(!DE){
-      fwrite(this->nonce_orig, sizeof(char), 12, oufile);
-    }
-    fwrite(linew, sizeof(char), ttn, oufile);
     
-    if(!DE){
-      fwrite(mac, sizeof(char), 16, oufile);
-    }
-    fclose(oufile);
+    if(!DE)
+      copy(mac,mac+16,linew+ttn);
     FILE_WRITTEN=1;
   }
   else {
@@ -287,7 +280,6 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
     }
     delete[] outthreads;
   }
-  delete[] linew;
   r_file.unmap();
   if(DISPLAY_PROG){
     if (progress.joinable())
@@ -298,15 +290,17 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
  * Displays progress
  * 
  * */
-void display_progress(unsigned int n) {
+void display_progress(size_t n) {
   unsigned int current=0;
-  unsigned int acum=0;
+  size_t acum=0;
   unsigned int res =50;
   double num =0;
   string line, spaces;
-  while(current<res){
+  char progress_buffer[100];
+  while(current<res ){
     acum=0;
-    printf("[%s%s]%.1f%% \r",line.data(), spaces.data(), ((num*res)));
+    sprintf(progress_buffer,"[%s%s]%.1f%%\0",line.data(), spaces.data(), ((num*100)-100));
+    cout << progress_buffer << "\r";
     num = (float)accumulate(progress_bar,progress_bar+THREAD_COUNT,acum)/n;
     if((num) *res>=current || n<1000){
       current++;
@@ -333,7 +327,7 @@ void display_progress(unsigned int n) {
 
 */
 
-void set_thread_arg(unsigned long int thrd, uint8_t* linew1, unsigned long int tracker, unsigned long int n, unsigned long int tn, uint8_t * line, uint32_t count, Cc20 * ptr) {
+void set_thread_arg(unsigned long int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) {
   arg_track[thrd].thrd = thrd;
   arg_track[thrd].linew = linew1;
   arg_track[thrd].n = n;
@@ -345,8 +339,8 @@ void set_thread_arg(unsigned long int thrd, uint8_t* linew1, unsigned long int t
 
 void multi_enc_pthrd(int thrd) {
   uint8_t * linew1 = arg_track[thrd].linew; // Used--
-  unsigned long int tracker = 0; // Used
-  unsigned long int n = arg_track[thrd].n; // Used--
+  size_t tracker = 0; // Used
+  size_t n = arg_track[thrd].n; // Used--
   uint8_t * line = arg_track[thrd].line; // Used--
   uint32_t count = arg_track[thrd].count; // Used --
   Cc20 * ptr = arg_ptr[thrd];

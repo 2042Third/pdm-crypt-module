@@ -29,7 +29,7 @@ release_de12= -m64 -std=c++17  cc20_multi.cpp -lm  -Wall -D DEEP_DEBUG -D PRINTI
 windows:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32)
 windows_debug:
-	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -D VERBOSE
+	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) 
 release_en:
 	g++ $(hash) $(boost) $(release_en) $(inc)
 release_de:
