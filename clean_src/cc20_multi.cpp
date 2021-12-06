@@ -36,7 +36,7 @@ void set_thread_arg(unsigned long int thrd, uint8_t* linew1, size_t n,  uint8_t 
 // void set_thread_arg(unsigned long int thrd, uint8_t* np,unsigned long int tracker,unsigned long int n, unsigned long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
        
 cc20_poly* poly;
-
+int poly1305_toggle=1;
 unsigned char orig_mac[16];
 
 int ENABLE_SHA3_OUTPUT = 0;
@@ -156,7 +156,10 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   #endif
 
   r_file.write_new(oufile_name.data(),1);
-  linew = r_file.get_write_mapping(r_file.file_size()+12+16); // Mapped writting
+  if(poly1305_toggle )
+    linew = r_file.get_write_mapping(r_file.file_size()+12+16); // Mapped writting
+  else 
+    linew = r_file.get_write_mapping(r_file.file_size()+12); // Mapped writting
   copy(this->nonce_orig, this->nonce_orig+12,
         linew);
   if(!DE)
@@ -168,7 +171,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   size_t tn = 0;
   n = r_file.file_size();
   size_t ttn = r_file.file_size();
-  if(DE){ // when decrypting
+  if(DE && poly1305_toggle){ // when decrypting
     n-=16;
     ttn-=16;
 
@@ -185,7 +188,8 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
     n-=12;
     line=line+12;
     // Read original mac
-    read_original_mac(orig_mac, (unsigned char *)line, (size_t)ttn);
+    if(poly1305_toggle)
+      read_original_mac(orig_mac, (unsigned char *)line, (size_t)ttn);
   }
 
   thread progress;
@@ -248,14 +252,15 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
     }
   }
   // Check encryption correctness
-  if(!DE)
-    poly->update((unsigned char *)linew,ttn);
-  else
-    poly->update((unsigned char *)line,ttn);
-
+  if(poly1305_toggle){
+    if(!DE)
+      poly->update((unsigned char *)linew,ttn);
+    else
+      poly->update((unsigned char *)line,ttn);
+  }
   unsigned char mac[16];
   poly->finish((unsigned char*)mac);
-  if (poly->verify(mac, orig_mac) || !DE){
+  if (poly->verify(mac, orig_mac) || !DE || !poly1305_toggle){
     if (ENABLE_SHA3_OUTPUT){
       // cout << "Generating hash..." << endl;
       if(!DE)
@@ -264,7 +269,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
         hashing.add(linew,ttn );
     }
     
-    if(!DE)
+    if(!DE && poly1305_toggle)
       copy(mac,mac+16,linew+ttn);
     FILE_WRITTEN=1;
   }
@@ -514,11 +519,13 @@ void set_config(char*inp){
   for(unsigned int i=0;i<a.size();i++){
     if (a[i] == 'S' ) ENABLE_SHA3_OUTPUT = 1;
     else if (a[i] == 'H' ) DISPLAY_PROG = 0;
+    else if (a[i] == 'd' ) poly1305_toggle = 0;
     else if (a[i] == 'E' ) cryDE = 0;
     else if (a[i] == 'D' ) cryDE = 1;
     else if (a[i] == 'h'){
-      printf("Usage: %s\nOptions:\n-S\t%s\n-H\t%s\n-E\t%s\n-D\t%s\n-h\t%s\n%s\n",
+      printf("Usage: %s\nOptions:\n-d\t%s\n-S\t%s\n-H\t%s\n-E\t%s\n-D\t%s\n-h\t%s\n%s\n",
         "c20 [OPTIONS] FILE_NAME",
+        "Fast mode, disable poly1305 checking"
         "Enable sha3 output on plain text",
         "Hide progress bar",
         "Encrypt(default)",
