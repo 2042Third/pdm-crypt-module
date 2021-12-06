@@ -136,18 +136,8 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   unsigned long int n = 0;
 
   struct stat sb;
-  // long int fd;
   uint8_t * data;
   const uint8_t * line; 
-  // fd = open(file_name.data(), O_RDONLY); // Reading file
-  // if (fd == -1) {
-  //   perror("Cannot open file ");
-  //   cout << file_name << " ";
-  //   exit(1);
-  // }
-
-
-  // fstat(fd, & sb);
 
   cc20_file r_file;
   r_file.read_new(file_name.data());
@@ -166,7 +156,6 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   #ifdef VERBOSE
   cout << "File mapped " << line[0] << endl;
   #endif
-  // line = data;
   long int tn = 0;
   n = r_file.file_size();
   unsigned int ttn = r_file.file_size();
@@ -177,18 +166,11 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   unsigned long int tracker = 0;
   unsigned long int np = 0, tmpn = np % THREAD_COUNT;
   
-  // #ifdef DE
-  // ttn-=12;
-  //   n-=12;
-  // line=line+12;
-  // #endif
   if(DE){
    std::cout<<"Decryption selected"<<endl;
     ttn-=12;
     n-=12;
     line=line+12;
-    // linew=(unsigned char*)outstr;
-    // line=data+12;
   }
 
   thread progress;
@@ -200,10 +182,8 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   }
   
   set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew, tracker, n, 0, (uint8_t*)line, count, this);
-  // set_thread_arg(np % THREAD_COUNT, (long int)linew, tracker, n, 0, line, count, this);
   threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
   np++;
-  
   for (unsigned long int k = 0; k < ((unsigned long int)(ttn / 64) + 0); k++) { // If leak, try add -1
 
     if (n >= 64) {
@@ -221,7 +201,6 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
         #endif
         set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew+tn, tracker, n, tn, (uint8_t*)line + tn, count + 1, this);
         threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
-
         tracker = 0;
         np++;
       }
@@ -248,12 +227,8 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   #endif
   
   for (int i = 0; i < THREAD_COUNT; i++) {
-    // cout<<"Trying"<<endl;
     if (threads[i].joinable()){
-
-      // cout << "[main] thread joining "<< i << endl;
       threads[i].join();
-
     }
   }
   if (ENABLE_SHA3_OUTPUT){
@@ -267,17 +242,13 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   fclose(oufile);
   oufile = fopen(oufile_name.data(), "ab");
   if(!DE){
-    // cout<<"nonce_orig: "<<this->nonce_orig <<endl;
     fwrite(this->nonce_orig, sizeof(char), 12, oufile);
   }
-  
   fwrite(linew, sizeof(char), ttn, oufile);
   fclose(oufile);
-
   #ifdef VERBOSE
   cout << "[main] Writing thread joined" << endl;
   #endif
-
   if (oufile_name == "a") {
     for (unsigned int i = 0; i < ttn / BLOCK_SIZE + 1; i++) {
       delete[] outthreads[i];
@@ -286,9 +257,6 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   }
   delete[] linew;
   r_file.unmap();
-  // if (munmap(data,ttn)!=0)
-  //   fprintf(stderr,"Cannot close");
-  // close(fd);
   if(DISPLAY_PROG){
     if (progress.joinable())
       progress.join();
@@ -302,16 +270,28 @@ void display_progress(unsigned int n) {
   unsigned int current=0;
   unsigned int acum=0;
   unsigned int res =50;
-  cout<<endl;
+  double num =0;
+  string line, spaces;
   while(current<res){
     acum=0;
-    if(((float)accumulate(progress_bar,progress_bar+THREAD_COUNT,acum)/n) *res>=current || n<1000){
+    printf("[%s%s]%.1f%\r",line.data(), spaces.data(), ((num*res)));
+    num = (float)accumulate(progress_bar,progress_bar+THREAD_COUNT,acum)/n;
+    if((num) *res>=current || n<1000){
       current++;
-      cout<<"-"<<flush;
+    }
+    line="";
+    spaces="";
+    num+=1;
+    for(unsigned i =0 ; i<res;i++){
+      if (i<=current)
+        line+="-";
+      else
+        spaces+=" ";
     }
     usleep(10000);
   }
-  cout<<"100%"<<endl;
+  printf("[%s%s]%.1f%\n",line.data(), spaces.data(), ((100.0)));
+
 }
 
 
