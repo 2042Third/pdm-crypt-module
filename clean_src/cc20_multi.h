@@ -32,6 +32,8 @@ public:
   void set_vals(uint8_t * nonce, uint8_t*key);
   void one_block (int thrd, uint32_t count);
   void endicha(uint8_t *a, uint32_t *b);
+  void read_original_mac(unsigned char * m, uint8_t* input_file, size_t off);
+  int file_written(){return FILE_WRITTEN;}
   int DE = 0;
 
   // Make sure this number is same as THREAD_COUNT
@@ -41,7 +43,7 @@ public:
 
 private:
   // cc20_file* r_file = NULL;
-
+  int FILE_WRITTEN =0;  
   uint8_t * nonce;
 
   uint32_t count;
