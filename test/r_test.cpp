@@ -18,7 +18,7 @@ int main (int argc , char** argv){
   line="";
   spaces="";
   while (cur_tick <= tick){
-    printf("[%s%s]%.1f%\r",line.data(), spaces.data(), ((num/50)*100));
+    printf("[%s%s]%.1f%\f\r",line.data(), spaces.data(), ((num/50)*100));
     line="";
     spaces="";
     num+=1;

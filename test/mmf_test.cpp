@@ -15,8 +15,9 @@ int main(int argc, char **argv)
   getline(cin, k);
 
   // ENCRYPTION TEST
-  cc20_file a(k.data());
-  a.run_test(k.data());
+  cc20_file a();
+  a.read_new(k.data());
+  a.
   cout << "Test finish."<<endl;
 
   return 1;

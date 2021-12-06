@@ -15,13 +15,16 @@ int main(int argc, char **argv)
   string v="";
   cout << "Key: \n";
   getline(cin, k);
-  cout << "Value: \n";
+  cout << "File: \n";
   getline(cin, v);
 
+  Bytes cur ;
+  init_byte_rand_cc20(cur,12);
+  nonce="1";
   // ENCRYPTION TEST
   vector<char> outstr;
   outstr.reserve(v.size()+13);
-  cmd_enc((uint8_t *)((&v)->data()), v.size(), (uint8_t *)((&outstr)->data()), k);
+  cmd_enc(v,"t_out",cur);
 
 
 }

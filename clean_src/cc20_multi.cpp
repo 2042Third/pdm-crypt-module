@@ -23,6 +23,7 @@ author:     Yi Yang
 #include <thread>
 #include <numeric>
 #include <unistd.h>
+#include <sstream>
 
 
 using namespace std;
@@ -32,8 +33,8 @@ void enc_writing_nw();
 void multi_enc_pthrd(int thrd);
 void multi_enc_pthrd_nw(int thrd);
 void set_thread_arg(unsigned long int thrd, uint8_t* np,unsigned long int tracker,unsigned long int n, unsigned long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
-// void set_thread_arg(int thrd, long int np,long int tracker,long int n, long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
        
+cc20_poly* poly;
 
 int ENABLE_SHA3_OUTPUT = 1;
 
@@ -203,6 +204,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
         threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
         tracker = 0;
         np++;
+
       }
     } 
     else {
@@ -232,6 +234,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
     }
   }
   if (ENABLE_SHA3_OUTPUT){
+    // cout << "Generating hash..." << endl;
     if(!DE)
       hashing.add(line,ttn );
     else
@@ -245,6 +248,16 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
     fwrite(this->nonce_orig, sizeof(char), 12, oufile);
   }
   fwrite(linew, sizeof(char), ttn, oufile);
+  // IN TESTING
+  // cout << "Generating Poly1305 mac..." << endl;
+  if(!DE)
+    poly->update((unsigned char *)linew,ttn);
+  else
+    poly->update((unsigned char *)line,ttn);
+    // hashing.add(linew,ttn );
+  
+
+  // END TESTING
   fclose(oufile);
   #ifdef VERBOSE
   cout << "[main] Writing thread joined" << endl;
@@ -392,6 +405,31 @@ void Cc20::endicha(uint8_t * a, uint32_t * b) {
   }
 }
 
+std::vector<unsigned char> string_to_binary_hex(const std::string& source)
+{
+    static int nibbles[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0, 0, 10, 11, 12, 13, 14, 15 };
+    std::vector<unsigned char> retval;
+    for (std::string::const_iterator it = source.begin(); it < source.end(); it += 2) {
+        unsigned char v = 0;
+        if (std::isxdigit(*it))
+            v = nibbles[std::toupper(*it) - '0'] << 4;
+        if (it + 1 < source.end() && std::isxdigit(*(it + 1)))
+            v += nibbles[std::toupper(*(it + 1)) - '0'];
+        retval.push_back(v);
+    }
+    return retval;
+}
+
+std::string binary_to_hex_string(const std::vector<unsigned char>& source)
+{
+    static char syms[] = "0123456789ABCDEF";
+    std::stringstream ss;
+    for (std::vector<unsigned char>::const_iterator it = source.begin(); it != source.end(); it++)
+        ss << syms[((*it >> 4) & 0xf)] << syms[*it & 0xf];
+
+    return ss.str();
+}
+
 /**
  * Init encryption.
  * 
@@ -415,31 +453,9 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
   Bytes key;
   Bytes nonce;
 
-  // boost::algorithm::trim(infile_name);
-
-  // #ifdef LINUX
-  // termios oldt;
-  // tcgetattr(STDIN_FILENO, & oldt);
-  // termios newt = oldt;
-  // newt.c_lflag &= ~ECHO;
-  // tcsetattr(STDIN_FILENO, TCSANOW, & newt);
-  // cout << "Password/密码： " << endl;
-  // std::getline(std::cin, text_key);
-  // tcsetattr(STDIN_FILENO, TCSANOW, & oldt);
-  // cout << endl;
-  // #endif
   cout << "Password:" << endl;
   std::getline(std::cin, text_key);
-  // #ifdef WINDOWS
-  // HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-  // DWORD mode = 0;
-  // GetConsoleMode(hStdin, & mode);
-  // SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT));
-  // cout << "Password/密码： " << endl;
-  // std::getline(std::cin, text_key);
-  // #endif
 
-  
   SHA3 key_hash;
   key_hash.add(stob(text_key).data(),text_key.size());
   key_hash.add(stob(text_key).data(),text_key.size());
@@ -466,7 +482,10 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
 
   cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
 
-
+  // IN TESTING
+  poly = new cc20_poly();
+  poly->init((unsigned char *)key_hash.getHash().data()); 
+  // END TESTING
   if(cry_obj.DE){
     cry_obj.rd_file_encr(infile_name_copy,"dec-"+infile_name);
     if (ENABLE_SHA3_OUTPUT) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
@@ -475,6 +494,12 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
     cry_obj.rd_file_encr(infile_name, infile_name+".pdm");
     if (ENABLE_SHA3_OUTPUT) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
   }
+  unsigned char mac[16];
+  poly->finish((unsigned char*)mac);
+  cout<<"poly1305: \"";
+  for (auto i : mac)
+    printf("%x", int(i));
+  cout<<"\""<<endl;
   auto end = std::chrono::high_resolution_clock::now();
   auto dur = end - start;
   auto i_millis = std::chrono::duration_cast < std::chrono::milliseconds > (dur);
@@ -523,7 +548,7 @@ int rd_inp(unsigned int argc, char ** argv, string *infile){
 }
 
 Cc20::~Cc20() {
-  // if(r_file.NULL) delete r_file.
+  if(poly !=NULL) delete poly;
 }
 
 int main(int argc, char ** argv) {
