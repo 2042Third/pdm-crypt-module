@@ -27,6 +27,8 @@ public:
 
   void start_seq();
   void encr(uint8_t*line,uint8_t*linew,unsigned long int fsize);
+  void rd_file_encr(uint8_t* buf, string oufile_name, size_t outsize) ;
+  void rd_file_encr(const std::string file_name, uint8_t* outstr) ;
   void rd_file_encr (uint8_t * buf, uint8_t* outstr, size_t input_length);
   void rd_file_encr (const std::string file_name, std::string oufile_name);
   void stream( uint8_t*plain,unsigned int len);
@@ -66,11 +68,13 @@ private:
   unsigned long b4 =  0B01101011001001000110010101110100 ;
 };
 
+void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outsize);
+void cmd_enc(string infile_name, string oufile_name, string text_nonce);
+void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key);
 void display_progress(size_t n);
+// EMSCRIPTEN_KEEPALIVE
+void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , std::string text_key);
 
-// void enc_writing(string oufile_name);
-// void enc_writing_nw();
-// void multi_enc_pthrd(int thrd);
-// void multi_enc_pthrd_nw(int thrd);
-// void set_thread_arg(int thrd, long int np,long int tracker,long int n, long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
+// EMSCRIPTEN_KEEPALIVE
+void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , std::string text_key);
 #endif
