@@ -35,7 +35,7 @@ release_en:
 release_de:
 	g++ $(hash) $(boost) $(release_de) $(inc)
 en:
-	g++ $(boost) $(srcs) $(release_en1) $(inc)
+	clang++ $(boost) $(srcs) $(release_en1) $(inc)
 de:
 	clang++ $(boost) $(srcs) $(release_de1) $(inc) -g
 en_debug:

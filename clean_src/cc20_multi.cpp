@@ -22,16 +22,17 @@ author:     Yi Yang
 #include "../lib/sha3.cpp"
 #include <thread>
 #include <numeric>
+#include <filesystem>
 #include <unistd.h>
 #include <sstream>
 
 
 using namespace std;
 
-void enc_writing(string oufile_name);
-void enc_writing_nw();
+// void enc_writing(string oufile_name);
+// void enc_writing_nw();
 void multi_enc_pthrd(int thrd);
-void multi_enc_pthrd_nw(int thrd);
+// void multi_enc_pthrd_nw(int thrd);
 void set_thread_arg(unsigned long int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) ;
 // void set_thread_arg(unsigned long int thrd, uint8_t* np,unsigned long int tracker,unsigned long int n, unsigned long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
        
@@ -81,7 +82,7 @@ Cc20 * arg_ptr[THREAD_COUNT]; // Parent pointers for each thread.
 
 thread threads[THREAD_COUNT]; // Threads
 
-char ** outthreads;
+// char ** outthreads;
 
 int final_line_written = 0; // Whether or not the fianl line is written
 
@@ -125,7 +126,36 @@ void Cc20::one_block(int thrd, uint32_t count) {
   endicha(this -> nex[thrd], cy[thrd]);
 }
 
+void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
+  const uint8_t * line; 
+  cc20_file r_file;
+  r_file.read_new(file_name.data());
+  #ifdef VERBOSE
+  cout << "Staring file size " << (size_t) r_file.file_size() << endl;
+  #if defined(_WIN64)
+  cout << "_WIN64 defined" <<endl;
+  #else
+  cout << "_WIN64 not defined" << endl;
+  #endif
+  #endif
+  r_file.write_new(oufile_name.data(),1);
+  if(poly1305_toggle )
+    linew = r_file.get_write_mapping(r_file.file_size()+12+16); // Mapped writting
+  else 
+    linew = r_file.get_write_mapping(r_file.file_size()+12); // Mapped writting
+  // if(!DE)
+  //   linew =linew+12;
+  line = (const uint8_t*) r_file.get_mapping();
+  #ifdef VERBOSE
+  cout << "File mapped " << line[0] << endl;
+  #endif
+  // n = r_file.file_size();
+  // size_t ttn = r_file.file_size();
 
+  rd_file_encr((uint8_t*)line, (uint8_t*)linew, r_file.file_size());
+  r_file.unmap();
+
+}
 
 /*
     Creates one thread for writing and THREAD_COUNT threads for calculating the 
@@ -135,42 +165,42 @@ void Cc20::one_block(int thrd, uint32_t count) {
 
 */
 
-void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
-  std::vector < uint8_t > content;
+void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
+  // std::vector < uint8_t > content;
   size_t n = 0;
 
-  struct stat sb;
-  uint8_t * data;
   const uint8_t * line; 
+  line = buf;
+  linew = (char *) outstr;
+  // cc20_file r_file;
+  // r_file.read_new(file_name.data());
 
-  cc20_file r_file;
-  r_file.read_new(file_name.data());
+  // #ifdef VERBOSE
+  // cout << "Staring file size " << (size_t) r_file.file_size() << endl;
+  // #if defined(_WIN64)
+  // cout << "_WIN64 defined" <<endl;
+  // #else
+  // cout << "_WIN64 not defined" << endl;
+  // #endif
+  // #endif
 
-  #ifdef VERBOSE
-  cout << "Staring file size " << (size_t) r_file.file_size() << endl;
-  #if defined(_WIN64)
-  cout << "_WIN64 defined" <<endl;
-  #else
-  cout << "_WIN64 not defined" << endl;
-  #endif
-  #endif
-
-  r_file.write_new(oufile_name.data(),1);
-  if(poly1305_toggle )
-    linew = r_file.get_write_mapping(r_file.file_size()+12+16); // Mapped writting
-  else 
-    linew = r_file.get_write_mapping(r_file.file_size()+12); // Mapped writting
-  copy(this->nonce_orig, this->nonce_orig+12,
-        linew);
-  if(!DE)
+  // r_file.write_new(oufile_name.data(),1);
+  // if(poly1305_toggle )
+  //   linew = r_file.get_write_mapping(r_file.file_size()+12+16); // Mapped writting
+  // else 
+  //   linew = r_file.get_write_mapping(r_file.file_size()+12); // Mapped writting
+  
+  if(!DE){
+    copy(this->nonce_orig, this->nonce_orig+12,linew);
     linew =linew+12;
-  line = (const uint8_t*) r_file.get_mapping();
-  #ifdef VERBOSE
-  cout << "File mapped " << line[0] << endl;
-  #endif
+  }
+  // line = (const uint8_t*) r_file.get_mapping();
+  // #ifdef VERBOSE
+  // cout << "File mapped " << line[0] << endl;
+  // #endif
+  n = input_length;
+  size_t ttn = input_length;
   size_t tn = 0;
-  n = r_file.file_size();
-  size_t ttn = r_file.file_size();
   if(DE && poly1305_toggle){ // when decrypting
     n-=16;
     ttn-=16;
@@ -279,13 +309,13 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   #ifdef VERBOSE
   cout << "[main] Writing thread joined" << endl;
   #endif
-  if (oufile_name == "a") {
-    for (unsigned int i = 0; i < ttn / BLOCK_SIZE + 1; i++) {
-      delete[] outthreads[i];
-    }
-    delete[] outthreads;
-  }
-  r_file.unmap();
+  // if (oufile_name == "a") {
+  //   for (unsigned int i = 0; i < ttn / BLOCK_SIZE + 1; i++) {
+  //     delete[] outthreads[i];
+  //   }
+  //   delete[] outthreads;
+  // }
+  // r_file.unmap();
   if(DISPLAY_PROG){
     if (progress.joinable())
       progress.join();
@@ -423,6 +453,17 @@ void Cc20::endicha(uint8_t * a, uint32_t * b) {
   }
 }
 
+/**
+ * Get the location of the decrypted file 
+ * */
+std::string Cc20::get_dec_loc(std::string file_name){
+  size_t indx = file_name.find_last_of('/');
+  if(indx == std::string::npos)
+    indx = file_name.find_last_of('\\');
+  return file_name.insert(indx+1, "dec-");;
+}
+
+
 
 void Cc20::read_original_mac(unsigned char * m, uint8_t* input_file, size_t off){
   for (unsigned int i=0 ; i< 16; i++){
@@ -447,7 +488,13 @@ void Cc20::read_original_mac(unsigned char * m, uint8_t* input_file, size_t off)
  * 
  * */
 void cmd_enc(string infile_name, string oufile_name, string text_nonce){
-  // cout<<infile_name<<","<<oufile_name<<","<<text_nonce<<"\n"<<endl;
+  std::filesystem::path f{ infile_name };
+  if ((std::filesystem::file_size(f) < 150000000) && DISPLAY_PROG ) // Default to disable progress display if less than 150 mb
+    DISPLAY_PROG=0;
+  if (!std::filesystem::exists(f)){
+    cout<<"File not found \'"<<infile_name<<"\'"<<endl;
+    return;
+  }
   Cc20 cry_obj;
   cry_obj.DE = cryDE;
   string text_key;
@@ -483,12 +530,10 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
 
   cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
 
-  // IN TESTING
   poly = new cc20_poly();
   poly->init((unsigned char *)key_hash.getHash().data()); 
-  // END TESTING
   if(cry_obj.DE){
-    cry_obj.rd_file_encr(infile_name_copy,"dec-"+infile_name);
+    cry_obj.rd_file_encr(infile_name_copy,cry_obj.get_dec_loc(infile_name));
     if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
   }
   else {

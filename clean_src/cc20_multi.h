@@ -27,6 +27,7 @@ public:
 
   void start_seq();
   void encr(uint8_t*line,uint8_t*linew,unsigned long int fsize);
+  void rd_file_encr (uint8_t * buf, uint8_t* outstr, size_t input_length);
   void rd_file_encr (const std::string file_name, std::string oufile_name);
   void stream( uint8_t*plain,unsigned int len);
   void set_vals(uint8_t * nonce, uint8_t*key);
@@ -34,6 +35,7 @@ public:
   void endicha(uint8_t *a, uint32_t *b);
   void read_original_mac(unsigned char * m, uint8_t* input_file, size_t off);
   int file_written(){return FILE_WRITTEN;}
+  std::string get_dec_loc(std::string file_name);
   // void display_progress(unsigned int n) ;
   int DE = 0;
 
