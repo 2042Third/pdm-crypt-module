@@ -19,7 +19,7 @@ author:     Yi Yang
 #include "cc20_multi.h"
 #include "cc20_poly.hpp"
 #include "cc20_parts.h"
-#include "../lib/sha3.h"
+#include "sha3.h"
 #include <thread>
 #include <numeric>
 #include <filesystem>

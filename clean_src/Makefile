@@ -16,8 +16,8 @@ inc = -lpthread -I../lib/poly1305-donna-master/ -I../lib/
 mac = -D MAC_OS  
 libr = -I../lib/poly1305-donna-master/ 
 win32 = -D WINDOWS 
-srcs = ../clean_src/cc20_file.cpp ../lib/cpp-mmf/memory_mapped_file.cpp ../lib/poly1305-donna-master/poly1305-donna.c 
-# mac = -D MAC_OS -I../lib/boost-mac/ -L../lib/boost-mac/stage/lib -L/usr/lib/system 
+srcs = ../clean_src/cc20_file.cpp ../lib/sha3.cpp ../lib/cpp-mmf/memory_mapped_file.cpp ../lib/poly1305-donna-master/poly1305-donna.cpp 
+# srcs = ../clean_src/cc20_file.cpp ../lib/sha3.cpp ../lib/cpp-mmf/memory_mapped_file.cpp ../lib/poly1305-donna-master/poly1305-donna.c 
 release_en= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX  -o c20.o
 release_de= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX -D DE -o c20de.o
 release_en1= -m64 -std=c++17  cc20_multi.cpp  -D LINUX -o c20
