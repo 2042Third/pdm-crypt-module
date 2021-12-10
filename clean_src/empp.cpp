@@ -89,13 +89,13 @@ string loader_out(std::string key, std::string inputi)
   string input = cvrt(inputi, inpsize);
   buf.reserve(inpsize + 1);
   set_up(buf, input);
-  outstr.reserve(inpsize - 10);
+  outstr.reserve(inpsize - 27);
   cmd_dec((uint8_t *)((&buf)->data()), inpsize, (uint8_t *)((&outstr)->data()), key);
   cout << "Decryption complete: " << endl;
   std::ostringstream outt;
   stringstream ss;
   string str="";
-  for (size_t i = 0; i < inpsize - 12-16; i++)
+  for (size_t i = 0; i < inpsize -28; i++)
   {
     // printf(" %d", outstr[i]);
     str.append(1,(char)outstr[i]);
@@ -114,10 +114,10 @@ string get_hash(string a){
 #ifdef WEB_TEST
 int main(int argc, char **argv)
 {
-  string k="";
+  string k="1234";
   string v="";
-  cout << "Key: \n";
-  getline(cin, k);
+  // cout << "Key: \n";
+  // getline(cin, k);
   cout << "Value: \n";
   getline(cin, v);
   std::cout<<"Hash: " << get_hash(v)<<std::endl;

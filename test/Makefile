@@ -6,7 +6,7 @@ srcs = ../clean_src/cc20_file.cpp ../lib/cpp-mmf/memory_mapped_file.cpp -I../lib
 src_ = ../clean_src
 fs = $(src_)/cc20_file.cpp $(src_)/cc20_multi.cpp ../lib/cpp-mmf/memory_mapped_file.cpp ../lib/sha3.cpp 
 df = -D LINUX -D SINGLETHREADING -D WEB_RELEASE -D WEB_TEST
-cmpdf = -O2 -m64 -g -Wall -std=c++17 -I../lib/poly1305-donna-master/ ../lib/poly1305-donna-master/poly1305-donna.c 
+cmpdf = -O2  -g -Wall -std=c++17 -I../lib/poly1305-donna-master/ ../lib/poly1305-donna-master/poly1305-donna.c 
 
 main:
 	g++ poly_test.cpp $(srcs) $(libr) $(lib) $(args) ../clean_src/cc20_multi.cpp -O2 -o test 
