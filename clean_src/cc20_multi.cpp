@@ -19,7 +19,7 @@ author:     Yi Yang
 #include "cc20_multi.h"
 #include "cc20_poly.hpp"
 #include "cc20_parts.h"
-#include "../lib/sha3.cpp"
+#include "../lib/sha3.h"
 #include <thread>
 #include <numeric>
 #include <filesystem>
@@ -46,9 +46,11 @@ const int BLOCK_SIZE = 4608000;
 /* Invariant: BLOCK_SIZE % 64 == 0
                                  115200, 256000, 576000, 1152000,2304000,4608000,6912000,9216000 ...
                                  Block size*/
-
+#ifdef SINGLETHREADING
 const int THREAD_COUNT = 30; // Make sure to change the header file's too.
-
+#else
+const int THREAD_COUNT = 1; // Make sure to change the header file's too.
+#endif
 const int PER_THREAD_BACK_LOG = 0; // This is not enabled.
 
 uint32_t folow[THREAD_COUNT][17]; // A copy of a state.
@@ -235,6 +237,7 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
     }
     progress = thread(display_progress,ttn);
   }
+  cout << "Size: "<<ttn << endl;
   set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew, n, (uint8_t*)line, count, this);
   threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
   np++;
@@ -557,7 +560,7 @@ void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key){
   key_hash.add(stob(text_key).data(),text_key.size());
   key_hash.add(stob(text_key).data(),text_key.size());
   string infile_name_copy;
-
+  DISPLAY_PROG=0;
   if(cry_obj.DE){
     uint8_t *line1[13]={0};
     infile_name_copy = infile_name+".pdm";
@@ -606,7 +609,7 @@ void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outs
   key_hash.add(stob(text_key).data(),text_key.size());
   key_hash.add(stob(text_key).data(),text_key.size());
   string infile_name_copy;
-
+  DISPLAY_PROG=0;
   uint8_t line1[13]={0};
   if(cry_obj.DE){
     for (unsigned int i=0;i<12;i++)
@@ -644,10 +647,12 @@ void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
   cry_obj.DE=0;
   Bytes key;
   Bytes nonce;
-
+  DISPLAY_PROG=0;
   SHA3 key_hash;
   for (unsigned int i=0;i<2;i++)
     key_hash.add(stob(text_key).data(),text_key.size());
+  poly = new cc20_poly();
+  poly->init((unsigned char *)key_hash.getHash().data()); 
   uint8_t line1[13]={0};
   if(cry_obj.DE){
     for (unsigned int i=0;i<12;i++)
@@ -682,9 +687,12 @@ void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
   Bytes key;
   Bytes nonce;
   cry_obj.DE=1;
+  DISPLAY_PROG=0;
   SHA3 key_hash;
   for (unsigned int i=0;i<2;i++)
     key_hash.add(stob(text_key).data(),text_key.size());
+  poly = new cc20_poly();
+  poly->init((unsigned char *)key_hash.getHash().data()); 
   uint8_t line1[13]={0};
   if(cry_obj.DE){
     for (unsigned int i=0;i<12;i++)
@@ -758,6 +766,8 @@ Cc20::~Cc20() {
   if(poly !=NULL) delete poly;
 }
 
+#ifndef WEB_RELEASE
+
 int main(int argc, char ** argv) {
   string infile,oufile,nonce;
   if (rd_inp(argc,argv,&infile)!=2){
@@ -770,3 +780,4 @@ int main(int argc, char ** argv) {
   cmd_enc(infile,"",btos(cur));
   return 0;
 }
+#endif

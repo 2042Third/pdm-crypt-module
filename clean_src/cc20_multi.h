@@ -18,7 +18,7 @@ author:     Yi Yang
 #include <stdlib.h>
 #include <sys/types.h>
 
-
+// using namespace std;
 
 class Cc20{
 
@@ -27,7 +27,7 @@ public:
 
   void start_seq();
   void encr(uint8_t*line,uint8_t*linew,unsigned long int fsize);
-  void rd_file_encr(uint8_t* buf, string oufile_name, size_t outsize) ;
+  void rd_file_encr(uint8_t* buf, std::string oufile_name, size_t outsize) ;
   void rd_file_encr(const std::string file_name, uint8_t* outstr) ;
   void rd_file_encr (uint8_t * buf, uint8_t* outstr, size_t input_length);
   void rd_file_encr (const std::string file_name, std::string oufile_name);
@@ -41,9 +41,14 @@ public:
   // void display_progress(unsigned int n) ;
   int DE = 0;
 
+  #ifdef SINGLETHREADING
   // Make sure this number is same as THREAD_COUNT
   //           *
-  uint8_t nex[41][65];
+  uint8_t nex[30][65];
+  #else
+  uint8_t nex[1][65];
+  #endif
+  
   ~Cc20();
 
 private:
@@ -54,10 +59,14 @@ private:
   uint32_t count;
 
   uint8_t nonce_orig[13]={0};
-
+  #ifdef SINGLETHREADING
   // Make sure this number is same as THREAD_COUNT
   //          *
-  uint32_t cy[41][17];
+  uint32_t cy[30][17];
+  #else
+  uint32_t cy[1][17];
+  #endif
+  
 
   uint8_t * key;
 
@@ -68,9 +77,9 @@ private:
   unsigned long b4 =  0B01101011001001000110010101110100 ;
 };
 
-void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outsize);
-void cmd_enc(string infile_name, string oufile_name, string text_nonce);
-void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key);
+void cmd_enc(uint8_t* buf, std::string oufile_name, std::string text_key, size_t outsize);
+void cmd_enc(std::string infile_name, std::string oufile_name, std::string text_nonce);
+void cmd_enc(std::string infile_name, uint8_t* outstr, std::string text_key);
 void display_progress(size_t n);
 // EMSCRIPTEN_KEEPALIVE
 void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , std::string text_key);
