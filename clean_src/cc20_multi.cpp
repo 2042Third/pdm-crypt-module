@@ -398,7 +398,7 @@ void multi_enc_pthrd(int thrd) {
   #ifdef VERBOSE
           cout<<"[calc] "<<thrd<<" locks, starting write " << endl;
   #endif
-  for (unsigned long int k = 0; k < BLOCK_SIZE / 64; k++) {
+  for (size_t k = 0; k < BLOCK_SIZE / 64; k++) {
     ptr -> one_block((int) thrd, (int) count);
     #ifdef VERBOSE
       cout<<"[calc] "<<thrd<<" 1 iteration, current size "<<n << endl;
@@ -417,7 +417,7 @@ void multi_enc_pthrd(int thrd) {
         #endif
       }
     } else {
-      for (int i = 0; i < n; i++) {
+      for (size_t i = 0; i < n; i++) {
         linew1[i+tracker] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
       }
       tracker += n;

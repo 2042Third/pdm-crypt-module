@@ -50,7 +50,7 @@ string loader_check(std::string key, std::string input)
   char outarr[(input.size() + 30) * 3]; // do the web array
   std::ostringstream outt;
   size_t ac = 0;
-  for (int i = 0; i < input.size() + 28; i++)
+  for (size_t i = 0; i < input.size() + 28; i++)
   {
     // printf("%03d ", (uint8_t)outstr[i]);
     sprintf(outarr + ac, "%03d", (uint8_t)outstr[i]);
@@ -64,7 +64,7 @@ string loader_check(std::string key, std::string input)
 string cvrt(string a, size_t b){
   string o="";
   uint8_t oi;
-  for (int i=0; i<b; i++){
+  for (size_t i=0; i<b; i++){
     char t[3];
     t[0] = a[i*3 + 0];
     t[1] = a[i * 3 + 1];
@@ -95,7 +95,7 @@ string loader_out(std::string key, std::string inputi)
   std::ostringstream outt;
   stringstream ss;
   string str="";
-  for (int i = 0; i < inpsize - 12-16; i++)
+  for (size_t i = 0; i < inpsize - 12-16; i++)
   {
     // printf(" %d", outstr[i]);
     str.append(1,(char)outstr[i]);
