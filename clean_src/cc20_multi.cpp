@@ -20,7 +20,9 @@ author:     Yi Yang
 #include "cc20_poly.hpp"
 #include "cc20_parts.h"
 #include "sha3.h"
+#ifndef SINGLETHREADING
 #include <thread>
+#endif //SINGLETHREADING
 #include <numeric>
 #include <filesystem>
 #include <unistd.h>
@@ -80,19 +82,15 @@ SHA3 hashing; // A rolling hash of the input data.
 
 Cc20 * arg_ptr[THREAD_COUNT]; // Parent pointers for each thread.
 
-// recursive_mutex locks[THREAD_COUNT]; // All locks for threads, each waits for the writing is done on file or memory.
-
+#ifndef SINGLETHREADING
 thread threads[THREAD_COUNT]; // Threads
-
-// char ** outthreads;
+#endif // SINGLETHREADING
 
 int final_line_written = 0; // Whether or not the fianl line is written
 
 // Crypto config
 
 int cryDE=0; // Sets the encryption is for encryption or decryption.
-
-// mutex mtx;
 
 /*
     XOR's two objects begaining at s1's off for n.
@@ -230,6 +228,7 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
     if(poly1305_toggle)
       read_original_mac(orig_mac, (unsigned char *)line, (size_t)ttn);
   }
+  #ifndef SINGLETHREADING
   thread progress;
   if (DISPLAY_PROG){
     for (unsigned int i=0; i<THREAD_COUNT;i++){
@@ -237,14 +236,20 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
     }
     progress = thread(display_progress,ttn);
   }
+  #endif// SINGLETHREADING
   cout << "Size: "<<ttn << endl;
   set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew, n, (uint8_t*)line, count, this);
+  #ifndef SINGLETHREADING
   threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
+  #else
+  multi_enc_pthrd(0);
+  #endif // SINGLETHREADING
   np++;
   for (unsigned long int k = 0; k < ((unsigned long int)(ttn / 64) + 0); k++) { // If leak, try add -1
     if (n >= 64) {
       tracker += 64;
       if (tn % (BLOCK_SIZE) == 0 && (k != 0)) {
+  #ifndef SINGLETHREADING
         if (threads[np % THREAD_COUNT].joinable()) {
           #ifdef VERBOSE
           cout << "[main] Possible join, waiting " <<np % THREAD_COUNT<< endl;
@@ -258,9 +263,16 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
         threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
         tracker = 0;
         np++;
+  #else 
+        set_thread_arg(0, (uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
+        multi_enc_pthrd(0);
+        tracker = 0;
+        np++;
+  #endif// SINGLETHREADING
       }
     } 
     else {
+  #ifndef SINGLETHREADING
       if (threads[np % THREAD_COUNT].joinable() && final_line_written != 1) {
           #ifdef VERBOSE
           cout << "[main] Last Possible join, waiting " <<np % THREAD_COUNT<< endl;
@@ -272,6 +284,10 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
       #endif
       set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
       threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
+  #else 
+      set_thread_arg(0, (uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
+      multi_enc_pthrd(0); 
+  #endif// SINGLETHREADING
     }
     count += 1;
     n -= 64;
@@ -281,11 +297,13 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
   cout << "[main] Finished dispatching joining" << endl;
   #endif
   
+  #ifndef SINGLETHREADING
   for (int i = 0; i < THREAD_COUNT; i++) {
     if (threads[i].joinable()){
       threads[i].join();
     }
   }
+  #endif// SINGLETHREADING
   // Check encryption correctness
   if(poly1305_toggle){
     if(!DE)
@@ -314,10 +332,13 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
   #ifdef VERBOSE
   cout << "[main] Writing thread joined" << endl;
   #endif
+
+  #ifndef SINGLETHREADING
   if(DISPLAY_PROG){
     if (progress.joinable())
       progress.join();
   }
+  #endif// SINGLETHREADING
 }
 
 /**

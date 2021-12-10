@@ -16,7 +16,7 @@ inc = -lpthread -I../lib/poly1305-donna-master/ -I../lib/
 mac = -D MAC_OS  
 libr = -I../lib/poly1305-donna-master/ 
 win32 = -D WINDOWS 
-srcs = ../clean_src/cc20_file.cpp ../lib/sha3.cpp ../lib/cpp-mmf/memory_mapped_file.cpp ../lib/poly1305-donna-master/poly1305-donna.cpp 
+srcs = ../clean_src/cc20_file.cpp ../lib/sha3.cpp ../lib/cpp-mmf/memory_mapped_file.cpp ../lib/poly1305-donna-master/poly1305-donna.c 
 # srcs = ../clean_src/cc20_file.cpp ../lib/sha3.cpp ../lib/cpp-mmf/memory_mapped_file.cpp ../lib/poly1305-donna-master/poly1305-donna.c 
 release_en= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX  -o c20.o
 release_de= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX -D DE -o c20de.o
@@ -28,6 +28,8 @@ release_en12= -m64 -std=c++17  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINT
 release_de12= -m64 -std=c++17  cc20_multi.cpp -lm  -Wall -D DEEP_DEBUG -D PRINTING -D ROUNDCOUNTTWLV -D LINUX -D DE -o c20de.c
 windows:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32)
+windows_single:
+	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -D SINGLETHREADING
 windows_debug:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) 
 release_en:
@@ -36,6 +38,8 @@ release_de:
 	g++ $(hash) $(boost) $(release_de) $(inc)
 en:
 	clang++ $(boost) $(srcs) $(release_en1) $(inc)
+en_single:
+	clang++ $(boost) $(srcs) $(release_en1) $(inc) -D SINGLETHREADING
 de:
 	clang++ $(boost) $(srcs) $(release_de1) $(inc) -g
 en_debug:
