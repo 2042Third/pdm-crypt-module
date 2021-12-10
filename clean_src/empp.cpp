@@ -136,8 +136,8 @@ EMSCRIPTEN_BINDINGS(raw_pointers) {
   emscripten::register_vector<uint8_t>("CharList");
   emscripten::function("loader_check", &loader_check);
   emscripten::function("loader_out", &loader_out);
-  emscripten::function("cmd_enc", &cmd_enc, emscripten::allow_raw_pointers());
-  emscripten::function("cmd_dec", &cmd_dec, emscripten::allow_raw_pointers());
+  // emscripten::function("cmd_enc", &cmd_enc, emscripten::allow_raw_pointers());
+  // emscripten::function("cmd_dec", &cmd_dec, emscripten::allow_raw_pointers());
   emscripten::function("get_hash",&get_hash);
 }
 #endif
