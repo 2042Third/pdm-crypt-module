@@ -87,6 +87,7 @@ string loader_out(std::string key, std::string inputi)
   char tchar;
   for (auto a : inputi)
     tchar = a;
+  cout<<endl;
   // cout <<"module input: "<<inputi << endl;
   // cvrt();
   string input = cvrt(inputi, inpsize);
