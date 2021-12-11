@@ -84,7 +84,10 @@ string loader_out(std::string key, std::string inputi)
   vector<char> buf;    //= new vector<uint8_t>();
   vector<char> outstr; // = new vector<uint8_t>();
   size_t inpsize = (inputi.size() - 6) / 3;
-  cout <<"module input: "<<inputi << endl;
+  char tchar;
+  for (auto a : inputi)
+    tchar = a;
+  // cout <<"module input: "<<inputi << endl;
   // cvrt();
   string input = cvrt(inputi, inpsize);
   buf.reserve(inpsize + 1);
