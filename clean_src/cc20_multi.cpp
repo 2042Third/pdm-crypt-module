@@ -787,7 +787,7 @@ Cc20::~Cc20() {
   if(poly !=NULL) delete poly;
 }
 
-#ifndef WEB_RELEASE || DESKTOP_RELEASE
+#ifdef HAS_MAIN 
 
 int main(int argc, char ** argv) {
   string infile,oufile,nonce;
