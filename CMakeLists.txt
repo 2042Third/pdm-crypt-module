@@ -2,6 +2,7 @@ add_library(cc20_multi
         include/cc20_multi.h
         clean_src/cc20_multi.cpp
         clean_src/cc20_dev.cpp
+        clean_src/cc20_file.cpp
         include/pdm-service.hpp
         lib/sha3.cpp
         lib/sha3.h
