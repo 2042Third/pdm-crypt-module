@@ -9,12 +9,12 @@ author:     Yi Yang
 #ifndef _cc20_multi_
 #define _cc20_multi_
 
-#ifndef WEB_RELEASE
-#define HAS_MAIN
+#ifdef WEB_RELEASE
+#undef HAS_MAIN
 #endif//WEB_RELEASE
 
-#ifndef DESKTOP_RELEASE
-#define HAS_MAIN
+#ifdef DESKTOP_RELEASE
+#undef HAS_MAIN
 #endif//DESKTOP_RELEASE
 
 #include <stdio.h>
