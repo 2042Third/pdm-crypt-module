@@ -14,11 +14,11 @@ target_compile_options(
         -pthread -m64 -D WINDOWS -D DESKTOP_RELEASE
 )
 if(WIN32)
-    target_compile_definitions(cc20_multi PUBLIC WINDOWS LINUX DESKTOP_RELEASE )
+    target_compile_definitions(cc20_multi PUBLIC WINDOWS LINUX )
 elseif (APPLE)
-    target_compile_definitions(cc20_multi PUBLIC MACOS LINUX DESKTOP_RELEASE )
+    target_compile_definitions(cc20_multi PUBLIC MACOS LINUX )
 elseif (UNIX)
-    target_compile_definitions(cc20_multi PUBLIC LINUX DESKTOP_RELEASE )
+    target_compile_definitions(cc20_multi PUBLIC LINUX )
 endif ()
 #target_compile_definitions(cc20_multi PRIVATE LINUX )
 
