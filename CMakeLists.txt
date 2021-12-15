@@ -21,4 +21,4 @@ elseif (UNIX)
 endif ()
 #target_compile_definitions(cc20_multi PRIVATE LINUX )
 
-target_include_directories(cc20_multi PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/clean_src ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+target_include_directories(cc20_multi PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR}/lib)
