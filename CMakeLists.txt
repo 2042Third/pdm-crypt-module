@@ -10,7 +10,7 @@ add_library(cc20_multi
         includes/cc20_parts.h)
 target_compile_options(
         cc20_multi PUBLIC
-        -pthread -m64
+        -pthread -m64 -D WINDOWS
 )
 if(WIN32)
     target_compile_definitions(cc20_multi PUBLIC WINDOWS LINUX )
