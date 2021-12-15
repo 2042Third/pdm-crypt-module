@@ -11,14 +11,14 @@ add_library(cc20_multi
         include/cc20_parts.h)
 target_compile_options(
         cc20_multi PUBLIC
-        -pthread -m64 -D WINDOWS -D DESKTOP_RELEASE
+        -pthread -m64 -D WINDOWS
 )
 if(WIN32)
-    target_compile_definitions(cc20_multi PUBLIC WINDOWS LINUX )
+    target_compile_definitions(cc20_multi PUBLIC WINDOWS LINUX DESKTOP_RELEASE )
 elseif (APPLE)
-    target_compile_definitions(cc20_multi PUBLIC MACOS LINUX )
+    target_compile_definitions(cc20_multi PUBLIC MACOS LINUX DESKTOP_RELEASE )
 elseif (UNIX)
-    target_compile_definitions(cc20_multi PUBLIC LINUX )
+    target_compile_definitions(cc20_multi PUBLIC LINUX DESKTOP_RELEASE )
 endif ()
 #target_compile_definitions(cc20_multi PRIVATE LINUX )
 
