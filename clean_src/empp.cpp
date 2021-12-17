@@ -22,15 +22,17 @@ using namespace std;
  * @param b user2
  * 
  * */
-string pp_hash(std::string a, std::string b){
-  string c = a.size()>b.size()?a:b;
-  string d = a.size()>b.size()?b:a;
+string pp_hash(std::string user1, std::string user2){
+  std::cout<<std::endl;//flush
+  string c = user1.size()>user2.size()?user1:user2;
+  string d = user1.size()>user2.size()?user2:user1;
   vector<char> buf(c.begin(),c.end()); 
   for (size_t i=0; i<d.size(); i++){
     buf[i] =(uint8_t)buf[i] +(uint8_t)d[i];
   }
   SHA3 vh;
   vh.add(buf.data(),buf.size());
+  std::cout<<std::endl;//flush
   return vh.getHash();
 }
 
