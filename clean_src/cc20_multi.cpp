@@ -502,6 +502,7 @@ void Cc20::read_original_mac(unsigned char * m, uint8_t* input_file, size_t off)
  * 
  * */
 void cmd_enc(string infile_name, string oufile_name, string text_nonce){
+#ifndef WEB_RELEASE
   std::filesystem::path f{ infile_name };
   if ((std::filesystem::file_size(f) < 150000000) && DISPLAY_PROG ) // Default to disable progress display if less than 150 mb
     DISPLAY_PROG=0;
@@ -509,6 +510,7 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
     cout<<"File not found \'"<<infile_name<<"\'"<<endl;
     return;
   }
+#endif// WEB_RELEASE
   Cc20 cry_obj;
   cry_obj.DE = cryDE;
   string text_key;
@@ -565,6 +567,7 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
  * 
  * */
 void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key){
+#ifndef WEB_RELEASE
   std::filesystem::path f{ infile_name };
   if ((std::filesystem::file_size(f) < 150000000) && DISPLAY_PROG ) // Default to disable progress display if less than 150 mb
     DISPLAY_PROG=0;
@@ -572,6 +575,7 @@ void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key){
     cout<<"File not found \'"<<infile_name<<"\'"<<endl;
     return;
   }
+#endif// WEB_RELEASE
   Cc20 cry_obj;
   cry_obj.DE = cryDE;
   Bytes key;
