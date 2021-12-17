@@ -22,7 +22,7 @@ using namespace std;
  * @param b user2
  * 
  * */
-string pp_hash(string a, string b){
+string pp_hash(std::string a, std::string b){
   string c = a.size()>b.size()?a:b;
   string d = a.size()>b.size()?b:a;
   vector<char> buf(c.begin(),c.end()); 
