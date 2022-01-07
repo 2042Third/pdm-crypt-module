@@ -23,6 +23,7 @@ author:     Yi Yang
 #ifndef SINGLETHREADING
 #include <thread>
 #endif //SINGLETHREADING
+#include <iomanip>
 #include <numeric>
 #include <filesystem>
 #include <unistd.h>
@@ -154,6 +155,30 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   rd_file_encr((uint8_t*)line, (uint8_t*)linew, r_file.file_size());
   r_file.unmap();
 }
+
+/**
+ * string to hex
+ * */
+string stoh (string a, size_t len){
+  std::stringstream ss;
+  ss << std::hex;
+  for( int i(0) ; i < len; ++i )
+     ss << std::setw(2) << std::setfill('0') << (int)a.data()[i];
+  return ss.str();
+}
+
+
+/**
+ * Hex to String 
+ * 
+ * Based on boost and sql function that converts a hex string 
+ **/
+  string htos (string a, size_t len) {
+    string out;
+    out.reserve(a.size () / (2 * sizeof (string)));
+    (void) htos_to(a,std::back_inserter(out));
+    return out;
+  }
 
 /**
  * Takes a file name and outputs the encrypted/decrypted content.

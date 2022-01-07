@@ -11,6 +11,7 @@ author:     Yi Yang
 #include <iostream>
 #include <climits>
 #include <ostream>
+#include <iterator>
 #include <random>
 #include <wchar.h>
 
@@ -46,6 +47,7 @@ unsigned int i=0;
 
 void stream(uint8_t * key, uint8_t * nonce, uint32_t count,uint8_t*plain,unsigned int len);
 
+
 #define U32T8_S(p, v)    \
   {                            \
     (p)[0] = (v >> 0) & 0xff;  \
@@ -68,6 +70,31 @@ template <>
 void roln<uint32_t>(uint32_t &val,unsigned int n) {
     val= (val << n) | (val >> (32-n));
 }
+
+template <typename Iterator>
+struct hex_iterator_traits {
+    typedef typename std::iterator_traits<Iterator>::value_type value_type;
+};
+
+template<typename Container>
+struct hex_iterator_traits< std::back_insert_iterator<Container> > {
+    typedef typename Container::value_type value_type;
+};
+
+template<typename Container>
+struct hex_iterator_traits< std::front_insert_iterator<Container> > {
+    typedef typename Container::value_type value_type;
+};
+
+template<typename Container>
+struct hex_iterator_traits< std::insert_iterator<Container> > {
+    typedef typename Container::value_type value_type;
+};
+
+template<typename T, typename charType, typename traits>
+    struct hex_iterator_traits< std::ostream_iterator<T, charType, traits> > {
+        typedef T value_type;
+    };
 
 //algo change #2
 static inline uint32_t rotl32(uint32_t x, int n)
@@ -149,6 +176,55 @@ template<typename NT>
 void state_cpy(NT *a,NT*b,unsigned int n){
     for(unsigned int i=0; i<n;i++) a[i]=b[i];
 }
+
+
+template <typename T>
+unsigned char hex_char_to_int ( T val ) {
+    char c = static_cast<char> ( val );
+    unsigned retval = 0;
+    if      ( c >= '0' && c <= '9' ) retval = c - '0';
+    else if ( c >= 'A' && c <= 'F' ) retval = c - 'A' + 10;
+    else if ( c >= 'a' && c <= 'f' ) retval = c - 'a' + 10;
+    return static_cast<char>(retval);
+    }
+
+/**
+ * Based on boost and sql functions that converts hex string to string
+ * 
+ * */
+template<typename InputIter, typename OutIter >
+OutIter decode_one( InputIter &a1, InputIter a2 , OutIter out ){
+    typedef typename hex_iterator_traits<OutIter>::value_type T;
+    T res (0);
+    for ( std::size_t i = 0; i < 2 * sizeof ( T ); ++i, ++a1 ) {
+        res = ( 16 * res ) + hex_char_to_int (*a1);
+    }
+
+        *out = res;
+        return ++out;
+}
+
+/**
+ * Based on boost and sql functions that converts hex string to string
+ * 
+ * */
+template<typename InputIter, typename OutIter >
+OutIter htos_( InputIter a1, InputIter a2 , OutIter out ){
+    while ( a1 != a2 )
+        out = decode_one ( a1, a2, out);
+    return out;
+}
+/**
+ * Based on boost and sql functions that converts hex string to string
+ * 
+ * */
+template<typename OutIter >
+OutIter htos_to(const string &a, OutIter out ){
+    return htos_(a.begin(), a.end(), out);
+}
+
+
+
 
 /*
     Require: key has 8, nonce has 3, and count has 1 elements. 

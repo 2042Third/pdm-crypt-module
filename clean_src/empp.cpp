@@ -9,7 +9,6 @@
 #include <iostream>
 #include <sstream>
 #include <stdlib.h>
-
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #include <emscripten/bind.h>
@@ -60,36 +59,17 @@ string loader_check(std::string key, std::string input)
   set_up(buf, input);
   outstr.reserve(input.size() + 30);
   cmd_enc((uint8_t *)((&buf)->data()), input.size(), (uint8_t *)((&outstr)->data()), key);
-  cout << "Encryption complete: " << endl;
-  char outarr[(input.size() + 30) * 3]; // do the web array
   std::ostringstream outt;
-  size_t ac = 0;
-  for (size_t i = 0; i < input.size() + 28; i++)
+  stringstream ss;
+  string str="";
+  for (size_t i = 0; i < outstr.size(); i++)
   {
-    sprintf(outarr + ac, "%03d", (uint8_t)outstr[i]);
-    ac += 3;
+    str.append(1,(char)outstr[i]);
   }
-  sprintf(outarr + ac, "%03d000", 0);
-  string str = outarr;
-  return str;
+  return stoh( str, str.size());
 }
 
-string cvrt(string a, size_t b){
-  string o="";
-  uint8_t oi;
-  for (size_t i=0; i<b; i++){
-    char t[3];
-    t[0] = a[i*3 + 0];
-    t[1] = a[i * 3 + 1];
-    t[2] = a[i * 3 + 2];
-    // t[3] = '\0';
-    oi = atoi(t);
-    o.append(1,oi);
-  }
 
-  cout<<endl;
-  return o;
-}
 
 string loader_out(std::string key, std::string inputi)
 {
@@ -100,7 +80,7 @@ string loader_out(std::string key, std::string inputi)
   for (auto a : inputi)
     tchar = a;
   cout<<endl;
-  string input = cvrt(inputi, inpsize);
+  string input = htos(inputi, inpsize);
   buf.reserve(inpsize + 1);
   set_up(buf, input);
   outstr.reserve(inpsize - 27);
@@ -130,24 +110,24 @@ int main(int argc, char **argv)
   string u2="a_longer_name";
   cout << "Value1: \n";
   getline(cin, u1);
-  cout << "Value2: \n";
-  getline(cin, u2);
-  printf("u1: %s\nu2: %s\n",u1.data(),u2.data());
-  printf("u1u2: %s\nu2u1: %s\n",pp_hash(u1,u2).data(),pp_hash(u2,u1).data());
+  string a = stoh(u1, u1.size());
+  string b = htos(a, a.size());
+  printf("Hex %s\n", a.data());
+  printf("Back to string %s\n", b.data());
   return 0;
-  string k="1234";
-  string v="";
-  cout << "Value: \n";
-  getline(cin, v);
-  std::cout<<"Hash: " << get_hash(v)<<std::endl;
-  std::string a="";
-  a = loader_check(k, v);
+  // string k="1234";
+  // string v="";
+  // cout << "Value: \n";
+  // getline(cin, v);
+  // std::cout<<"Hash: " << get_hash(v)<<std::endl;
+  // std::string a="";
+  // a = loader_check(k, v);
 
-  std::cout<<"\nWe got: "<<a<<std::endl;
-  std::string b ="";
-  b= loader_out(k, a);
-  std::cout << "\nDec we got: " << b << std::endl;
-  return 0;
+  // std::cout<<"\nWe got: "<<a<<std::endl;
+  // std::string b ="";
+  // b= loader_out(k, a);
+  // std::cout << "\nDec we got: " << b << std::endl;
+  // return 0;
 }
 #endif //END_TEST
 

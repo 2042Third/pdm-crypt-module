@@ -85,6 +85,8 @@ private:
   unsigned long b4 =  0B01101011001001000110010101110100 ;
 };
 
+  std::string htos (std::string a, size_t len);
+  std::string stoh (std::string a, size_t len);
 void cmd_enc(uint8_t* buf, std::string oufile_name, std::string text_key, size_t outsize);
 void cmd_enc(std::string infile_name, std::string oufile_name, std::string text_nonce);
 void cmd_enc(std::string infile_name, uint8_t* outstr, std::string text_key);
