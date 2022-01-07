@@ -176,7 +176,15 @@ template<typename NT>
 void state_cpy(NT *a,NT*b,unsigned int n){
     for(unsigned int i=0; i<n;i++) a[i]=b[i];
 }
-
+template <typename T, typename OutputIterator>
+    OutputIterator encode_one ( T val, OutputIterator out, const char * hexDigits ) {
+        const std::size_t num_hex_digits =  2 * sizeof ( T );
+        char res [ num_hex_digits ];
+        char  *p = res + num_hex_digits;
+        for ( std::size_t i = 0; i < num_hex_digits; ++i, val >>= 4 )
+            *--p = hexDigits [ val & 0x0F ];
+        return std::copy ( res, res + num_hex_digits, out );
+        }
 
 template <typename T>
 unsigned char hex_char_to_int ( T val ) {
@@ -204,6 +212,7 @@ OutIter decode_one( InputIter &a1, InputIter a2 , OutIter out ){
         return ++out;
 }
 
+
 /**
  * Based on boost and sql functions that converts hex string to string
  * 
@@ -221,6 +230,25 @@ OutIter htos_( InputIter a1, InputIter a2 , OutIter out ){
 template<typename OutIter >
 OutIter htos_to(const string &a, OutIter out ){
     return htos_(a.begin(), a.end(), out);
+}
+
+/**
+ * Based on boost and sql functions that converts hex string to string
+ * 
+ * */
+template<typename InputIter, typename OutIter >
+OutIter hex_f( InputIter a1, InputIter a2 , OutIter out ){
+    for ( ; a1 != a2; ++a1 )
+        out = encode_one ( *a1, out, "0123456789abcdef" );
+    return out;
+}
+/**
+ * Based on boost and sql functions that converts hex string to string
+ * 
+ * */
+template<typename OutIter >
+OutIter hex_from(const string &a, OutIter out ){
+    return hex_f(a.begin(), a.end(), out);
 }
 
 

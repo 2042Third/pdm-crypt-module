@@ -159,12 +159,11 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
 /**
  * string to hex
  * */
-string stoh (string a, size_t len){
-  std::stringstream ss;
-  ss << std::hex;
-  for( int i(0) ; i < len; ++i )
-     ss << std::setw(2) << std::setfill('0') << (int)a.data()[i];
-  return ss.str();
+string stoh (string a){
+  string out;
+  out.reserve(a.size () / (2 * sizeof (string)));
+  (void) hex_from (a,std::back_inserter(out));
+  return out;
 }
 
 
@@ -173,7 +172,7 @@ string stoh (string a, size_t len){
  * 
  * Based on boost and sql function that converts a hex string 
  **/
-  string htos (string a, size_t len) {
+  string htos (string a) {
     string out;
     out.reserve(a.size () / (2 * sizeof (string)));
     (void) htos_to(a,std::back_inserter(out));

@@ -62,11 +62,12 @@ string loader_check(std::string key, std::string input)
   std::ostringstream outt;
   stringstream ss;
   string str="";
-  for (size_t i = 0; i < outstr.size(); i++)
+  for (size_t i = 0; i <input.size()+28; i++)
   {
-    str.append(1,(char)outstr[i]);
+    str.append(1,outstr[i]);
   }
-  return stoh( str, str.size());
+  cout<<str<<endl;
+  return stoh( str);
 }
 
 
@@ -75,17 +76,17 @@ string loader_out(std::string key, std::string inputi)
 {
   vector<char> buf;    //= new vector<uint8_t>();
   vector<char> outstr; // = new vector<uint8_t>();
-  size_t inpsize = (inputi.size() - 6) / 3;
   char tchar;
   for (auto a : inputi)
     tchar = a;
   cout<<endl;
-  string input = htos(inputi, inpsize);
+  string input = htos(inputi);
+  size_t inpsize = (input.size()) ;
   buf.reserve(inpsize + 1);
   set_up(buf, input);
+  cout << "Input lengths: "<<inpsize << endl;
   outstr.reserve(inpsize - 27);
   cmd_dec((uint8_t *)((&buf)->data()), inpsize, (uint8_t *)((&outstr)->data()), key);
-  cout << "Decryption complete: " << endl;
   std::ostringstream outt;
   stringstream ss;
   string str="";
@@ -108,26 +109,24 @@ int main(int argc, char **argv)
 {
   string u1="mike";
   string u2="a_longer_name";
-  cout << "Value1: \n";
-  getline(cin, u1);
-  string a = stoh(u1, u1.size());
-  string b = htos(a, a.size());
-  printf("Hex %s\n", a.data());
-  printf("Back to string %s\n", b.data());
-  return 0;
-  // string k="1234";
-  // string v="";
-  // cout << "Value: \n";
-  // getline(cin, v);
-  // std::cout<<"Hash: " << get_hash(v)<<std::endl;
-  // std::string a="";
-  // a = loader_check(k, v);
+  
+  cout<<"from \""<<u1<<"\""<<endl;
+  cout<<"  to \""<<stoh(u1)<<"\""<<endl;
+  cout<<"  to \""<<htos(stoh(u1))<<"\""<<endl;
 
-  // std::cout<<"\nWe got: "<<a<<std::endl;
-  // std::string b ="";
-  // b= loader_out(k, a);
-  // std::cout << "\nDec we got: " << b << std::endl;
-  // return 0;
+  string k="1234";
+  string v="";
+  cout << "Value: \n";
+  getline(cin, v);
+  std::cout<<"Hash: " << get_hash(v)<<std::endl;
+  std::string a="";
+  a = loader_check(k, v);
+
+  std::cout<<"\nWe got: "<<a<<std::endl;
+  std::string b ="";
+  b= loader_out(k, a);
+  std::cout << "\nDec we got: " << b << std::endl;
+  return 0;
 }
 #endif //END_TEST
 
