@@ -1,5 +1,7 @@
 
 /*
+DEPRECATED
+
 pdm-service.h
 
 pdm/Personal Data Management system is a encrypted and multiplatform data searching, building, archiving tool.
@@ -30,12 +32,11 @@ const int MAX_KEY_LENGTH = 32;
 
 
 template<typename NU>
-void set_conc(NU* s1,NU* s2,unsigned int n);
-Bytes stob (std::string &src);
-std::string btos (Bytes &src);
-std::vector<uint8_t> rd_file (std::string &file_name);
-void wt_file(std::string file_name, std::string &content);
-std::string pad_to_key (std::string text_key, const int len);
+// void set_conc(NU* s1,NU* s2,unsigned int n);
+// Bytes stob (std::string &src);
+// std::string btos (Bytes &src);
+// std::string pad_to_key (std::string text_key, const int len);
+
 // Addition operation
 template<typename NU>
 void set_conc(NU* s1,NU* s2,unsigned int n){

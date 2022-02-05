@@ -16,3 +16,5 @@ carage_r:
 	g++ r_test.cpp -O2 -g -o r_test
 web_linux:
 	g++ $(src_)/empp.cpp $(fs) $(df) $(cmpdf) $(libr)  -o safe_test 
+ecc:
+	$(MAKE) -C $(src_) ecc_test

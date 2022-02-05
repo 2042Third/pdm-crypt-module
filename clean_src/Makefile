@@ -1,14 +1,14 @@
 ver = -m64 -std=c++17 
 dflg =  -g -Wall -fconcepts -D PRINTING
 dpflg = -D DEEP_DEBUG -lm -D HARD_CODE_DEBUG
-file1 = c20_dev.cpp
-file2 = cc20_dev.cpp
+# file1 = c20_dev.cpp
+# file2 = cc20_dev.cpp
 file3 = cc20_multi.cpp
 sys1 = -D WINDOWS
 sys2 = -D LINUX -pthread
 sys3 = -D MAC
 hash =  -g 
-boost= -O3 -I../lib/ -I../lib/boost_1_78_0 -I../include/ -D HAS_MAIN
+boost= -O3 -I../lib/ -I../lib/boost_1_78_0 -I../lib/ecc -I../include/ -D HAS_MAIN
 # incmac =  -lboost_thread -lpthread 
 incmac =  -lpthread 
 inc = -lpthread
@@ -17,11 +17,20 @@ mac = -D MAC_OS
 src_ = ../clean_src
 libr = -I../lib/poly1305-donna-master/ 
 win32 = -D WINDOWS 
-srcs = ../clean_src/cc20_file.cpp ../lib/sha3.cpp ../lib/cpp-mmf/memory_mapped_file.cpp ../lib/poly1305-donna-master/poly1305-donna.c 
-# srcs = ../clean_src/cc20_file.cpp ../lib/sha3.cpp ../lib/cpp-mmf/memory_mapped_file.cpp ../lib/poly1305-donna-master/poly1305-donna.c 
+
+srcs = ../clean_src/cc20_file.cpp \
+../lib/sha3.cpp \
+../lib/cpp-mmf/memory_mapped_file.cpp \
+../lib/poly1305-donna-master/poly1305-donna.c \
+../lib/ecc/ecdh_curve25519.c \
+../lib/ecc/curve25519.c \
+../lib/ecc/fe25519.c \
+../lib/ecc/bigint.c \
+../clean_src/ec.cpp
 release_en= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX  -o c20.o
 release_de= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX -D DE -o c20de.o
 release_en1= -m64 -std=c++17  cc20_multi.cpp  -D LINUX -o c20
+ecc_flags =  -m64 -std=c++17 -D LINUX -o ecc_test
 debug_web= -m64 -std=c++17  cc20_multi.cpp  -D LINUX   -D WEB_RELEASE -D WEB_TEST -O3 -I../lib/ -I../include/
 release_de1= -m64 -std=c++17  cc20_multi.cpp   -D LINUX -o c20
 en_debug= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -o d20
@@ -33,16 +42,20 @@ windows:
 windows_single:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -D SINGLETHREADING
 windows_debug:
-	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) 
+	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -g
 release_en:
 	g++ $(hash) $(boost) $(release_en) $(inc)
 release_de:
 	g++ $(hash) $(boost) $(release_de) $(inc)
+# ecc_test:
+# 	g++ -Wall -O2 -g ../test/ecc_test.cpp -I../lib/ecc \
+# 	$(boost) $(ecc_flags) $(libec_src) $(inc) $(win32) 
 en:
 	clang++ $(boost) $(srcs) $(release_en1) $(inc)
 en_single:
 	clang++ $(boost) $(srcs) $(release_en1) $(inc) -D SINGLETHREADING
 de:
 	clang++ $(boost) $(srcs) $(release_de1) $(inc) -g
+
 web_linux:
-	clang++  -I../include/ $(src_)/empp.cpp $(srcs) $(debug_web) $(inc) -g -D SINGLETHREADING -o ../test/web_debug
+	clang++  -I../lib/ecc -I../include/ $(src_)/empp.cpp $(srcs) $(debug_web) $(inc) -g -D SINGLETHREADING -o ../test/web_debug

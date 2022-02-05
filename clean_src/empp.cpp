@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "cc20_multi.h"
+#include "ec.h"
 #include "sha3.h"
 #include <iostream>
 #include <sstream>
@@ -15,6 +16,7 @@
 #endif
 using namespace std;
 
+#define C20_ECC_SIZE 32
 
 /**
  * @param a user1
@@ -97,6 +99,65 @@ string loader_out(std::string key, std::string inputi)
   return str;
 }
 
+/**
+ * Return the secret key
+ * 
+ * */
+string gen_sec(){
+  uint8_t sec[C20_ECC_SIZE+1];
+  sec[C20_ECC_SIZE]='\0';
+  string tmpsec="";
+  ECC20 ecc;
+  ecc.gensec((uint8_t*)sec);
+  for(size_t i=0;i<C20_ECC_SIZE;i++)
+    tmpsec.append(1,(char)sec[i]);
+  // #ifdef WEB_TEST
+  // printf("gen_sec(): \"%s\"\n",sec);
+  // #endif 
+  return stoh(tmpsec);
+}
+/**
+ * Return the public key
+ * @param - a the secret key
+ * */
+string gen_pub(string a){
+  uint8_t pub[33];
+  pub[C20_ECC_SIZE]='\0';
+  string tmpsec=htos(a);
+  // #ifdef WEB_TEST
+  // printf("gen_pub input: \"%s\"\n",tmpsec.data());
+  // #endif 
+  ECC20 ecc;
+  ecc.setsec((uint8_t*)tmpsec.data());
+  ecc.genpub(pub);
+  string tmppub="";
+  for(size_t i=0;i<C20_ECC_SIZE;i++)
+    tmppub.append(1,(char)pub[i]);
+  return stoh(tmppub);
+}
+
+/**
+ * Return the shared key
+ * @param - a the secret key
+ * @param - c the other public key
+ * */
+string gen_shr(string a,  string c){
+  uint8_t shr[33];
+  shr[C20_ECC_SIZE]='\0';
+  string tmpsec=htos(a);
+  string tmp2pub=htos(c);
+  ECC20 ecc;
+  ecc.setsec((uint8_t*)tmpsec.data());
+  ecc.genshr(shr,(uint8_t*)tmp2pub.data());
+  string tmpshr="";
+  for(int i=0;i<C20_ECC_SIZE;i++)
+    tmpshr.append(1,(char)shr[i]);
+  // #ifdef WEB_TEST
+  // printf("gen_shr(a,c): \"%s\"\n",stoh(tmpshr).data());
+  // #endif 
+  return stoh(tmpshr);
+}
+
 string get_hash(string a){
   SHA3 vh;
   vh.add(a.data(),a.size());
@@ -107,25 +168,36 @@ string get_hash(string a){
 #ifdef WEB_TEST
 int main(int argc, char **argv)
 {
-  string u1="mike";
-  string u2="a_longer_name";
-  
-  cout<<"from \""<<u1<<"\""<<endl;
-  cout<<"  to \""<<stoh(u1)<<"\""<<endl;
-  cout<<"  to \""<<htos(stoh(u1))<<"\""<<endl;
+  size_t testsize=0;
+  uint8_t test[32];
+  string ttmp="3a57718b1da04cc0c52f626212e5c82a";
+  for(auto i:ttmp){
+    test[testsize]=i;
+    testsize++;
+  }
+  string tmpshr="";
+  for(int i=0;i<C20_ECC_SIZE;i++)
+    tmpshr.append(1,(char)test[i]);
+  // cout<<test<<endl;
+  // cout<<stoh(tmpshr)<<endl;
 
-  string k="1234";
-  string v="";
-  cout << "Value: \n";
-  getline(cin, v);
-  std::cout<<"Hash: " << get_hash(v)<<std::endl;
-  std::string a="";
-  a = loader_check(k, v);
+  // Alice
+  string seca = gen_sec();
+  string puba = gen_pub(seca);
 
-  std::cout<<"\nWe got: "<<a<<std::endl;
-  std::string b ="";
-  b= loader_out(k, a);
-  std::cout << "\nDec we got: " << b << std::endl;
+  // Bob
+  string secb = gen_sec();
+  string pubb = gen_pub(secb);
+
+  //agreenent
+  string shra = gen_shr(seca,pubb);
+  string shrb = gen_shr(secb,puba);
+  printf("Alice secret and public: \"%s\", \"%s\"\n",seca.data(),puba.data());
+  printf("Bob   secret and public: \"%s\", \"%s\"\n",secb.data(),pubb.data());
+  printf("Alice shared: \"%s\"\n",shra.data());
+  printf("Bob   shared: \"%s\"\n",shrb.data());
+
+
   return 0;
 }
 #endif //END_TEST

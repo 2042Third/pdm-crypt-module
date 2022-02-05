@@ -10,16 +10,8 @@ author:     Yi Yang
 
 
 
-#include "cc20_file.h"
-#include "cc20_dev.cpp"
-// #include "sys-win32/mman.h"
-// #include <mman.h>
 #include <errno.h>
 #include <fcntl.h>
-#include "cc20_multi.h"
-#include "cc20_poly.hpp"
-#include "cc20_parts.h"
-#include "sha3.h"
 #ifndef SINGLETHREADING
 #include <thread>
 #endif //SINGLETHREADING
@@ -28,6 +20,15 @@ author:     Yi Yang
 #include <filesystem>
 #include <unistd.h>
 #include <sstream>
+#include <string.h>
+#include "cc20_file.h"
+#ifndef PDM_CC20_DEV_HPP
+#include "cc20_dev.hpp"
+#endif // PDM_CC20_DEV_HPP
+#include "cc20_multi.h"
+#include "cc20_poly.hpp"
+#include "cc20_parts.h"
+#include "sha3.h"
 
 
 using namespace std;
