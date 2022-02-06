@@ -209,6 +209,9 @@ EMSCRIPTEN_BINDINGS(raw_pointers) {
   emscripten::function("loader_out", &loader_out);
   emscripten::function("get_hash",&get_hash);
   emscripten::function("pp_hash",&pp_hash);
+  emscripten::function("gen_sec",&gen_sec);
+  emscripten::function("gen_pub",&gen_pub);
+  emscripten::function("gen_shr",&gen_shr);
 }
 #endif
 
