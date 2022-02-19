@@ -42,7 +42,7 @@ windows:
 windows_single:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -D SINGLETHREADING
 windows_debug:
-	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -g
+	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -g -DFOURCORE
 release_en:
 	g++ $(hash) $(boost) $(release_en) $(inc)
 release_de:

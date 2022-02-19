@@ -17,6 +17,19 @@ author:     Yi Yang
 #undef HAS_MAIN
 #endif//DESKTOP_RELEASE
 
+#ifdef SINGLETHREADING
+#define THREAD_COUNT 30 
+#elif FOURCORE
+#define THREAD_COUNT 4 
+#else
+#define THREAD_COUNT 1 
+#endif
+
+#define BLOCK_SIZE  4608000
+/* Invariant: BLOCK_SIZE % 64 == 0
+               115200, 256000, 576000, 1152000,2304000,4608000,6912000,9216000 ...
+               Block size*/
+
 #include <stdio.h>
 #include <chrono>
 // Added 
@@ -26,7 +39,7 @@ author:     Yi Yang
 #include <stdlib.h>
 #include <sys/types.h>
 
-// using namespace std;
+
 
 class Cc20{
 
@@ -48,14 +61,7 @@ public:
   std::string get_dec_loc(std::string file_name);
   // void display_progress(unsigned int n) ;
   int DE = 0;
-
-  #ifdef SINGLETHREADING
-  // Make sure this number is same as THREAD_COUNT
-  //           *
-  uint8_t nex[30][65];
-  #else
-  uint8_t nex[1][65];
-  #endif
+  uint8_t nex[THREAD_COUNT][65];
   
   ~Cc20();
 
@@ -67,13 +73,8 @@ private:
   uint32_t count;
 
   uint8_t nonce_orig[13]={0};
-  #ifdef SINGLETHREADING
-  // Make sure this number is same as THREAD_COUNT
-  //          *
-  uint32_t cy[30][17];
-  #else
-  uint32_t cy[1][17];
-  #endif
+
+  uint32_t cy[THREAD_COUNT][17];
   
 
   uint8_t * key;

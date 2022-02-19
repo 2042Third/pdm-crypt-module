@@ -46,15 +46,14 @@ unsigned char orig_mac[16];
 
 int ENABLE_SHA3_OUTPUT = 0;
 
-const int BLOCK_SIZE = 4608000;
-/* Invariant: BLOCK_SIZE % 64 == 0
-                                 115200, 256000, 576000, 1152000,2304000,4608000,6912000,9216000 ...
-                                 Block size*/
-#ifdef SINGLETHREADING
-const int THREAD_COUNT = 30; // Make sure to change the header file's too.
-#else
-const int THREAD_COUNT = 1; // Make sure to change the header file's too.
-#endif
+/**
+ * Moved "BLOCK_SIZE" to header file
+ * 
+ * */
+/**
+ * Moved "THREAD_COUNT" to header file and made it definied at compile-time.
+ * 
+ * */
 const int PER_THREAD_BACK_LOG = 0; // This is not enabled.
 
 uint32_t folow[THREAD_COUNT][17]; // A copy of a state.
@@ -182,11 +181,7 @@ string stoh (string a){
 
 /**
  * Takes a file name and outputs the encrypted/decrypted content.
- * */
-void Cc20::rd_file_encr(const std::string file_name, uint8_t* outstr) {
-  const uint8_t * line; 
-  cc20_file r_file;
-  r_file.read_new(file_name.data());
+ *   
   #ifdef VERBOSE
   cout << "Staring file size " << (size_t) r_file.file_size() << endl;
   #if defined(_WIN64)
@@ -195,10 +190,16 @@ void Cc20::rd_file_encr(const std::string file_name, uint8_t* outstr) {
   cout << "_WIN64 not defined" << endl;
   #endif
   #endif
-  line = (const uint8_t*) r_file.get_mapping();
+
   #ifdef VERBOSE
   cout << "File mapped " << line[0] << endl;
   #endif
+ * */
+void Cc20::rd_file_encr(const std::string file_name, uint8_t* outstr) {
+  const uint8_t * line; 
+  cc20_file r_file;
+  r_file.read_new(file_name.data());
+  line = (const uint8_t*) r_file.get_mapping();
   rd_file_encr((uint8_t*)line, (uint8_t*)outstr, r_file.file_size());
   r_file.unmap();
 }
