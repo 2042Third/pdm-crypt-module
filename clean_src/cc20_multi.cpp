@@ -144,10 +144,18 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   #endif
   #endif
   r_file.write_new(oufile_name.data(),1);
-  if(poly1305_toggle )
-    linew = r_file.get_write_mapping(r_file.file_size()+12+16); // Mapped writting
-  else 
-    linew = r_file.get_write_mapping(r_file.file_size()+12); // Mapped writting
+  if(DE){
+    if(poly1305_toggle )
+      linew = r_file.get_write_mapping(r_file.file_size()-12-16); // Mapped writting
+    else
+      linew = r_file.get_write_mapping(r_file.file_size()-12); // Mapped writting
+  }
+  else { // Encryption step
+    if(poly1305_toggle )
+      linew = r_file.get_write_mapping(r_file.file_size()+12+16); // Mapped writting
+    else
+      linew = r_file.get_write_mapping(r_file.file_size()+12); // Mapped writting
+  }
   line = (const uint8_t*) r_file.get_mapping();
   #ifdef VERBOSE
   cout << "File mapped " << line[0] << endl;
@@ -582,7 +590,7 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
   auto dur = end - start;
   auto i_millis = std::chrono::duration_cast < std::chrono::milliseconds > (dur);
   auto f_secs = std::chrono::duration_cast < std::chrono::duration < float >> (dur);
-  if(cry_obj.file_written() || 1)
+  if(cry_obj.file_written() )
     printf("\n%.2fs\n",f_secs.count());
 }
 
