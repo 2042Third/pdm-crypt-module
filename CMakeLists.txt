@@ -7,8 +7,8 @@ if( ${PDM_BUILD_TYPE} MATCHES Library)
     message(STATUS "PDM-crypt-module library build ")
     add_library(cc20_multi
         include/cc20_multi.h
-        clean_src/cc20_multi.cpp
-        clean_src/cc20_file.cpp
+        src/cc20_multi.cpp
+        src/cc20_file.cpp
         include/pdm-service.hpp
         lib/sha3.cpp
         lib/sha3.h
@@ -34,8 +34,8 @@ elseif(${PDM_BUILD_TYPE} MATCHES Desktop)
     message(STATUS "PDM-crypt-module command-line executable build")
     add_executable(c20
         include/cc20_multi.h
-        clean_src/cc20_multi.cpp
-        clean_src/cc20_file.cpp
+        src/cc20_multi.cpp
+        src/cc20_file.cpp
         include/pdm-service.hpp
         lib/sha3.cpp
         lib/sha3.h
@@ -46,7 +46,7 @@ elseif(${PDM_BUILD_TYPE} MATCHES Desktop)
         lib/ecc/curve25519.c
         lib/ecc/fe25519.c
         lib/ecc/bigint.c
-        clean_src/ec.cpp
+        src/ec.cpp
         )
     if(WIN32)
         target_compile_options(

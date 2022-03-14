@@ -14,11 +14,11 @@ incmac =  -lpthread
 inc = -lpthread
 # inc =-I../lib/boost-linux/ -L../lib/boost-linux/stage/lib -lboost_thread -pthread
 mac = -D MAC_OS  
-src_ = ../clean_src
+src_ = ../src
 libr = -I../lib/poly1305-donna-master/ 
 win32 = -D WINDOWS 
 
-srcs = ../clean_src/cc20_file.cpp \
+srcs = ../src/cc20_file.cpp \
 ../lib/sha3.cpp \
 ../lib/cpp-mmf/memory_mapped_file.cpp \
 ../lib/poly1305-donna-master/poly1305-donna.c \
@@ -26,7 +26,7 @@ srcs = ../clean_src/cc20_file.cpp \
 ../lib/ecc/curve25519.c \
 ../lib/ecc/fe25519.c \
 ../lib/ecc/bigint.c \
-../clean_src/ec.cpp
+../src/ec.cpp
 release_en= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX  -o c20.o
 release_de= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX -D DE -o c20de.o
 release_en1= -m64 -std=c++17  cc20_multi.cpp  -D LINUX -o c20
