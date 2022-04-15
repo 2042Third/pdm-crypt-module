@@ -8,15 +8,19 @@
 #include "sha3.h"
 
 // big endian architectures need #define __BYTE_ORDER __BIG_ENDIAN
+#ifdef _MSC_VER
+#define WINDOWS
+#endif //_MSC_VER
+
 #ifndef WINDOWS
 #ifndef _MSC_VER
 #ifdef MAC_OS
 #include <machine/endian.h>
 #else
 #include <endian.h>
-#endif
-#endif
-#endif
+#endif // MAC_OS
+#endif // _MSC_VER
+#endif // WINDOWS
 
 #include <iostream>
 

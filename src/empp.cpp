@@ -18,6 +18,8 @@ using namespace std;
 
 #define C20_ECC_SIZE 32
 
+#define cplusplus_main_compilation (__cplusplus & WEB_TEST)
+
 /**
  * @param a user1
  * @param b user2
@@ -35,6 +37,22 @@ string pp_hash(std::string user1, std::string user2){
   vh.add(buf.data(),buf.size());
   std::cout<<std::endl;//flush
   return vh.getHash();
+}
+/**
+ * wrapper for calling from c
+ * 
+ * */
+char* pp_hash_c(char* user1, char* user2){
+  std::string u1 = std::string(user1);
+  std::string u2 = std::string(user2);
+  std::string out = pp_hash(u1, u2);
+  return out.data();
+}
+extern "C" char* pp_hash_convert(char* user1, char* user2){
+  std::string u1 = std::string(user1);
+  std::string u2 = std::string(user2);
+  std::string out = pp_hash(u1, u2);
+  return out.data();
 }
 
 // EMSCRIPTEN_KEEPALIVE
@@ -165,7 +183,7 @@ string get_hash(string a){
   return b;
 }
 
-#ifdef WEB_TEST
+#ifdef cplusplus_main_compilation
 int main(int argc, char **argv)
 {
   size_t testsize=0;
