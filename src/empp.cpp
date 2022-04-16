@@ -42,13 +42,13 @@ string pp_hash(std::string user1, std::string user2){
  * wrapper for calling from c
  * 
  * */
-char* pp_hash_c(char* user1, char* user2){
+const char* pp_hash_c(char* user1, char* user2){
   std::string u1 = std::string(user1);
   std::string u2 = std::string(user2);
   std::string out = pp_hash(u1, u2);
   return out.data();
 }
-extern "C" char* pp_hash_convert(char* user1, char* user2){
+extern "C" const char* pp_hash_convert(char* user1, char* user2){
   std::string u1 = std::string(user1);
   std::string u2 = std::string(user2);
   std::string out = pp_hash(u1, u2);
