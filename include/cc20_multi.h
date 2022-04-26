@@ -39,6 +39,7 @@ author:     Yi Yang
 #include <stdlib.h>
 #include <sys/types.h>
 #include "cc20_poly.hpp"
+#include "sha3.h"
 
 
 
@@ -68,6 +69,7 @@ public:
   ~Cc20();
 
   cc20_poly* poly;// should be in private
+  SHA3 hashing; // A rolling hash of the input data.
 
 private:
   unsigned char orig_mac[16];

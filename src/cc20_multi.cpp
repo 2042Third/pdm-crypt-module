@@ -27,7 +27,6 @@ author:     Yi Yang
 #endif // PDM_CC20_DEV_HPP
 #include "cc20_multi.h"
 #include "cc20_parts.h"
-#include "sha3.h"
 
 
 using namespace std;
@@ -63,6 +62,9 @@ size_t progress_bar[THREAD_COUNT];
 
 int DISPLAY_PROG =1;
 
+/**
+ * Should be into an object with all the tools
+ * */
 cc20_parts arg_track[THREAD_COUNT];
 // unsigned long int arg_track[THREAD_COUNT][6];
 /* Passes arguments into threads.
@@ -72,7 +74,6 @@ cc20_parts arg_track[THREAD_COUNT];
                                        arg_track[THREAD_COUNT][3] ---> Remaining plain size
                                        arg_track[THREAD_COUNT][4] ---> NOT USED*/
 
-SHA3 hashing; // A rolling hash of the input data.
 
 
 Cc20 * arg_ptr[THREAD_COUNT]; // Parent pointers for each thread.
@@ -581,11 +582,11 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
   cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
   if(cry_obj.DE){
     cry_obj.rd_file_encr(infile_name_copy,cry_obj.get_dec_loc(infile_name));
-    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
+    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<cry_obj.hashing.getHash()<<"\""<<endl;
   }
   else {
     cry_obj.rd_file_encr(infile_name, infile_name+".pdm");
-    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
+    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<cry_obj.hashing.getHash()<<"\""<<endl;
   }
   
   auto end = std::chrono::high_resolution_clock::now();
@@ -643,11 +644,11 @@ void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key){
   cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
   if(cry_obj.DE){
     cry_obj.rd_file_encr(infile_name_copy,outstr);
-    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
+    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<cry_obj.hashing.getHash()<<"\""<<endl;
   }
   else {
     cry_obj.rd_file_encr(infile_name, outstr);
-    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
+    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<cry_obj.hashing.getHash()<<"\""<<endl;
   }
 }
 
@@ -688,11 +689,11 @@ void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outs
   cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
   if(cry_obj.DE){
     cry_obj.rd_file_encr(buf,oufile_name, outsize );
-    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
+    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<cry_obj.hashing.getHash()<<"\""<<endl;
   }
   else {
     cry_obj.rd_file_encr(buf,oufile_name, outsize);
-    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
+    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<cry_obj.hashing.getHash()<<"\""<<endl;
   }
 }
 
