@@ -38,6 +38,7 @@ author:     Yi Yang
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include "cc20_poly.hpp"
 
 
 
@@ -63,27 +64,28 @@ public:
   int DE = 0;
   uint8_t nex[THREAD_COUNT][65];
   
+  Cc20();
   ~Cc20();
 
+  cc20_poly* poly;// should be in private
+
 private:
+
+
   // cc20_file* r_file = NULL;
   int FILE_WRITTEN =0;  
   uint8_t * nonce;
-
   uint32_t count;
-
   uint8_t nonce_orig[13]={0};
-
   uint32_t cy[THREAD_COUNT][17];
   
-
   uint8_t * key;
 
   // Binary constant for chacha20 state, modified 
-  unsigned long b1 =  0B01100001011100010111100011100101 ;
-  unsigned long b2 =  0B10110111001011000110011101101110 ;
-  unsigned long b3 =  0B01111001111000101010110100110010 ;
-  unsigned long b4 =  0B01101011001001000110010101110100 ;
+  const unsigned long b1 =  0B01100001011100010111100011100101 ;
+  const unsigned long b2 =  0B10110111001011000110011101101110 ;
+  const unsigned long b3 =  0B01111001111000101010110100110010 ;
+  const unsigned long b4 =  0B01101011001001000110010101110100 ;
 };
 
   std::string htos (std::string a);

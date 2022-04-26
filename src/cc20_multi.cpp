@@ -26,7 +26,6 @@ author:     Yi Yang
 #include "cc20_dev.hpp"
 #endif // PDM_CC20_DEV_HPP
 #include "cc20_multi.h"
-#include "cc20_poly.hpp"
 #include "cc20_parts.h"
 #include "sha3.h"
 
@@ -40,7 +39,6 @@ void multi_enc_pthrd(int thrd);
 void set_thread_arg(unsigned long int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) ;
 // void set_thread_arg(unsigned long int thrd, uint8_t* np,unsigned long int tracker,unsigned long int n, unsigned long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
        
-cc20_poly* poly;
 int poly1305_toggle=1;
 unsigned char orig_mac[16];
 
@@ -516,6 +514,14 @@ void Cc20::read_original_mac(unsigned char * m, uint8_t* input_file, size_t off)
 }
 
 /**
+ * Constructor
+ * */
+Cc20::Cc20(){
+  poly = new cc20_poly();
+
+}
+
+/**
  * Init encryption.
  * This version of pdm-crypt have different ways to interfacing the data.
  * It can be mapped from hard drive and output as a mapped file, or take a file
@@ -574,9 +580,9 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
   // Timer
   auto start = std::chrono::high_resolution_clock::now();
 
+  // ***change these setup into a function
   cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
-  poly = new cc20_poly();
-  poly->init((unsigned char *)key_hash.getHash().data()); 
+  cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
   if(cry_obj.DE){
     cry_obj.rd_file_encr(infile_name_copy,cry_obj.get_dec_loc(infile_name));
     if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
@@ -638,8 +644,7 @@ void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key){
   }
 
   cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
-  poly = new cc20_poly();
-  poly->init((unsigned char *)key_hash.getHash().data()); 
+  cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
   if(cry_obj.DE){
     cry_obj.rd_file_encr(infile_name_copy,outstr);
     if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
@@ -684,8 +689,7 @@ void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outs
   }
 
   cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
-  poly = new cc20_poly();
-  poly->init((unsigned char *)key_hash.getHash().data()); 
+  cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
   if(cry_obj.DE){
     cry_obj.rd_file_encr(buf,oufile_name, outsize );
     if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
@@ -710,8 +714,7 @@ void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
   SHA3 key_hash;
   for (unsigned int i=0;i<2;i++)
     key_hash.add(stob(text_key).data(),text_key.size());
-  poly = new cc20_poly();
-  poly->init((unsigned char *)key_hash.getHash().data()); 
+  cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
   uint8_t line1[13]={0};
   if(cry_obj.DE){
     for (unsigned int i=0;i<12;i++)
@@ -750,8 +753,7 @@ void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
   SHA3 key_hash;
   for (unsigned int i=0;i<2;i++)
     key_hash.add(stob(text_key).data(),text_key.size());
-  poly = new cc20_poly();
-  poly->init((unsigned char *)key_hash.getHash().data()); 
+  cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
   uint8_t line1[13]={0};
   if(cry_obj.DE){
     for (unsigned int i=0;i<12;i++)
