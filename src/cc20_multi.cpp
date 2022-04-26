@@ -39,29 +39,25 @@ void multi_enc_pthrd(int thrd);
 void set_thread_arg(unsigned long int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) ;
 // void set_thread_arg(unsigned long int thrd, uint8_t* np,unsigned long int tracker,unsigned long int n, unsigned long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
        
-int poly1305_toggle=1;
-unsigned char orig_mac[16];
+int poly1305_toggle=1; // be changed into enum or structrure
 
 int ENABLE_SHA3_OUTPUT = 0;
 
 /**
  * Moved "BLOCK_SIZE" to header file
- * 
- * */
-/**
  * Moved "THREAD_COUNT" to header file and made it definied at compile-time.
- * 
  * */
-const int PER_THREAD_BACK_LOG = 0; // This is not enabled.
+// const int PER_THREAD_BACK_LOG = 0; // This is not enabled.
 
-uint32_t folow[THREAD_COUNT][17]; // A copy of a state.
 
 // Statically allocates, and uses BLOCK_SIZE*THREAD_COUNT of memory. 
-char thread_track[THREAD_COUNT][BLOCK_SIZE] = {{0}};
+// char thread_track[THREAD_COUNT][BLOCK_SIZE] = {{0}};
 
+
+/**
+ * Need to change this into an object
+ * */
 long int writing_track[THREAD_COUNT]; // Tells the writer thread how much to read; should only be different on the last block.
-
-char *linew; // Tracks all the input
 
 size_t progress_bar[THREAD_COUNT];
 

@@ -70,7 +70,9 @@ public:
   cc20_poly* poly;// should be in private
 
 private:
-
+  unsigned char orig_mac[16];
+  uint32_t folow[THREAD_COUNT][17]; // A copy of a state.
+  char *linew; // Tracks all the input
 
   // cc20_file* r_file = NULL;
   int FILE_WRITTEN =0;  
