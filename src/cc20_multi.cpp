@@ -149,9 +149,6 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
       linew = r_file.get_write_mapping(r_file.file_size()+12); // Mapped writting
   }
   line = (const uint8_t*) r_file.get_mapping();
-  #ifdef VERBOSE
-  cout << "File mapped " << line[0] << endl;
-  #endif
   rd_file_encr((uint8_t*)line, (uint8_t*)linew, r_file.file_size());
   r_file.unmap();
 }
@@ -265,13 +262,10 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
   #endif// SINGLETHREADING
   cout << "Size: "<<ttn << endl;
   arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)linew, n, (uint8_t*)line, count, this);
-  // set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew, n, (uint8_t*)line, count, this);
   #ifndef SINGLETHREADING
   threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
-  // threads[np % THREAD_COUNT] = thread( [&arg_track[np % THREAD_COUNT]] {multi_enc_pthrd(); }) 
-  // threads[np % THREAD_COUNT]= thread (arg_track[np % THREAD_COUNT].multi_enc_pthrd, tmpn);
   #else
-  arg_track[np % THREAD_COUNT]->multi_enc_pthrd(0);
+  arg_track[np % THREAD_COUNT]->multi_enc_pthrd();
   #endif // SINGLETHREADING
   np++;
   for (unsigned long int k = 0; k < ((unsigned long int)(ttn / 64) + 0); k++) { // If leak, try add -1
@@ -279,26 +273,20 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
       tracker += 64;
       if (tn % (BLOCK_SIZE) == 0 && (k != 0)) {
   #ifndef SINGLETHREADING
+        // waiting for thread to finish
         if (threads[np % THREAD_COUNT].joinable()) {
-          #ifdef VERBOSE
-          cout << "[main] Possible join, waiting " <<np % THREAD_COUNT<< endl;
-          #endif
           threads[np % THREAD_COUNT].join();
         }
         #ifdef VERBOSE
         cout << "[main] " <<np % THREAD_COUNT<< " regular being dispatched"<< endl;
         #endif
         arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
-        // set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
         threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
-        // threads[np % THREAD_COUNT] = thread( [&arg_track[np % THREAD_COUNT]] { Cc20::worker::multi_enc_pthrd(); }) 
-        // threads[np % THREAD_COUNT] = thread(&Cc20::worker::multi_enc_pthrd, arg_track[np % THREAD_COUNT]);
         tracker = 0;
         np++;
   #else 
         arg_track[0]->set(0,(uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
-        // set_thread_arg(0, (uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
-        multi_enc_pthrd(0);
+        arg_track[0]->multi_enc_pthrd();
         tracker = 0;
         np++;
   #endif// SINGLETHREADING
@@ -307,31 +295,19 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
     else {
   #ifndef SINGLETHREADING
       if (threads[np % THREAD_COUNT].joinable() && final_line_written != 1) {
-          #ifdef VERBOSE
-          cout << "[main] Last Possible join, waiting " <<np % THREAD_COUNT<< endl;
-          #endif
         threads[np % THREAD_COUNT].join();
       }
-      #ifdef VERBOSE
-      cout << "[main] " <<np % THREAD_COUNT<< " last one being dispatched"<< endl;
-      #endif
       arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
-      // set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
       threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
-      // threads[np % THREAD_COUNT] = thread(arg_track[np % THREAD_COUNT].multi_enc_pthrd, np % THREAD_COUNT);
   #else 
       arg_track[0]->set(0,(uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
-      // set_thread_arg(0, (uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
-      arg_track[0]->multi_enc_pthrd(0); 
+      arg_track[0]->multi_enc_pthrd(); 
   #endif// SINGLETHREADING
     }
     count += 1;
     n -= 64;
     tn += 64;
   }
-  #ifdef VERBOSE
-  cout << "[main] Finished dispatching joining" << endl;
-  #endif
   
   #ifndef SINGLETHREADING
   for (int i = 0; i < THREAD_COUNT; i++) {
@@ -354,7 +330,6 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
     || !poly1305_toggle
     ){
     if (ENABLE_SHA3_OUTPUT){
-      // cout << "Generating hash..." << endl;
       if(!DE)
         hashing.add(line,ttn );
       else
@@ -368,10 +343,6 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
   else {
     cout << "Password incorrect, decryption failed and no files written..."<<endl;
   }
-  #ifdef VERBOSE
-  cout << "[main] Writing thread joined" << endl;
-  #endif
-
   #ifndef SINGLETHREADING
   if(DISPLAY_PROG){
     if (progress.joinable())
@@ -438,11 +409,7 @@ void Cc20::worker::set(int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uin
 // };
 
 void Cc20::worker::multi_enc_pthrd() {
-  // uint8_t * linew1 = linew; // Used--
   size_t tracker = 0; // Used
-  // size_t n = arg_track[thrd].n; // Used--
-  // uint8_t * line = arg_track[thrd].line; // Used--
-  // uint32_t count = arg_track[thrd].count; // Used --
   Cc20 * ptr = arg_ptr[thrd];
 
   #ifdef VERBOSE
@@ -450,21 +417,14 @@ void Cc20::worker::multi_enc_pthrd() {
   #endif
   for (size_t k = 0; k < BLOCK_SIZE / 64; k++) {
     ptr -> one_block((int) thrd, (int) count);
-    #ifdef VERBOSE
-      // cout<<"[calc] "<<thrd<<" 1 iteration, current size "<<n << endl;
-    #endif
     if (n >= 64) {
       for (long int i = 0; i < 64; i++) {
         linew1[i + tracker] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
       }
       tracker += 64;
       if (tracker >= (BLOCK_SIZE)) { // Notifies the writing tread when data can be read
-        
         writing_track[thrd] = tracker;
         tracker = 0;
-        #ifdef VERBOSE
-          cout<<"[calc] "<<thrd<<" returning lock, calling write, size "<<writing_track[thrd] << endl;
-        #endif
       }
     } else {
       for (size_t i = 0; i < n; i++) {
@@ -472,9 +432,6 @@ void Cc20::worker::multi_enc_pthrd() {
       }
       tracker += n;
       writing_track[thrd] = tracker; // Notifies the writing tread when data can be read
-        #ifdef VERBOSE
-        cout<<"[calc] "<<thrd<<" on last lock, size "<<writing_track[thrd]<< endl;
-        #endif
       break;
     }
     count += 1;

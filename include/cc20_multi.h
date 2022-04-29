@@ -18,14 +18,14 @@ author:     Yi Yang
 #endif//DESKTOP_RELEASE
 
 #ifndef SINGLETHREADING
-#define THREAD_COUNT 8
+#define THREAD_COUNT 20
 #elif FOURCORE
 #define THREAD_COUNT 4 
 #else
 #define THREAD_COUNT 1 
 #endif
 
-#define BLOCK_SIZE  115200
+#define BLOCK_SIZE  4608000
 /* Invariant: BLOCK_SIZE % 64 == 0
                115200, 256000, 576000, 1152000,2304000,4608000,6912000,9216000 ...
                Block size*/
