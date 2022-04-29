@@ -26,8 +26,8 @@ author:     Yi Yang
 #include "cc20_dev.hpp"
 #endif // PDM_CC20_DEV_HPP
 #include "cc20_multi.h"
-#include "cc20_parts.h"
 
+#include <functional> // std::ref
 
 using namespace std;
 
@@ -35,7 +35,7 @@ using namespace std;
 // void enc_writing_nw();
 void multi_enc_pthrd(int thrd);
 // void multi_enc_pthrd_nw(int thrd);
-void set_thread_arg(unsigned long int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) ;
+// void set_thread_arg(unsigned long int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) ;
 // void set_thread_arg(unsigned long int thrd, uint8_t* np,unsigned long int tracker,unsigned long int n, unsigned long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
        
 int poly1305_toggle=1; // be changed into enum or structrure
@@ -62,10 +62,7 @@ size_t progress_bar[THREAD_COUNT];
 
 int DISPLAY_PROG =1;
 
-/**
- * Should be into an object with all the tools
- * */
-cc20_parts arg_track[THREAD_COUNT];
+
 // unsigned long int arg_track[THREAD_COUNT][6];
 /* Passes arguments into threads.
                                        arg_track[THREAD_COUNT][0] ---> Thread number
@@ -267,11 +264,14 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
   }
   #endif// SINGLETHREADING
   cout << "Size: "<<ttn << endl;
-  set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew, n, (uint8_t*)line, count, this);
+  arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)linew, n, (uint8_t*)line, count, this);
+  // set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew, n, (uint8_t*)line, count, this);
   #ifndef SINGLETHREADING
-  threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
+  threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
+  // threads[np % THREAD_COUNT] = thread( [&arg_track[np % THREAD_COUNT]] {multi_enc_pthrd(); }) 
+  // threads[np % THREAD_COUNT]= thread (arg_track[np % THREAD_COUNT].multi_enc_pthrd, tmpn);
   #else
-  multi_enc_pthrd(0);
+  arg_track[np % THREAD_COUNT]->multi_enc_pthrd(0);
   #endif // SINGLETHREADING
   np++;
   for (unsigned long int k = 0; k < ((unsigned long int)(ttn / 64) + 0); k++) { // If leak, try add -1
@@ -288,12 +288,16 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
         #ifdef VERBOSE
         cout << "[main] " <<np % THREAD_COUNT<< " regular being dispatched"<< endl;
         #endif
-        set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
-        threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
+        arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
+        // set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
+        threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
+        // threads[np % THREAD_COUNT] = thread( [&arg_track[np % THREAD_COUNT]] { Cc20::worker::multi_enc_pthrd(); }) 
+        // threads[np % THREAD_COUNT] = thread(&Cc20::worker::multi_enc_pthrd, arg_track[np % THREAD_COUNT]);
         tracker = 0;
         np++;
   #else 
-        set_thread_arg(0, (uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
+        arg_track[0]->set(0,(uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
+        // set_thread_arg(0, (uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
         multi_enc_pthrd(0);
         tracker = 0;
         np++;
@@ -311,11 +315,14 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
       #ifdef VERBOSE
       cout << "[main] " <<np % THREAD_COUNT<< " last one being dispatched"<< endl;
       #endif
-      set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
-      threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
+      arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
+      // set_thread_arg(np % THREAD_COUNT, (uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
+      threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
+      // threads[np % THREAD_COUNT] = thread(arg_track[np % THREAD_COUNT].multi_enc_pthrd, np % THREAD_COUNT);
   #else 
-      set_thread_arg(0, (uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
-      multi_enc_pthrd(0); 
+      arg_track[0]->set(0,(uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
+      // set_thread_arg(0, (uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
+      arg_track[0]->multi_enc_pthrd(0); 
   #endif// SINGLETHREADING
     }
     count += 1;
@@ -342,7 +349,10 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
   }
   unsigned char mac[16];
   poly->finish((unsigned char*)mac);
-  if (poly->verify(mac, orig_mac) || !DE || !poly1305_toggle){
+  if (poly->verify(mac, orig_mac) 
+    || !DE 
+    || !poly1305_toggle
+    ){
     if (ENABLE_SHA3_OUTPUT){
       // cout << "Generating hash..." << endl;
       if(!DE)
@@ -372,7 +382,7 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
 
 /**
  * Displays progress
- * 
+ * -- move to namespace
  * */
 void display_progress(size_t n) {
   unsigned int current=0;
@@ -407,21 +417,32 @@ void display_progress(size_t n) {
     Sets arguments in arg_track for threads.
 
 */
-void set_thread_arg(unsigned long int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) {
-  arg_track[thrd].thrd = thrd;
-  arg_track[thrd].linew = linew1;
-  arg_track[thrd].n = n;
-  arg_track[thrd].line = line;
-  arg_track[thrd].count = count;
+void Cc20::worker::set(int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) {
+  // arg_track[thrd].thrd = thrd;
+  // arg_track[thrd].linew = linew1;
+  // arg_track[thrd].n = n;
+  // arg_track[thrd].line = line;
+  // arg_track[thrd].count = count;
+
+  this->thrd = thrd;
+  this->linew1 = linew1;
+  this->n = n;
+  this->line = line;
+  this->count = count;
+
   arg_ptr[thrd] = ptr;
 }
 
-void multi_enc_pthrd(int thrd) {
-  uint8_t * linew1 = arg_track[thrd].linew; // Used--
+// auto thread_func = [](int &i) {
+//     return i+42;
+// };
+
+void Cc20::worker::multi_enc_pthrd() {
+  // uint8_t * linew1 = linew; // Used--
   size_t tracker = 0; // Used
-  size_t n = arg_track[thrd].n; // Used--
-  uint8_t * line = arg_track[thrd].line; // Used--
-  uint32_t count = arg_track[thrd].count; // Used --
+  // size_t n = arg_track[thrd].n; // Used--
+  // uint8_t * line = arg_track[thrd].line; // Used--
+  // uint32_t count = arg_track[thrd].count; // Used --
   Cc20 * ptr = arg_ptr[thrd];
 
   #ifdef VERBOSE
@@ -430,7 +451,7 @@ void multi_enc_pthrd(int thrd) {
   for (size_t k = 0; k < BLOCK_SIZE / 64; k++) {
     ptr -> one_block((int) thrd, (int) count);
     #ifdef VERBOSE
-      cout<<"[calc] "<<thrd<<" 1 iteration, current size "<<n << endl;
+      // cout<<"[calc] "<<thrd<<" 1 iteration, current size "<<n << endl;
     #endif
     if (n >= 64) {
       for (long int i = 0; i < 64; i++) {
@@ -515,7 +536,9 @@ void Cc20::read_original_mac(unsigned char * m, uint8_t* input_file, size_t off)
  * */
 Cc20::Cc20(){
   poly = new cc20_poly();
-
+  for (unsigned int i=0 ; i< THREAD_COUNT; i++){
+    arg_track[i]=new worker();
+  } 
 }
 
 /**
@@ -822,6 +845,9 @@ int rd_inp(unsigned int argc, char ** argv, string *infile){
 
 Cc20::~Cc20() {
   if(poly !=NULL) delete poly;
+  for (unsigned int i=0 ; i< THREAD_COUNT;i++){
+    delete arg_track[i];
+  }
 }
 
 #ifdef HAS_MAIN 

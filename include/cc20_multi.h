@@ -17,15 +17,15 @@ author:     Yi Yang
 #undef HAS_MAIN
 #endif//DESKTOP_RELEASE
 
-#ifdef SINGLETHREADING
-#define THREAD_COUNT 30 
+#ifndef SINGLETHREADING
+#define THREAD_COUNT 8
 #elif FOURCORE
 #define THREAD_COUNT 4 
 #else
 #define THREAD_COUNT 1 
 #endif
 
-#define BLOCK_SIZE  4608000
+#define BLOCK_SIZE  115200
 /* Invariant: BLOCK_SIZE % 64 == 0
                115200, 256000, 576000, 1152000,2304000,4608000,6912000,9216000 ...
                Block size*/
@@ -44,7 +44,19 @@ author:     Yi Yang
 
 
 class Cc20{
-
+  /**
+   *  -- replaces cc20_parts
+   * Should contain all things a thread needs, including the encryption 
+   * */
+  struct worker {
+    void set(int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr);
+    void multi_enc_pthrd();
+    unsigned long int thrd;
+    uint8_t* line;
+    uint8_t* linew1;
+    uint32_t count;
+    size_t n;
+  };
 
 public:
 
@@ -70,7 +82,10 @@ public:
 
   cc20_poly* poly;// should be in private
   SHA3 hashing; // A rolling hash of the input data.
-
+  /**
+   * Should be into an object with all the tools
+   * */
+  worker* arg_track[THREAD_COUNT];
 private:
   unsigned char orig_mac[16];
   uint32_t folow[THREAD_COUNT][17]; // A copy of a state.

@@ -39,7 +39,8 @@ release_en12= -m64 -std=c++17  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINT
 release_de12= -m64 -std=c++17  cc20_multi.cpp -lm  -Wall -D DEEP_DEBUG -D PRINTING -D ROUNDCOUNTTWLV -D LINUX -D DE -o c20de.c
 windows:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -Wall
-
+linux:
+	g++ $(boost) $(release_en1) $(srcs) $(inc) -Wall -g -DVERBOSE
 windows_single:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -D SINGLETHREADING
 windows_debug:
