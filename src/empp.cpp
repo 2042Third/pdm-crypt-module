@@ -164,7 +164,7 @@ int test (string a, string b, int accum){
   if (dec ==
       b){
     accum+=1;
-    cout<< accum<<endl;
+    cout<< accum<<"\t out of 100,000 passed\r";
   }
   else {
     cout<<"failure!!"<<endl;
@@ -217,9 +217,10 @@ int main(int argc, char **argv)
   // printf("encrypted: \"%s\"\n",enc.data());
   // printf("decrypted: \"%s\"\n",dec.data());
   int accum =0;
-  for (unsigned int i=0 ; i< 100;i++){
+  for (unsigned int i=0 ; i< 100000;i++){
     accum = testing::test(pas, tmp2, accum);
   }
+  cout<<endl;
   return 0;
 }
 #endif //END_TEST

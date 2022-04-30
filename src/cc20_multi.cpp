@@ -713,12 +713,10 @@ void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
         key_hash.add(stob(text_key).data(),text_key.size());
         key_hash.add(stob(text_key).data(),text_key.size());
   cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
-  uint8_t line1[13]={0};
   Bytes input_vc;
   for(size_t i=0 ; i<12;i++)
     input_vc.push_back(buf[i]);
   string text_nonce = btos(input_vc);
-  cout<< text_nonce.size()<<endl;
   if (text_nonce.size() != 0) {
     text_nonce = pad_to_key((string) text_nonce, 12);
   }
