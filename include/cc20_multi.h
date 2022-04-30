@@ -42,6 +42,16 @@ author:     Yi Yang
 #include "sha3.h"
 
 
+namespace c20{
+  struct config {
+    int poly1305_toggle=1; // be changed into enum or structrure
+    int ENABLE_SHA3_OUTPUT = 0; 
+    int DISPLAY_PROG =1;
+    int final_line_written = 0; // Whether or not the fianl line is written
+    int DE=0; 
+    int arg_c=1;
+  };
+}
 
 class Cc20{
   /**
@@ -49,7 +59,7 @@ class Cc20{
    * Should contain all things a thread needs, including the encryption 
    * */
   struct worker {
-    void set(int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr);
+    void set(int thrd, uint8_t* linew0, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr);
     void multi_enc_pthrd();
     unsigned long int thrd;
     uint8_t* line;
@@ -67,37 +77,36 @@ public:
   void rd_file_encr (uint8_t * buf, uint8_t* outstr, size_t input_length);
   void rd_file_encr (const std::string file_name, std::string oufile_name);
   void stream( uint8_t*plain,unsigned int len);
-  void set_vals(uint8_t * nonce, uint8_t*key);
+  void set_vals(uint8_t * nonce0, uint8_t*key0);
   void one_block (int thrd, uint32_t count);
   void endicha(uint8_t *a, uint32_t *b);
+  void set_configurations (c20::config configs);
   void read_original_mac(unsigned char * m, uint8_t* input_file, size_t off);
+  int check_file(std::string a);
   int file_written(){return FILE_WRITTEN;}
   std::string get_dec_loc(std::string file_name);
-  // void display_progress(unsigned int n) ;
-  int DE = 0;
+  void get_key_hash(std::string a, uint8_t* hash);
+  char* get_inp_nonce (std::string infile_name, uint8_t* line1);
+  void get_time_diff(std::chrono::time_point<std::chrono::high_resolution_clock> start);
+
   uint8_t nex[THREAD_COUNT][65];
-  
+  int is_dec(){return conf.DE;}
   Cc20();
   ~Cc20();
 
   cc20_poly* poly;// should be in private
-  SHA3 hashing; // A rolling hash of the input data.
-  /**
-   * Should be into an object with all the tools
-   * */
+  SHA3 hashing; 
   worker* arg_track[THREAD_COUNT];
+  c20::config conf;
 private:
-  unsigned char orig_mac[16];
+  unsigned char orig_mac[16]={0};
   uint32_t folow[THREAD_COUNT][17]; // A copy of a state.
   char *linew; // Tracks all the input
-
-  // cc20_file* r_file = NULL;
   int FILE_WRITTEN =0;  
   uint8_t * nonce;
   uint32_t count;
   uint8_t nonce_orig[13]={0};
   uint32_t cy[THREAD_COUNT][17];
-  
   uint8_t * key;
 
   // Binary constant for chacha20 state, modified 
@@ -106,16 +115,12 @@ private:
   const unsigned long b3 =  0B01111001111000101010110100110010 ;
   const unsigned long b4 =  0B01101011001001000110010101110100 ;
 };
-
-  std::string htos (std::string a);
-  std::string stoh (std::string a);
+std::string htos (std::string a);
+std::string stoh (std::string a);
 void cmd_enc(uint8_t* buf, std::string oufile_name, std::string text_key, size_t outsize);
 void cmd_enc(std::string infile_name, std::string oufile_name, std::string text_nonce);
 void cmd_enc(std::string infile_name, uint8_t* outstr, std::string text_key);
 void display_progress(size_t n);
-// EMSCRIPTEN_KEEPALIVE
 void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , std::string text_key);
-
-// EMSCRIPTEN_KEEPALIVE
 void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , std::string text_key);
 #endif

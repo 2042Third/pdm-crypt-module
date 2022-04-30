@@ -3,6 +3,7 @@
 #define EMPP_CPP
 #include <stdio.h>
 #include <string>
+#include <memory>
 #include <vector>
 #include "cc20_multi.h"
 #include "ec.h"
@@ -20,13 +21,18 @@ using namespace std;
 
 #define cplusplus_main_compilation (__cplusplus & WEB_TEST)
 
+void memclear(uint8_t* a, size_t b ){
+  for (size_t i=0; i<b;i++){
+    a[i] = 0;
+  }
+}
 /**
  * @param a user1
  * @param b user2
  * 
  * */
 string pp_hash(std::string user1, std::string user2){
-  std::cout<<std::endl;//flush
+  std::cout<<std::flush;//flush
   string c = user1.size()>user2.size()?user1:user2;
   string d = user1.size()>user2.size()?user2:user1;
   vector<char> buf(c.begin(),c.end()); 
@@ -35,7 +41,7 @@ string pp_hash(std::string user1, std::string user2){
   }
   SHA3 vh;
   vh.add(buf.data(),buf.size());
-  std::cout<<std::endl;//flush
+  std::cout<<std::flush;//flush
   return vh.getHash();
 }
 /**
@@ -63,58 +69,24 @@ void use_vector_string(const std::vector<uint8_t> &vec) {
     }
 }
 
-void set_up(vector<char> &buf, string inp)
-{
-  for (char a : inp)
-  {
-    buf.push_back((uint8_t)a);
-  }
-}
 
-string loader_check(std::string key, std::string input)
+string loader_check(const std::string key, const std::string input)
 {
-  vector<char> buf;    //= new vector<uint8_t>();
-  vector<char> outstr; // = new vector<uint8_t>();
-  buf.reserve(input.size() + 1);
-  set_up(buf, input);
-  outstr.reserve(input.size() + 30);
-  cmd_enc((uint8_t *)((&buf)->data()), input.size(), (uint8_t *)((&outstr)->data()), key);
-  std::ostringstream outt;
-  stringstream ss;
-  string str="";
-  for (size_t i = 0; i <input.size()+28; i++)
-  {
-    str.append(1,outstr[i]);
-  }
-  cout<<str<<endl;
-  return stoh( str);
+  string buf(input);    //= new vector<uint8_t>();
+  string outstr(input.size() + 28,0); // = new vector<uint8_t>();
+  cmd_enc((uint8_t *)((&buf)->data()), (size_t)input.size(), (uint8_t *)((&outstr)->data()), key);
+  return stoh( outstr);
 }
 
 
 
-string loader_out(std::string key, std::string inputi)
+string loader_out(const std::string key, const std::string inputi)
 {
-  vector<char> buf;    //= new vector<uint8_t>();
-  vector<char> outstr; // = new vector<uint8_t>();
-  char tchar;
-  for (auto a : inputi)
-    tchar = a;
-  cout<<endl;
-  string input = htos(inputi);
-  size_t inpsize = (input.size()) ;
-  buf.reserve(inpsize + 1);
-  set_up(buf, input);
-  cout << "Input lengths: "<<inpsize << endl;
-  outstr.reserve(inpsize - 27);
+  string buf(htos(inputi));    //= new vector<uint8_t>();
+  string outstr((buf.size()) - 28,0);    //= new vector<uint8_t>();
+  size_t inpsize = (buf.size()) ;
   cmd_dec((uint8_t *)((&buf)->data()), inpsize, (uint8_t *)((&outstr)->data()), key);
-  std::ostringstream outt;
-  stringstream ss;
-  string str="";
-  for (size_t i = 0; i < inpsize -28; i++)
-  {
-    str.append(1,(char)outstr[i]);
-  }
-  return str;
+  return outstr;
 }
 
 /**
@@ -182,40 +154,72 @@ string get_hash(string a){
   string b = vh.getHash();
   return b;
 }
+namespace testing{
+
+int test (string a, string b, int accum){
+  string enc = loader_check(a, b);
+  string dec = loader_out(a, enc);
+  // string enc = stoh(b);
+  // string dec = htos(enc);
+  if (dec ==
+      b){
+    accum+=1;
+    cout<< accum<<endl;
+  }
+  else {
+    cout<<"failure!!"<<endl;
+    cout<< "\tgot     : "<<dec<<endl;
+    cout<< "\texpected: "<<b<<endl;
+  }
+  return accum;
+}
+
+} // namespace testing
 
 #ifdef cplusplus_main_compilation
 int main(int argc, char **argv)
 {
-  size_t testsize=0;
-  uint8_t test[32];
-  string ttmp="3a57718b1da04cc0c52f626212e5c82a";
-  for(auto i:ttmp){
-    test[testsize]=i;
-    testsize++;
+  // size_t testsize=0;
+  // uint8_t test[32];
+  // string ttmp="3a57718b1da04cc0c52f626212e5c82a";
+  // for(auto i:ttmp){
+  //   test[testsize]=i;
+  //   testsize++;
+  // }
+  // string tmpshr="";
+  // for(int i=0;i<C20_ECC_SIZE;i++)
+  //   tmpshr.append(1,(char)test[i]);
+  // // cout<<test<<endl;
+  // // cout<<stoh(tmpshr)<<endl;
+
+  // // Alice
+  // string seca = gen_sec();
+  // string puba = gen_pub(seca);
+
+  // // Bob
+  // string secb = gen_sec();
+  // string pubb = gen_pub(secb);
+
+  // //agreenent
+  // string shra = gen_shr(seca,pubb);
+  // string shrb = gen_shr(secb,puba);
+  // printf("Alice secret and public: \"%s\", \"%s\"\n",seca.data(),puba.data());
+  // printf("Bob   secret and public: \"%s\", \"%s\"\n",secb.data(),pubb.data());
+  // printf("Alice shared: \"%s\"\n",shra.data());
+  // printf("Bob   shared: \"%s\"\n",shrb.data());
+// ecryption adn decryption test
+  string pas = "1234";
+  string tmp2 = "hello this is a message";
+  // string enc = loader_check(pas, tmp2);
+  // string dec = loader_out(pas, enc);
+
+  // printf("input: \"%s\"\n",tmp2.data());
+  // printf("encrypted: \"%s\"\n",enc.data());
+  // printf("decrypted: \"%s\"\n",dec.data());
+  int accum =0;
+  for (unsigned int i=0 ; i< 100;i++){
+    accum = testing::test(pas, tmp2, accum);
   }
-  string tmpshr="";
-  for(int i=0;i<C20_ECC_SIZE;i++)
-    tmpshr.append(1,(char)test[i]);
-  // cout<<test<<endl;
-  // cout<<stoh(tmpshr)<<endl;
-
-  // Alice
-  string seca = gen_sec();
-  string puba = gen_pub(seca);
-
-  // Bob
-  string secb = gen_sec();
-  string pubb = gen_pub(secb);
-
-  //agreenent
-  string shra = gen_shr(seca,pubb);
-  string shrb = gen_shr(secb,puba);
-  printf("Alice secret and public: \"%s\", \"%s\"\n",seca.data(),puba.data());
-  printf("Bob   secret and public: \"%s\", \"%s\"\n",secb.data(),pubb.data());
-  printf("Alice shared: \"%s\"\n",shra.data());
-  printf("Bob   shared: \"%s\"\n",shrb.data());
-
-
   return 0;
 }
 #endif //END_TEST

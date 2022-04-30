@@ -207,9 +207,8 @@ OutIter decode_one( InputIter &a1, InputIter a2 , OutIter out ){
     for ( std::size_t i = 0; i < 2 * sizeof ( T ); ++i, ++a1 ) {
         res = ( 16 * res ) + hex_char_to_int (*a1);
     }
-
-        *out = res;
-        return ++out;
+    *out = res;
+    return ++out;
 }
 
 

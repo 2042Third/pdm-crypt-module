@@ -17,6 +17,7 @@ author:     Yi Yang
 #endif //SINGLETHREADING
 #include <iomanip>
 #include <numeric>
+#include <memory>
 #include <filesystem>
 #include <unistd.h>
 #include <sstream>
@@ -33,14 +34,12 @@ using namespace std;
 
 // void enc_writing(string oufile_name);
 // void enc_writing_nw();
-void multi_enc_pthrd(int thrd);
+// void multi_enc_pthrd(int thrd);
 // void multi_enc_pthrd_nw(int thrd);
 // void set_thread_arg(unsigned long int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) ;
 // void set_thread_arg(unsigned long int thrd, uint8_t* np,unsigned long int tracker,unsigned long int n, unsigned long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
        
-int poly1305_toggle=1; // be changed into enum or structrure
 
-int ENABLE_SHA3_OUTPUT = 0;
 
 /**
  * Moved "BLOCK_SIZE" to header file
@@ -60,7 +59,6 @@ long int writing_track[THREAD_COUNT]; // Tells the writer thread how much to rea
 
 size_t progress_bar[THREAD_COUNT];
 
-int DISPLAY_PROG =1;
 
 
 // unsigned long int arg_track[THREAD_COUNT][6];
@@ -79,11 +77,7 @@ Cc20 * arg_ptr[THREAD_COUNT]; // Parent pointers for each thread.
 thread threads[THREAD_COUNT]; // Threads
 #endif // SINGLETHREADING
 
-int final_line_written = 0; // Whether or not the fianl line is written
-
-// Crypto config
-
-int cryDE=0; // Sets the encryption is for encryption or decryption.
+// Sets the encryption is for encryption or decryption.
 
 /*
     XOR's two objects begaining at s1's off for n.
@@ -136,14 +130,14 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   #endif
   #endif
   r_file.write_new(oufile_name.data(),1);
-  if(DE){
-    if(poly1305_toggle )
+  if(conf.DE){
+    if(conf.poly1305_toggle )
       linew = r_file.get_write_mapping(r_file.file_size()-12-16); // Mapped writting
     else
       linew = r_file.get_write_mapping(r_file.file_size()-12); // Mapped writting
   }
   else { // Encryption step
-    if(poly1305_toggle )
+    if(conf.poly1305_toggle )
       linew = r_file.get_write_mapping(r_file.file_size()+12+16); // Mapped writting
     else
       linew = r_file.get_write_mapping(r_file.file_size()+12); // Mapped writting
@@ -151,6 +145,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   line = (const uint8_t*) r_file.get_mapping();
   rd_file_encr((uint8_t*)line, (uint8_t*)linew, r_file.file_size());
   r_file.unmap();
+  if (conf.ENABLE_SHA3_OUTPUT && this->file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
 }
 
 /**
@@ -199,6 +194,7 @@ void Cc20::rd_file_encr(const std::string file_name, uint8_t* outstr) {
   line = (const uint8_t*) r_file.get_mapping();
   rd_file_encr((uint8_t*)line, (uint8_t*)outstr, r_file.file_size());
   r_file.unmap();
+  if (conf.ENABLE_SHA3_OUTPUT && this->file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
 }
 /**
  * Takes a memroy output file.
@@ -206,11 +202,12 @@ void Cc20::rd_file_encr(const std::string file_name, uint8_t* outstr) {
 void Cc20::rd_file_encr(uint8_t* buf, string oufile_name, size_t outsize) {
   cc20_file r_file;
   r_file.write_new(oufile_name.data(),1);
-  if(poly1305_toggle )
+  if(conf.poly1305_toggle )
     linew = r_file.get_write_mapping(r_file.file_size()+12+16); // Mapped writting
   else 
     linew = r_file.get_write_mapping(r_file.file_size()+12); // Mapped writting
   rd_file_encr((uint8_t*)buf, (uint8_t*)linew, outsize);
+  if (conf.ENABLE_SHA3_OUTPUT && this->file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
 }
 
 /*
@@ -225,15 +222,15 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
   size_t n = 0;
   const uint8_t * line; 
   line = buf;
-  linew = (char *) outstr;
-  if(!DE){
-    copy(this->nonce_orig, this->nonce_orig+12,linew);
-    linew =linew+12;
+  this->linew = (char *) outstr;
+  if(!conf.DE){
+    copy(this->nonce_orig, this->nonce_orig+12,this->linew);
+    this->linew =this->linew+12;
   }
   n = input_length;
   size_t ttn = input_length;
   size_t tn = 0;
-  if(DE && poly1305_toggle){ // when decrypting
+  if(conf.DE && conf.poly1305_toggle){ // when decrypting
     n-=16;
     ttn-=16;
   }
@@ -242,26 +239,26 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
     writing_track[i] = 0;
   }
   unsigned long int tracker = 0;
-  unsigned long int np = 0, tmpn = np % THREAD_COUNT;
-  if(DE){
+  unsigned long int np = 0;
+  if(conf.DE){
     ttn-=12;
     n-=12;
     line=line+12;
     // Read original mac
-    if(poly1305_toggle)
+    if(conf.poly1305_toggle)
       read_original_mac(orig_mac, (unsigned char *)line, (size_t)ttn);
   }
   #ifndef SINGLETHREADING
   thread progress;
-  if (DISPLAY_PROG){
+  if (conf.DISPLAY_PROG){
     for (unsigned int i=0; i<THREAD_COUNT;i++){
       progress_bar[i] = 0;
     }
     progress = thread(display_progress,ttn);
   }
   #endif// SINGLETHREADING
-  cout << "Size: "<<ttn << endl;
-  arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)linew, n, (uint8_t*)line, count, this);
+  // cout << "Size: "<<ttn << endl;
+  arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew, n, (uint8_t*)line, count, this);
   #ifndef SINGLETHREADING
   threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
   #else
@@ -280,12 +277,12 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
         #ifdef VERBOSE
         cout << "[main] " <<np % THREAD_COUNT<< " regular being dispatched"<< endl;
         #endif
-        arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
+        arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
         threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
         tracker = 0;
         np++;
   #else 
-        arg_track[0]->set(0,(uint8_t*)linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
+        arg_track[0]->set(0,(uint8_t*)this->linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
         arg_track[0]->multi_enc_pthrd();
         tracker = 0;
         np++;
@@ -294,13 +291,13 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
     } 
     else {
   #ifndef SINGLETHREADING
-      if (threads[np % THREAD_COUNT].joinable() && final_line_written != 1) {
+      if (threads[np % THREAD_COUNT].joinable() && conf.final_line_written != 1) {
         threads[np % THREAD_COUNT].join();
       }
-      arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
+      arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
       threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
   #else 
-      arg_track[0]->set(0,(uint8_t*)linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
+      arg_track[0]->set(0,(uint8_t*)this->linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
       arg_track[0]->multi_enc_pthrd(); 
   #endif// SINGLETHREADING
     }
@@ -317,26 +314,26 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
   }
   #endif// SINGLETHREADING
   // Check encryption correctness
-  if(poly1305_toggle){
-    if(!DE)
+  if(conf.poly1305_toggle){
+    if(!conf.DE)
       poly->update((unsigned char *)linew,ttn);
     else
       poly->update((unsigned char *)line,ttn);
   }
-  unsigned char mac[16];
+  unsigned char mac[16]={0};
   poly->finish((unsigned char*)mac);
   if (poly->verify(mac, orig_mac) 
-    || !DE 
-    || !poly1305_toggle
+    || !this->conf.DE 
+    || !this->conf.poly1305_toggle
     ){
-    if (ENABLE_SHA3_OUTPUT){
-      if(!DE)
+    if (conf.ENABLE_SHA3_OUTPUT){
+      if(!conf.DE)
         hashing.add(line,ttn );
       else
         hashing.add(linew,ttn );
     }
     
-    if(!DE && poly1305_toggle)
+    if(!conf.DE && conf.poly1305_toggle)
       copy(mac,mac+16,linew+ttn);
     FILE_WRITTEN=1;
   }
@@ -344,7 +341,7 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
     cout << "Password incorrect, decryption failed and no files written..."<<endl;
   }
   #ifndef SINGLETHREADING
-  if(DISPLAY_PROG){
+  if(conf.DISPLAY_PROG){
     if (progress.joinable())
       progress.join();
   }
@@ -388,7 +385,7 @@ void display_progress(size_t n) {
     Sets arguments in arg_track for threads.
 
 */
-void Cc20::worker::set(int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) {
+void Cc20::worker::set(int thrd, uint8_t* linew0, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) {
   // arg_track[thrd].thrd = thrd;
   // arg_track[thrd].linew = linew1;
   // arg_track[thrd].n = n;
@@ -396,7 +393,7 @@ void Cc20::worker::set(int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uin
   // arg_track[thrd].count = count;
 
   this->thrd = thrd;
-  this->linew1 = linew1;
+  this->linew1 = linew0;
   this->n = n;
   this->line = line;
   this->count = count;
@@ -436,7 +433,7 @@ void Cc20::worker::multi_enc_pthrd() {
     }
     count += 1;
     n -= 64;
-    if(DISPLAY_PROG)progress_bar[thrd]+=64;
+    if(ptr->conf.DISPLAY_PROG)progress_bar[thrd]+=64;
   }
   #ifdef VERBOSE
           cout<<"[calc] "<<thrd<<" unlocks " << endl;
@@ -444,8 +441,8 @@ void Cc20::worker::multi_enc_pthrd() {
 }
 
 
-void Cc20::set_vals(uint8_t * nonce, uint8_t * key) {
-  this -> nonce = nonce;
+void Cc20::set_vals(uint8_t * nonce0, uint8_t * key0) {
+  this -> nonce = nonce0;
   copy(nonce,nonce+12,this -> nonce_orig );
   this -> count = 0;
   for (unsigned int i = 0; i < THREAD_COUNT; i++) {
@@ -460,7 +457,7 @@ void Cc20::set_vals(uint8_t * nonce, uint8_t * key) {
     this -> cy[i][3] = 0x6b206574;
 
     expan(this -> cy[i], 13, this -> nonce, 3);
-    expan(this -> cy[i], 4, key, 8);
+    expan(this -> cy[i], 4, key0, 8);
     //algo change #2
     one_block((int)i, (int)1);
   }
@@ -495,9 +492,57 @@ Cc20::Cc20(){
   poly = new cc20_poly();
   for (unsigned int i=0 ; i< THREAD_COUNT; i++){
     arg_track[i]=new worker();
+    for (unsigned int f = 0; f< 17;f++){
+      folow[i][f] = {0};
+      cy[i][f] = {0};
+    }
   } 
 }
 
+void Cc20::set_configurations(c20::config configs){
+  conf.poly1305_toggle = configs.poly1305_toggle;
+  conf.ENABLE_SHA3_OUTPUT = configs.ENABLE_SHA3_OUTPUT;
+  conf.DISPLAY_PROG = configs.DISPLAY_PROG;
+  conf.final_line_written = configs.final_line_written;
+  conf.DE = configs.DE;
+}
+int Cc20::check_file (string a){
+  std::filesystem::path f{ a };
+  if ((std::filesystem::file_size(f) < 150000000) && conf.DISPLAY_PROG ) // Default to disable progress display if less than 150 mb
+    conf.DISPLAY_PROG=0;
+  if (!std::filesystem::exists(f)){
+    cout<<"File not found \'"<<a<<"\'"<<endl;
+    return 0;
+  }
+  return 1;
+}
+
+void Cc20::get_key_hash(string a, uint8_t* hash){
+  SHA3 key_hash;
+  key_hash.add(stob(a).data(),a.size());
+  key_hash.add(stob(a).data(),a.size());
+  cout<<"key hash size "<< key_hash.getHash().size()<<endl;
+  memcpy(hash, key_hash.getHash().data(), sizeof(uint8_t) * 64);
+}
+
+char* Cc20::get_inp_nonce(string infile_name, uint8_t* line1){
+  FILE * infile = fopen(infile_name.data(), "rb");
+  fread(line1,sizeof(char), 12,infile);
+  fclose(infile);
+  if(line1!=NULL)
+    return (char*)line1;
+  else 
+    return nullptr;
+}
+
+void Cc20::get_time_diff(  std::chrono::time_point<std::chrono::high_resolution_clock> start){
+  auto end = std::chrono::high_resolution_clock::now();
+  auto dur = end - start;
+  auto i_millis = std::chrono::duration_cast < std::chrono::milliseconds > (dur);
+  auto f_secs = std::chrono::duration_cast < std::chrono::duration < float >> (dur);
+  if(this->file_written() )
+    printf("\n%.2fs\n",f_secs.count());
+}
 /**
  * Init encryption.
  * This version of pdm-crypt have different ways to interfacing the data.
@@ -518,63 +563,35 @@ Cc20::Cc20(){
  * @param nonce the nonce of this encryption
  * 
  * */
-void cmd_enc(string infile_name, string oufile_name, string text_nonce){
-#ifndef WEB_RELEASE
-  std::filesystem::path f{ infile_name };
-  if ((std::filesystem::file_size(f) < 150000000) && DISPLAY_PROG ) // Default to disable progress display if less than 150 mb
-    DISPLAY_PROG=0;
-  if (!std::filesystem::exists(f)){
-    cout<<"File not found \'"<<infile_name<<"\'"<<endl;
-    return;
-  }
-#endif// WEB_RELEASE
+void cmd_enc(string infile_name, string oufile_name, string text_nonce, c20::config configs){
+  uint8_t key_hash[65]= {0};
+  uint8_t inonce [13] = {0}; 
   Cc20 cry_obj;
-  cry_obj.DE = cryDE;
+#ifndef WEB_RELEASE
+  if (!cry_obj.check_file(infile_name))
+    return;
+#endif// WEB_RELEASE
+  cry_obj.set_configurations(configs);
   string text_key;
-  Bytes key;
-  Bytes nonce;
-
   cout << "Password:" << endl;
   std::getline(std::cin, text_key);
-
-  SHA3 key_hash;
-  key_hash.add(stob(text_key).data(),text_key.size());
-  key_hash.add(stob(text_key).data(),text_key.size());
-  string infile_name_copy;
-
-  if(cry_obj.DE){
-    uint8_t *line1[13]={0};
-    infile_name_copy = infile_name+".pdm";
-    FILE * infile = fopen(infile_name_copy.data(), "rb");
-    size_t fread_out = fread(line1,sizeof(char), 12,infile);
-    if(line1!=NULL)
-      text_nonce=(char*)line1;
-    fclose(infile);
-  }
-  if (text_nonce.size() != 0) {
+  cout<< cry_obj.conf.DE<<endl;
+  cry_obj.get_key_hash(text_key, key_hash);
+  string infile_name_copy=infile_name+".pdm";
+  if(cry_obj.is_dec()){
+    text_nonce = cry_obj.get_inp_nonce(infile_name_copy, inonce);
     text_nonce = pad_to_key((string) text_nonce, 12);
   }
-  // Timer
-  auto start = std::chrono::high_resolution_clock::now();
-
-  // ***change these setup into a function
-  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
-  cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
-  if(cry_obj.DE){
+  std::chrono::time_point<std::chrono::high_resolution_clock> start = std::chrono::high_resolution_clock::now();
+  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
+  cry_obj.poly->init((unsigned char *)key_hash); 
+  if(cry_obj.is_dec()){
     cry_obj.rd_file_encr(infile_name_copy,cry_obj.get_dec_loc(infile_name));
-    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<cry_obj.hashing.getHash()<<"\""<<endl;
   }
   else {
     cry_obj.rd_file_encr(infile_name, infile_name+".pdm");
-    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<cry_obj.hashing.getHash()<<"\""<<endl;
   }
-  
-  auto end = std::chrono::high_resolution_clock::now();
-  auto dur = end - start;
-  auto i_millis = std::chrono::duration_cast < std::chrono::milliseconds > (dur);
-  auto f_secs = std::chrono::duration_cast < std::chrono::duration < float >> (dur);
-  if(cry_obj.file_written() )
-    printf("\n%.2fs\n",f_secs.count());
+  cry_obj.get_time_diff(start);
 }
 
 /**
@@ -584,17 +601,11 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce){
  * 
  * */
 void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key){
-#ifndef WEB_RELEASE
-  std::filesystem::path f{ infile_name };
-  if ((std::filesystem::file_size(f) < 150000000) && DISPLAY_PROG ) // Default to disable progress display if less than 150 mb
-    DISPLAY_PROG=0;
-  if (!std::filesystem::exists(f)){
-    cout<<"File not found \'"<<infile_name<<"\'"<<endl;
-    return;
-  }
-#endif// WEB_RELEASE
   Cc20 cry_obj;
-  cry_obj.DE = cryDE;
+#ifndef WEB_RELEASE
+  if (!cry_obj.check_file(infile_name))
+    return;
+#endif// WEB_RELEASE
   Bytes key;
   Bytes nonce;
   string text_nonce;
@@ -602,12 +613,11 @@ void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key){
   key_hash.add(stob(text_key).data(),text_key.size());
   key_hash.add(stob(text_key).data(),text_key.size());
   string infile_name_copy;
-  DISPLAY_PROG=0;
-  if(cry_obj.DE){
+  if(cry_obj.conf.DE){
     uint8_t *line1[13]={0};
     infile_name_copy = infile_name+".pdm";
     FILE * infile = fopen(infile_name_copy.data(), "rb");
-    size_t fread_out = fread(line1,sizeof(char), 12,infile);
+    fread(line1,sizeof(char), 12,infile);
     if(line1!=NULL)
       text_nonce=(char*)line1;
     fclose(infile);
@@ -622,13 +632,11 @@ void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key){
 
   cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
   cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
-  if(cry_obj.DE){
+  if(cry_obj.conf.DE){
     cry_obj.rd_file_encr(infile_name_copy,outstr);
-    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<cry_obj.hashing.getHash()<<"\""<<endl;
   }
   else {
     cry_obj.rd_file_encr(infile_name, outstr);
-    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<cry_obj.hashing.getHash()<<"\""<<endl;
   }
 }
 
@@ -642,7 +650,7 @@ void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key){
 void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outsize){
   
   Cc20 cry_obj;
-  cry_obj.DE = cryDE;
+  // cry_obj.DE = cryDE;
   Bytes key;
   Bytes nonce;
   string text_nonce;
@@ -650,9 +658,8 @@ void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outs
   key_hash.add(stob(text_key).data(),text_key.size());
   key_hash.add(stob(text_key).data(),text_key.size());
   string infile_name_copy;
-  DISPLAY_PROG=0;
   uint8_t line1[13]={0};
-  if(cry_obj.DE){
+  if(cry_obj.conf.DE){
     for (unsigned int i=0;i<12;i++)
       line1[i]=(buf[i]);
     text_nonce=(char*)line1;
@@ -667,104 +674,76 @@ void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outs
 
   cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
   cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
-  if(cry_obj.DE){
+  if(cry_obj.conf.DE){
     cry_obj.rd_file_encr(buf,oufile_name, outsize );
-    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<cry_obj.hashing.getHash()<<"\""<<endl;
   }
   else {
     cry_obj.rd_file_encr(buf,oufile_name, outsize);
-    if (ENABLE_SHA3_OUTPUT && cry_obj.file_written()) cout <<"SHA3: \""<<cry_obj.hashing.getHash()<<"\""<<endl;
   }
 }
 
 // EMSCRIPTEN_KEEPALIVE
 void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_key){
-  cout<<"[cc20_multi] encryption start."<<endl;
+  // cout<<"[cc20_multi] encryption start."<<endl;
   Bytes cur;
   init_byte_rand_cc20(cur,12);
   string text_nonce = btos(cur);
-  Cc20 cry_obj;
-  cry_obj.DE=0;
-  Bytes key;
-  Bytes nonce;
-  DISPLAY_PROG=0;
-  SHA3 key_hash;
-  for (unsigned int i=0;i<2;i++)
-    key_hash.add(stob(text_key).data(),text_key.size());
+  Cc20  cry_obj;
+        cry_obj.conf.DE=0;
+        cry_obj.conf.DISPLAY_PROG=0;
+  SHA3  key_hash;
+        key_hash.add(stob(text_key).data(),text_key.size());
+        key_hash.add(stob(text_key).data(),text_key.size());
   cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
-  uint8_t line1[13]={0};
-  if(cry_obj.DE){
-    for (unsigned int i=0;i<12;i++)
-      line1[i]=(buf[i]);
-    text_nonce=(char*)line1;
-  }
   if (text_nonce.size() != 0) {
     text_nonce = pad_to_key((string) text_nonce, 12);
   }
-
   cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
-
-  if(cry_obj.DE){
-    std::cout<<"Decryption message received "<<std::endl;
-    cry_obj.rd_file_encr(buf,outstr, input_length);
-
-  }
-  else {
-    std::cout<<"Encryption message received "<<std::endl;
-    cry_obj.rd_file_encr(buf, outstr, input_length);
-  }
-
+  cry_obj.rd_file_encr(buf, outstr, input_length);
 }
 
 // EMSCRIPTEN_KEEPALIVE 
 void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_key){
-  cout<<"[cc20_multi] decryption start."<<endl;
-  Bytes cur;
-  init_byte_rand_cc20(cur,12);
-  string text_nonce = btos(cur);
-  Cc20 cry_obj;
-  Bytes key;
-  Bytes nonce;
-  cry_obj.DE=1;
-  DISPLAY_PROG=0;
-  SHA3 key_hash;
-  for (unsigned int i=0;i<2;i++)
-    key_hash.add(stob(text_key).data(),text_key.size());
+  // cout<<"[cc20_multi] decryption start."<<endl;
+  // string text_nonce ;
+  Cc20  cry_obj;
+        cry_obj.conf.DE=1;
+        cry_obj.conf.DISPLAY_PROG=0;
+  SHA3  key_hash;
+        key_hash.add(stob(text_key).data(),text_key.size());
+        key_hash.add(stob(text_key).data(),text_key.size());
   cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
   uint8_t line1[13]={0};
-  if(cry_obj.DE){
-    for (unsigned int i=0;i<12;i++)
-      line1[i]=(buf[i]);
-    text_nonce=(char*)line1;
-  }
+  Bytes input_vc;
+  for(size_t i=0 ; i<12;i++)
+    input_vc.push_back(buf[i]);
+  string text_nonce = btos(input_vc);
+  cout<< text_nonce.size()<<endl;
   if (text_nonce.size() != 0) {
     text_nonce = pad_to_key((string) text_nonce, 12);
   }
-  // Timer
   cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
-  if(cry_obj.DE){
-    std::cout<<"Decryption message received "<<std::endl;
+  if(cry_obj.conf.DE){
     cry_obj.rd_file_encr(buf,outstr, input_length);
   }
   else {
-    std::cout<<"Encryption message received "<<std::endl;
     cry_obj.rd_file_encr(buf, outstr, input_length);
   }
 }
 
 
-void set_config(char*inp){
+void set_config(char*inp, c20::config * sts){
   string a = inp;
   for(unsigned int i=0;i<a.size();i++){
-    if (a[i] == 'S' ) ENABLE_SHA3_OUTPUT = 1;
-    else if (a[i] == 'H' ) DISPLAY_PROG = 0;
-    else if (a[i] == 'd' ) poly1305_toggle = 0;
-    else if (a[i] == 'E' ) cryDE = 0;
-    else if (a[i] == 'D' ) cryDE = 1;
+    if      (a[i] == 'S' ) sts->ENABLE_SHA3_OUTPUT = 1;
+    else if (a[i] == 'H' ) sts->DISPLAY_PROG = 0;
+    else if (a[i] == 'd' ) sts->poly1305_toggle = 0;
+    else if (a[i] == 'E' ) sts->DE = 0;
+    else if (a[i] == 'D' ) sts->DE = 1;
     else if (a[i] == 'h'){
       printf("Usage: %s\nOptions:\n-d\t%s\n-S\t%s\n-H\t%s\n-E\t%s\n-D\t%s\n-h\t%s\n%s\n",
         "c20 [OPTIONS] FILE_NAME",
-        "Fast mode, disable poly1305 checking"
+        "Fast mode, disable poly1305 checking",
         "Enable sha3 output on plain text",
         "Hide progress bar",
         "Encrypt(default)",
@@ -781,23 +760,23 @@ void set_config(char*inp){
 
 
 
-int rd_inp(unsigned int argc, char ** argv, string *infile){
-  int arg_c=1;
+c20::config rd_inp(unsigned int argc, char ** argv, string *infile){
+  c20::config sts;
   for (unsigned int i = 1; i< argc;i++){
     if (argv[i][0] == '-'){
-      set_config(argv[i]);
+      set_config(argv[i], &sts);
     }
     else{
       if (infile->empty()){
-        arg_c++;
+        sts.arg_c++;
         *infile = argv[i];
       }
       else
-        return 0;
+        return sts;
     }
   }
   
-  return arg_c;
+  return sts;
 }
 
 Cc20::~Cc20() {
@@ -811,14 +790,15 @@ Cc20::~Cc20() {
 
 int main(int argc, char ** argv) {
   string infile,oufile,nonce;
-  if (rd_inp(argc,argv,&infile)!=2){
+  c20::config configs = rd_inp(argc,argv,&infile);
+  if (configs.arg_c!=2){
     cout<<"Must have 1 file input, -h for help."<<endl;
     return 0;
   }
   Bytes cur ;
   init_byte_rand_cc20(cur,12);
   nonce="1";
-  cmd_enc(infile,"",btos(cur));
+  cmd_enc(infile,"",btos(cur), configs);
   return 0;
 }
 #endif

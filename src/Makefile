@@ -31,7 +31,7 @@ release_en= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts 
 release_de= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX -D DE -o c20de.o
 release_en1= -m64 -std=c++17  cc20_multi.cpp  -D LINUX -o c20
 ecc_flags =  -m64 -std=c++17 -D LINUX -o ecc_test
-debug_web= -m64 -std=c++17  cc20_multi.cpp  -D LINUX   -D WEB_RELEASE -D WEB_TEST -O3 -I../lib/ -I../include/
+debug_web= -m64 -std=c++17  cc20_multi.cpp  -D LINUX   -D WEB_RELEASE -D WEB_TEST -O2 -I../lib/ -I../include/
 release_de1= -m64 -std=c++17  cc20_multi.cpp   -D LINUX -o c20
 en_debug= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -o d20
 de_debug= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -D DE -o d20de
@@ -40,7 +40,7 @@ release_de12= -m64 -std=c++17  cc20_multi.cpp -lm  -Wall -D DEEP_DEBUG -D PRINTI
 windows:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -Wall
 linux:
-	g++ $(boost) $(release_en1) $(srcs) $(inc) -Wall -g -DVERBOSE
+	g++ $(boost) $(release_en1) $(srcs) $(inc) -Wall -g
 windows_single:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -D SINGLETHREADING
 windows_debug:
@@ -60,6 +60,6 @@ de:
 	clang++ $(boost) $(srcs) $(release_de1) $(inc) -g
 
 web_linux:
-	clang++  -I../lib/ecc -I../include/ $(src_)/empp.cpp $(srcs) $(debug_web) $(inc) -g -D SINGLETHREADING -o ../test/web_debug
+	clang++  -I../lib/ecc -I../include/ $(src_)/empp.cpp $(srcs) $(debug_web) $(inc) -g -D SINGLETHREADING -o ../test/web_debug 
 desktop_c:
 	gcc  -I$(MINGW_INC_PATH)/include/llvm/Support -I../lib/ecc -I../include/ $(src_)/empp.cpp $(srcs) $(debug_web) $(inc) -g -D SINGLETHREADING -o ../test/web_debug
