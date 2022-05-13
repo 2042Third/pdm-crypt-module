@@ -105,7 +105,7 @@ void Cc20::one_block(int thrd, uint32_t count) {
   cy[thrd][12] = count;
   memcpy(folow[thrd], cy[thrd], sizeof(uint32_t) * 16);
   #ifdef ROUNDCOUNTTWLV
-  for (unsigned int i = 0; i < 6; i++) tworounds(folow[thrd]); // 8 rounds
+  for (unsigned int i = 0; i < 6; i++) tworounds(folow[thrd]); // 12 rounds
   #else
   for (unsigned int i = 0; i < 10; i++) tworounds(folow[thrd]); // 20 rounds
   #endif

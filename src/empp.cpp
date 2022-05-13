@@ -159,12 +159,11 @@ namespace testing{
 int test (string a, string b, int accum){
   string enc = loader_check(a, b);
   string dec = loader_out(a, enc);
-  // string enc = stoh(b);
-  // string dec = htos(enc);
+  int ttl = 1000000;
   if (dec ==
       b){
     accum+=1;
-    cout<< accum<<"\t out of 100,000 passed\r";
+    cout<<accum/10000<< "% pass\r";
   }
   else {
     cout<<"failure!!"<<endl;
@@ -175,6 +174,25 @@ int test (string a, string b, int accum){
 }
 
 } // namespace testing
+
+class MyClass {
+public:
+  MyClass(int x, std::string y)
+    : x(x)
+    , y(y)
+  {}
+  void incrementX() {
+    ++x;
+  }
+  int getX() const { return x; }
+  void setX(int x_) { x = x_; }
+  static std::string getStringFromInstance(const MyClass& instance) {
+    return instance.y;
+  }
+private:
+  int x;
+  std::string y;
+};
 
 #ifdef cplusplus_main_compilation
 int main(int argc, char **argv)
@@ -217,7 +235,7 @@ int main(int argc, char **argv)
   // printf("encrypted: \"%s\"\n",enc.data());
   // printf("decrypted: \"%s\"\n",dec.data());
   int accum =0;
-  for (unsigned int i=0 ; i< 100000;i++){
+  for (unsigned int i=0 ; i< 1000000;i++){
     accum = testing::test(pas, tmp2, accum);
   }
   cout<<endl;
@@ -235,6 +253,12 @@ EMSCRIPTEN_BINDINGS(raw_pointers) {
   emscripten::function("gen_sec",&gen_sec);
   emscripten::function("gen_pub",&gen_pub);
   emscripten::function("gen_shr",&gen_shr);
+  emscripten::class_<MyClass>("MyClass")
+    .constructor<int, std::string>()
+    .function("incrementX", &MyClass::incrementX)
+    .property("x", &MyClass::getX, &MyClass::setX)
+    .class_function("getStringFromInstance", &MyClass::getStringFromInstance)
+    ;
 }
 #endif
 
