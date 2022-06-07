@@ -1,4 +1,9 @@
-
+/**
+ * This is a wrapper around the cc20 encryption library for WebAssembly and Emscripten.
+ * However, this still uses c++'s std::string.  
+ * 
+ * Yi Yang
+ * */
 #ifndef EMPP_CPP
 #define EMPP_CPP
 #include <stdio.h>
