@@ -24,6 +24,7 @@ using namespace std;
 
 #define C20_ECC_SIZE 32
 
+#define C20_EXPORT extern "C"
 #define cplusplus_main_compilation (__cplusplus & WEB_TEST)
 
 void memclear(uint8_t* a, size_t b ){
@@ -59,12 +60,18 @@ const char* pp_hash_c(char* user1, char* user2){
   std::string out = pp_hash(u1, u2);
   return out.data();
 }
-extern "C" const char* pp_hash_convert(char* user1, char* user2){
+
+C20_EXPORT 
+void pp_hash_convert(const char* user1, const char* user2, char* outstr){
   std::string u1 = std::string(user1);
   std::string u2 = std::string(user2);
   std::string out = pp_hash(u1, u2);
-  return out.data();
+  for(unsigned int i=0; i<out.size();i++){
+    outstr[i] = out[i];
+  }
 }
+
+
 
 // EMSCRIPTEN_KEEPALIVE
 void use_vector_string(const std::vector<uint8_t> &vec) {
@@ -83,7 +90,18 @@ string loader_check(const std::string key, const std::string input)
   return stoh( outstr);
 }
 
-
+/**
+ * @requires outstr must have input_n+28 bytes.
+ * */
+C20_EXPORT 
+void loader_check_convert(const char* key,  const char* input, size_t input_n, char* outstr){
+  string str_key(key);
+  string outstring(input_n+ 28,0); // = new vector<uint8_t>();
+  cmd_enc((uint8_t *)(input), (size_t)input_n, (uint8_t *)((&outstring)->data()), str_key);
+  string none_tmp=stoh( outstring);
+  cout<<"encrypted hax size: "<<none_tmp.size()<<endl;
+  memcpy(outstr,(uint8_t *)((&none_tmp)->data()), none_tmp.size());
+}
 
 string loader_out(const std::string key, const std::string inputi)
 {
@@ -92,6 +110,21 @@ string loader_out(const std::string key, const std::string inputi)
   size_t inpsize = (buf.size()) ;
   cmd_dec((uint8_t *)((&buf)->data()), inpsize, (uint8_t *)((&outstr)->data()), key);
   return outstr;
+}
+
+C20_EXPORT 
+void loader_out_convert(const char* key,  const char* inputi, size_t inputi_n, char* outstr)
+{
+  string str_key(key);
+  string bufbuf(inputi);
+  string buf(htos(bufbuf));    //= new vector<uint8_t>();
+  cout<<"decryption start: "<<buf.size()<<endl;
+  string outstring((buf.size()) - 28,0); 
+  size_t inpsize = (buf.size()) ;
+  cout<<"decryption size: "<<buf.size()<<endl;
+  cmd_dec((uint8_t *)((&buf)->data()), inpsize, (uint8_t *)((&outstring)->data()), str_key);
+  memcpy(outstr,(uint8_t *)((&outstring)->data()), outstring.size());
+  return ;
 }
 
 /**
@@ -159,6 +192,16 @@ string get_hash(string a){
   string b = vh.getHash();
   return b;
 }
+
+C20_EXPORT
+void get_hash_convert(const char* a, size_t a_n, char* outstr){
+  SHA3 vh;
+  vh.add(a,a_n);
+  string b = vh.getHash();
+  for(unsigned int i=0; i<b.size();i++){
+    outstr[i] = b[i];
+  }
+}
 namespace testing{
 
 int test (string a, string b, int accum){
@@ -200,7 +243,8 @@ private:
 };
 
 #ifdef cplusplus_main_compilation
-int main(int argc, char **argv)
+
+int main2(int argc, char **argv)
 {
   // size_t testsize=0;
   // uint8_t test[32];
@@ -231,19 +275,22 @@ int main(int argc, char **argv)
   // printf("Alice shared: \"%s\"\n",shra.data());
   // printf("Bob   shared: \"%s\"\n",shrb.data());
 // ecryption adn decryption test
-  string pas = "1234";
-  string tmp2 = "hello this is a message";
+  char* pas = "1234";
+  char* tmp2 = "hello this is a message";
   // string enc = loader_check(pas, tmp2);
   // string dec = loader_out(pas, enc);
 
   // printf("input: \"%s\"\n",tmp2.data());
   // printf("encrypted: \"%s\"\n",enc.data());
   // printf("decrypted: \"%s\"\n",dec.data());
-  int accum =0;
-  for (unsigned int i=0 ; i< 1000000;i++){
-    accum = testing::test(pas, tmp2, accum);
-  }
-  cout<<endl;
+
+
+  // int accum =0;
+  // for (unsigned int i=0 ; i< 1000000;i++){
+  //   accum = testing::test(pas, tmp2, accum);
+  // }
+  // cout<<endl;
+
   return 0;
 }
 #endif //END_TEST

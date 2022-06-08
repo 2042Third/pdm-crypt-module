@@ -41,6 +41,8 @@ windows:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -Wall
 linux:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) -Wall -g
+
+
 windows_single:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -D SINGLETHREADING
 windows_debug:
@@ -61,5 +63,39 @@ de:
 
 web_linux:
 	clang++  -I../lib/ecc -I../include/ $(src_)/empp.cpp $(srcs) $(debug_web) $(inc) -g -D SINGLETHREADING -o ../test/web_debug 
+
 desktop_c:
 	gcc  -I$(MINGW_INC_PATH)/include/llvm/Support -I../lib/ecc -I../include/ $(src_)/empp.cpp $(srcs) $(debug_web) $(inc) -g -D SINGLETHREADING -o ../test/web_debug
+
+
+CC  ?= gcc
+CXX ?= g++
+
+CFLAGS = -Os -g -Wall -pedantic -std=c18
+CXXFLAGS = -Os -g -Wall -pedantic -std=c++20
+
+OBJ	= cmain cc20_wrapper cc20_multi cc20_file sha3 empp memory_mapped_file poly1305-donna ecdh_curve25519 fe25519 bigint ec
+OBJS  = $(addsuffix .o,$(OBJ))
+all:
+	make compile
+
+compile:
+	make $(OBJS)
+	make c20wrapper
+
+c20wrapper: $(OBJS) 
+	$(CXX) -o c20wrapper $(OBJS)
+
+cmain.o: cmain.c
+	$(CC) $(CFLAGS) -I../include/ -c -o cmain.o cmain.c
+
+cc20_wrapper.o: cc20_wrapper.cpp
+	$(CXX) $(CXXFLAGS)  -I../lib/ecc -I../include/ $(inc) -c -o cc20_wrapper.o cc20_wrapper.cpp 
+	
+	
+clean:
+	rm -rf $(OBJS) c20wrapper *.dSYM
+
+wrapper_test:
+	make compile
+

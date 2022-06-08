@@ -2,11 +2,7 @@
 #ifndef PDM_CC20_FILE_H
 #define PDM_CC20_FILE_H
 
-#ifndef AUTOMAKING
 #include "cpp-mmf/memory_mapped_file.hpp"
-#else
-#include "memory_mapped_file.hpp"
-#endif
 
 class cc20_file {
 public:

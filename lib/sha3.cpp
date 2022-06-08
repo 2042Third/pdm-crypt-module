@@ -14,7 +14,7 @@
 
 #ifndef WINDOWS
 #ifndef _MSC_VER
-#ifdef MAC_OS
+#ifdef __APPLE__
 #include <machine/endian.h>
 #else
 #include <endian.h>

@@ -1,6 +1,4 @@
-#pragma once
-
-#include "poly1305-donna.h"
+#include "poly1305-donna-master/poly1305-donna.h"
 
 class cc20_poly {
 public:
