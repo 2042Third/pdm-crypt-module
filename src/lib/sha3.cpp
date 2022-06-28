@@ -17,7 +17,7 @@
 #ifdef __APPLE__
 #include <machine/endian.h>
 #else
-#include <endian.h>
+#include "endian.h"
 #endif // MAC_OS
 #endif // _MSC_VER
 #endif // WINDOWS

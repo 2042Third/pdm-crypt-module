@@ -8,7 +8,7 @@ author:     Yi Yang
 */
 #ifndef _cc20_multi_
 #define _cc20_multi_
-
+#define THREAD_COUNT 20
 #ifdef WEB_RELEASE
 #undef HAS_MAIN
 #endif//WEB_RELEASE
@@ -30,6 +30,18 @@ author:     Yi Yang
                115200, 256000, 576000, 1152000,2304000,4608000,6912000,9216000 ...
                Block size*/
 
+// The poly1305 mac key size
+#define POLY_SIZE 16
+
+//
+/**
+ * The nonce size
+ * chacha20     => 12
+ * xchacha20    => 24
+ * */
+#define NONCE_SIZE 24
+#define XNONCE_SIZE 16
+
 #include <stdio.h>
 #include <chrono>
 // Added 
@@ -43,6 +55,10 @@ author:     Yi Yang
 
 
 namespace c20{
+  /**
+   * Configs for runtime encryption
+   * Theses are the defaults
+   * */
   struct config {
     int poly1305_toggle=1; // be changed into enum or structrure
     int ENABLE_SHA3_OUTPUT = 0; 
@@ -54,31 +70,37 @@ namespace c20{
 }
 
 class Cc20{
-  /**
-   *  -- replaces cc20_parts
-   * Should contain all things a thread needs, including the encryption 
-   * */
+
+public:
+/**
+ *  -- replaces cc20_parts
+ * Should contain all things a thread needs, including the encryption
+ * */
   struct worker {
     void set(int thrd, uint8_t* linew0, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr);
+//  void x_set(int thrd, uint8_t* linew0, size_t n,  uint8_t * line, Cc20 * ptr);
     void multi_enc_pthrd();
+//  void x_multi_enc_pthrd();
     unsigned long int thrd;
     uint8_t* line;
     uint8_t* linew1;
     uint32_t count;
     size_t n;
   };
-
-public:
-
   void start_seq();
   void encr(uint8_t*line,uint8_t*linew,unsigned long int fsize);
   void rd_file_encr(uint8_t* buf, std::string oufile_name, size_t outsize) ;
   void rd_file_encr(const std::string file_name, uint8_t* outstr) ;
   void rd_file_encr (uint8_t * buf, uint8_t* outstr, size_t input_length);
   void rd_file_encr (const std::string file_name, std::string oufile_name);
+
   void stream( uint8_t*plain,unsigned int len);
   void set_vals(uint8_t * nonce0, uint8_t*key0);
+  void h_set_vals(uint8_t * nonce0, uint8_t * key0);
+  void x_set_vals(uint8_t *nonce0, uint8_t *key0);
+
   void one_block (int thrd, uint32_t count);
+
   void endicha(uint8_t *a, uint32_t *b);
   void set_configurations (c20::config configs);
   void read_original_mac(unsigned char * m, uint8_t* input_file, size_t off);
@@ -88,7 +110,6 @@ public:
   void get_key_hash(std::string a, uint8_t* hash);
   char* get_inp_nonce (std::string infile_name, uint8_t* line1);
   void get_time_diff(std::chrono::time_point<std::chrono::high_resolution_clock> start);
-
   uint8_t nex[THREAD_COUNT][65];
   int is_dec(){return conf.DE;}
   Cc20();
@@ -98,15 +119,9 @@ public:
   SHA3 hashing; 
   worker* arg_track[THREAD_COUNT];
   c20::config conf;
-private:
-  unsigned char orig_mac[16]={0};
-  uint32_t folow[THREAD_COUNT][17]; // A copy of a state.
-  char *linew; // Tracks all the input
-  int FILE_WRITTEN =0;  
-  uint8_t * nonce;
-  uint32_t count;
-  uint8_t nonce_orig[13]={0};
-  uint32_t cy[THREAD_COUNT][17];
+protected:
+  // A copy of a state.
+  // Tracks all the input
   uint8_t * key;
 
   // Binary constant for chacha20 state, modified 
@@ -114,6 +129,16 @@ private:
   const unsigned long b2 =  0B10110111001011000110011101101110 ;
   const unsigned long b3 =  0B01111001111000101010110100110010 ;
   const unsigned long b4 =  0B01101011001001000110010101110100 ;
+  int FILE_WRITTEN =0;
+  uint32_t count;
+  uint32_t cy[THREAD_COUNT][17];
+  uint32_t folow[THREAD_COUNT][17];
+  char *linew;
+  uint8_t * nonce;
+  uint8_t nonce_orig[NONCE_SIZE]={0};
+  unsigned char orig_mac[16]={0};
+
+
 };
 std::string htos (std::string a);
 std::string stoh (std::string a);
@@ -122,5 +147,6 @@ void cmd_enc(std::string infile_name, std::string oufile_name, std::string text_
 void cmd_enc(std::string infile_name, uint8_t* outstr, std::string text_key);
 void display_progress(size_t n);
 void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , std::string text_key);
+void cmd_enc(std::string infile_name, std::string oufile_name, std::string text_nonce, c20::config configs);
 void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , std::string text_key);
 #endif

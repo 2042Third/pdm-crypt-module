@@ -27,6 +27,7 @@ author:     Yi Yang
 #include "cc20_dev.hpp"
 #endif // PDM_CC20_DEV_HPP
 #include "cc20_multi.h"
+//#include "xCc20.h"
 
 #include <functional> // std::ref
 
@@ -104,11 +105,11 @@ template < typename NU >
 void Cc20::one_block(int thrd, uint32_t count) {
   cy[thrd][12] = count;
   memcpy(folow[thrd], cy[thrd], sizeof(uint32_t) * 16);
-  #ifdef ROUNDCOUNTTWLV
+#ifdef ROUNDCOUNTTWLV
   for (unsigned int i = 0; i < 6; i++) tworounds(folow[thrd]); // 12 rounds
-  #else
+#else
   for (unsigned int i = 0; i < 10; i++) tworounds(folow[thrd]); // 20 rounds
-  #endif
+#endif
   set_conc(cy[thrd], folow[thrd], 16);
   endicha(this -> nex[thrd], cy[thrd]);
 }
@@ -118,29 +119,29 @@ void Cc20::one_block(int thrd, uint32_t count) {
  * Writes the encrypted/decrypted content to the output file.
  * */
 void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
-  const uint8_t * line; 
+  const uint8_t * line;
   cc20_file r_file;
   r_file.read_new(file_name.data());
-  #ifdef VERBOSE
+#ifdef VERBOSE
   cout << "Staring file size " << (size_t) r_file.file_size() << endl;
   #if defined(_WIN64)
   cout << "_WIN64 defined" <<endl;
   #else
   cout << "_WIN64 not defined" << endl;
   #endif
-  #endif
+#endif
   r_file.write_new(oufile_name.data(),1);
   if(conf.DE){
     if(conf.poly1305_toggle )
-      linew = r_file.get_write_mapping(r_file.file_size()-12-16); // Mapped writting
+      linew = r_file.get_write_mapping(r_file.file_size()-NONCE_SIZE-POLY_SIZE); // Mapped writting
     else
-      linew = r_file.get_write_mapping(r_file.file_size()-12); // Mapped writting
+      linew = r_file.get_write_mapping(r_file.file_size()-NONCE_SIZE); // Mapped writting
   }
   else { // Encryption step
     if(conf.poly1305_toggle )
-      linew = r_file.get_write_mapping(r_file.file_size()+12+16); // Mapped writting
+      linew = r_file.get_write_mapping(r_file.file_size()+NONCE_SIZE+POLY_SIZE); // Mapped writting
     else
-      linew = r_file.get_write_mapping(r_file.file_size()+12); // Mapped writting
+      linew = r_file.get_write_mapping(r_file.file_size()+NONCE_SIZE); // Mapped writting
   }
   line = (const uint8_t*) r_file.get_mapping();
   rd_file_encr((uint8_t*)line, (uint8_t*)linew, r_file.file_size());
@@ -203,9 +204,9 @@ void Cc20::rd_file_encr(uint8_t* buf, string oufile_name, size_t outsize) {
   cc20_file r_file;
   r_file.write_new(oufile_name.data(),1);
   if(conf.poly1305_toggle )
-    linew = r_file.get_write_mapping(r_file.file_size()+12+16); // Mapped writting
+    linew = r_file.get_write_mapping(r_file.file_size()+NONCE_SIZE+POLY_SIZE); // Mapped writting
   else 
-    linew = r_file.get_write_mapping(r_file.file_size()+12); // Mapped writting
+    linew = r_file.get_write_mapping(r_file.file_size()+NONCE_SIZE); // Mapped writting
   rd_file_encr((uint8_t*)buf, (uint8_t*)linew, outsize);
   if (conf.ENABLE_SHA3_OUTPUT && this->file_written()) cout <<"SHA3: \""<<hashing.getHash()<<"\""<<endl;
 }
@@ -220,19 +221,19 @@ void Cc20::rd_file_encr(uint8_t* buf, string oufile_name, size_t outsize) {
 
 void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
   size_t n = 0;
-  const uint8_t * line; 
+  const uint8_t * line;
   line = buf;
   this->linew = (char *) outstr;
   if(!conf.DE){
-    copy(this->nonce_orig, this->nonce_orig+12,this->linew);
-    this->linew =this->linew+12;
+    copy(this->nonce_orig, this->nonce_orig+NONCE_SIZE,this->linew);
+    this->linew =this->linew+NONCE_SIZE;
   }
   n = input_length;
   size_t ttn = input_length;
   size_t tn = 0;
   if(conf.DE && conf.poly1305_toggle){ // when decrypting
-    n-=16;
-    ttn-=16;
+    n-=POLY_SIZE;
+    ttn-=POLY_SIZE;
   }
   uint32_t count = 0;
   for (long int i = 0; i < THREAD_COUNT; i++) {
@@ -241,14 +242,14 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
   unsigned long int tracker = 0;
   unsigned long int np = 0;
   if(conf.DE){
-    ttn-=12;
-    n-=12;
-    line=line+12;
+    ttn-=NONCE_SIZE;
+    n-=NONCE_SIZE;
+    line=line+NONCE_SIZE;
     // Read original mac
     if(conf.poly1305_toggle)
       read_original_mac(orig_mac, (unsigned char *)line, (size_t)ttn);
   }
-  #ifndef SINGLETHREADING
+#ifndef SINGLETHREADING
   thread progress;
   if (conf.DISPLAY_PROG){
     for (unsigned int i=0; i<THREAD_COUNT;i++){
@@ -256,63 +257,63 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
     }
     progress = thread(display_progress,ttn);
   }
-  #endif// SINGLETHREADING
+#endif// SINGLETHREADING
   // cout << "Size: "<<ttn << endl;
   arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew, n, (uint8_t*)line, count, this);
-  #ifndef SINGLETHREADING
+#ifndef SINGLETHREADING
   threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
-  #else
+#else
   arg_track[np % THREAD_COUNT]->multi_enc_pthrd();
-  #endif // SINGLETHREADING
+#endif // SINGLETHREADING
   np++;
   for (unsigned long int k = 0; k < ((unsigned long int)(ttn / 64) + 0); k++) { // If leak, try add -1
     if (n >= 64) {
       tracker += 64;
       if (tn % (BLOCK_SIZE) == 0 && (k != 0)) {
-  #ifndef SINGLETHREADING
+#ifndef SINGLETHREADING
         // waiting for thread to finish
         if (threads[np % THREAD_COUNT].joinable()) {
           threads[np % THREAD_COUNT].join();
         }
-        #ifdef VERBOSE
+#ifdef VERBOSE
         cout << "[main] " <<np % THREAD_COUNT<< " regular being dispatched"<< endl;
-        #endif
+#endif
         arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
         threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
         tracker = 0;
         np++;
-  #else 
+#else
         arg_track[0]->set(0,(uint8_t*)this->linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
         arg_track[0]->multi_enc_pthrd();
         tracker = 0;
         np++;
-  #endif// SINGLETHREADING
+#endif// SINGLETHREADING
       }
-    } 
+    }
     else {
-  #ifndef SINGLETHREADING
+#ifndef SINGLETHREADING
       if (threads[np % THREAD_COUNT].joinable() && conf.final_line_written != 1) {
         threads[np % THREAD_COUNT].join();
       }
       arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
       threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
-  #else 
+#else
       arg_track[0]->set(0,(uint8_t*)this->linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
-      arg_track[0]->multi_enc_pthrd(); 
-  #endif// SINGLETHREADING
+      arg_track[0]->multi_enc_pthrd();
+#endif// SINGLETHREADING
     }
     count += 1;
     n -= 64;
     tn += 64;
   }
-  
-  #ifndef SINGLETHREADING
+
+#ifndef SINGLETHREADING
   for (int i = 0; i < THREAD_COUNT; i++) {
     if (threads[i].joinable()){
       threads[i].join();
     }
   }
-  #endif// SINGLETHREADING
+#endif// SINGLETHREADING
   // Check encryption correctness
   if(conf.poly1305_toggle){
     if(!conf.DE)
@@ -320,32 +321,32 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
     else
       poly->update((unsigned char *)line,ttn);
   }
-  unsigned char mac[16]={0};
+  unsigned char mac[POLY_SIZE]={0};
   poly->finish((unsigned char*)mac);
-  if (poly->verify(mac, orig_mac) 
-    || !this->conf.DE 
-    || !this->conf.poly1305_toggle
-    ){
+  if (poly->verify(mac, orig_mac)
+      || !this->conf.DE
+      || !this->conf.poly1305_toggle
+      ){
     if (conf.ENABLE_SHA3_OUTPUT){
       if(!conf.DE)
         hashing.add(line,ttn );
       else
         hashing.add(linew,ttn );
     }
-    
+
     if(!conf.DE && conf.poly1305_toggle)
-      copy(mac,mac+16,linew+ttn);
+      copy(mac,mac+POLY_SIZE,linew+ttn);
     FILE_WRITTEN=1;
   }
   else {
     cout << "Password incorrect, decryption failed and no files written..."<<endl;
   }
-  #ifndef SINGLETHREADING
+#ifndef SINGLETHREADING
   if(conf.DISPLAY_PROG){
     if (progress.joinable())
       progress.join();
   }
-  #endif// SINGLETHREADING
+#endif// SINGLETHREADING
 }
 
 /**
@@ -396,10 +397,11 @@ void Cc20::worker::set(int thrd, uint8_t* linew0, size_t n,  uint8_t * line, uin
   this->linew1 = linew0;
   this->n = n;
   this->line = line;
-  this->count = count;
-
+  this->count = count*BLOCK_SIZE; // changed to time block size , Jun/28/2022
+  cout<<"setting block (count) -> "<<this->count<<endl;
   arg_ptr[thrd] = ptr;
 }
+
 
 // auto thread_func = [](int &i) {
 //     return i+42;
@@ -409,11 +411,11 @@ void Cc20::worker::multi_enc_pthrd() {
   size_t tracker = 0; // Used
   Cc20 * ptr = arg_ptr[thrd];
 
-  #ifdef VERBOSE
-          cout<<"[calc] "<<thrd<<" locks, starting write " << endl;
-  #endif
+#ifdef VERBOSE
+  cout<<"[calc] "<<thrd<<" locks, starting write " << endl;
+#endif
   for (size_t k = 0; k < BLOCK_SIZE / 64; k++) {
-    ptr -> one_block((int) thrd, (int) count);
+    ptr -> one_block((int) thrd, (int) count*64); // change to time 64 , Jun/28/2022
     if (n >= 64) {
       for (long int i = 0; i < 64; i++) {
         linew1[i + tracker] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
@@ -435,15 +437,18 @@ void Cc20::worker::multi_enc_pthrd() {
     n -= 64;
     if(ptr->conf.DISPLAY_PROG)progress_bar[thrd]+=64;
   }
-  #ifdef VERBOSE
-          cout<<"[calc] "<<thrd<<" unlocks " << endl;
-  #endif
+#ifdef VERBOSE
+  cout<<"[calc] "<<thrd<<" unlocks " << endl;
+#endif
 }
 
 
+/**
+ * ChaCha20 initialize
+ * */
 void Cc20::set_vals(uint8_t * nonce0, uint8_t * key0) {
   this -> nonce = nonce0;
-  copy(nonce,nonce+12,this -> nonce_orig );
+  copy(nonce,nonce+NONCE_SIZE,this -> nonce_orig );
   this -> count = 0;
   for (unsigned int i = 0; i < THREAD_COUNT; i++) {
     // this -> cy[i][0] = 0x617178e5;
@@ -463,8 +468,72 @@ void Cc20::set_vals(uint8_t * nonce0, uint8_t * key0) {
   }
 }
 
+/**
+ * Sets up the xchacha20 initial state.
+ * Given H ChaCha20 is already setup
+ *
+ * */
+void Cc20::x_set_vals(uint8_t *nonce0, uint8_t *key0) {
+  h_set_vals(nonce0,key0); // This is really one of the only things needed to change, but oh well...
+  this -> nonce = nonce0;
+  copy(nonce,nonce+NONCE_SIZE,this -> nonce_orig );
+  this -> count = 0;
+  cout<<"making init"<<endl;
+  for (unsigned int i = 0; i < THREAD_COUNT; i++) {
+    // x chacha subkey setup
+    cy[i][4] = cy[i][0];
+    cy[i][5] = cy[i][1];
+    cy[i][6] = cy[i][2];
+    cy[i][7] = cy[i][3];
+    cy[i][8] = cy[i][12];
+    cy[i][9] = cy[i][13];
+    cy[i][10] = cy[i][14];
+    cy[i][11] = cy[i][15];
+
+    this -> cy[i][0] = 0x61707865;
+    this -> cy[i][1] = 0x3320646e;
+    this -> cy[i][2] = 0x79622d32;
+    this -> cy[i][3] = 0x6b206574;
+
+    expan(this -> cy[i], 14, this -> nonce+16, 2); // * explained below
+    expan(this -> cy[i], 4, key0, 8);
+    cy[i][13]=0;  // originally nonce is only at index 13,14,15
+                  // , now the nonce is generating the xchacha-subkey
+                  // ; thus, only last 8 bytes of the 24 bytes can be used for
+                  // nonce, prefixed by a null (this line)
+
+    //algo change #2
+    one_block((int)i, (int)1);
+//    p_state(cy[i]);
+  }
+}
+/**
+ * HChaCha20 initialize
+ *  Nonce needs to be 16 bytes, comparing to 12 bytes in ChaCha20
+ * */
+void Cc20::h_set_vals(uint8_t * nonce0, uint8_t * key0) {
+  this -> nonce = nonce0;
+  std::copy(nonce, nonce + NONCE_SIZE, this -> nonce_orig );
+  this -> count = 0;
+  for (unsigned int i = 0; i < THREAD_COUNT; i++) {
+    this -> cy[i][0] = 0x61707865;
+    this -> cy[i][1] = 0x3320646e;
+    this -> cy[i][2] = 0x79622d32;
+    this -> cy[i][3] = 0x6b206574;
+    expan(this -> cy[i], 12, this -> nonce, 4);
+    expan(this -> cy[i], 4, key0, 8);
+    if(i==0){
+      p_state(cy[i]);
+      p_hex(nonce0,24);
+      cout<<endl;
+    }
+    one_block((int)i, (int)1);
+
+  }
+}
+
 void Cc20::endicha(uint8_t * a, uint32_t * b) {
-  for (unsigned int i = 0; i < 16; i++) {
+  for (unsigned int i = 0; i < POLY_SIZE; i++) {
     U32T8_S(a + 4 * i, b[i]);
   }
 }
@@ -480,7 +549,7 @@ std::string Cc20::get_dec_loc(std::string file_name){
 }
 
 void Cc20::read_original_mac(unsigned char * m, uint8_t* input_file, size_t off){
-  for (unsigned int i=0 ; i< 16; i++){
+  for (unsigned int i=0 ; i< POLY_SIZE; i++){
     m[i]=input_file[off+i];
   }
 }
@@ -492,7 +561,7 @@ Cc20::Cc20(){
   poly = new cc20_poly();
   for (unsigned int i=0 ; i< THREAD_COUNT; i++){
     arg_track[i]=new worker();
-    for (unsigned int f = 0; f< 17;f++){
+    for (unsigned int f = 0; f< POLY_SIZE+1;f++){
       folow[i][f] = {0};
       cy[i][f] = {0};
     }
@@ -527,7 +596,7 @@ void Cc20::get_key_hash(string a, uint8_t* hash){
 
 char* Cc20::get_inp_nonce(string infile_name, uint8_t* line1){
   FILE * infile = fopen(infile_name.data(), "rb");
-  fread(line1,sizeof(char), 12,infile);
+  fread(line1,sizeof(char), NONCE_SIZE,infile);
   fclose(infile);
   if(line1!=NULL)
     return (char*)line1;
@@ -565,7 +634,7 @@ void Cc20::get_time_diff(  std::chrono::time_point<std::chrono::high_resolution_
  * */
 void cmd_enc(string infile_name, string oufile_name, string text_nonce, c20::config configs){
   uint8_t key_hash[65]= {0};
-  uint8_t inonce [13] = {0}; 
+  uint8_t inonce [NONCE_SIZE] = {0};
   Cc20 cry_obj;
 #ifndef WEB_RELEASE
   if (!cry_obj.check_file(infile_name))
@@ -579,12 +648,24 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce, c20::con
   cry_obj.get_key_hash(text_key, key_hash);
   string infile_name_copy=infile_name+".pdm";
   if(cry_obj.is_dec()){
+    cout<<"making init1"<<endl;
+
     text_nonce = cry_obj.get_inp_nonce(infile_name_copy, inonce);
-    text_nonce = pad_to_key((string) text_nonce, 12);
+    cout<<"making init2"<<endl;
+//    cout<<"hex:"<< stoh(text_key)<<endl;
+
+    text_nonce = text_nonce.substr(0,24);//pad_to_key((string) text_nonce.substr(0,24), NONCE_SIZE);
   }
   std::chrono::time_point<std::chrono::high_resolution_clock> start = std::chrono::high_resolution_clock::now();
-  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
-  cry_obj.poly->init((unsigned char *)key_hash); 
+  cout << "check 1" << endl;
+
+#ifdef VERBOSE
+  cout<<"key hex:"<< stoh(text_key)<<endl;
+  cout<<"nonce hex:"<< stoh(text_nonce)<<endl;
+#endif
+  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
+//  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
+  cry_obj.poly->init((unsigned char *)key_hash);
   if(cry_obj.is_dec()){
     cry_obj.rd_file_encr(infile_name_copy,cry_obj.get_dec_loc(infile_name));
   }
@@ -593,6 +674,7 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce, c20::con
   }
   cry_obj.get_time_diff(start);
 }
+
 
 /**
  * Takes a file, outputs memory.
@@ -614,24 +696,25 @@ void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key){
   key_hash.add(stob(text_key).data(),text_key.size());
   string infile_name_copy;
   if(cry_obj.conf.DE){
-    uint8_t *line1[13]={0};
+    uint8_t *line1[NONCE_SIZE]={0};
     infile_name_copy = infile_name+".pdm";
     FILE * infile = fopen(infile_name_copy.data(), "rb");
-    fread(line1,sizeof(char), 12,infile);
+    fread(line1,sizeof(char), NONCE_SIZE,infile);
     if(line1!=NULL)
       text_nonce=(char*)line1;
     fclose(infile);
   }
   else {
-    init_byte_rand_cc20(nonce,12);
+    init_byte_rand_cc20(nonce,NONCE_SIZE);
     text_nonce = btos(nonce);
   }
   if (text_nonce.size() != 0) {
-    text_nonce = pad_to_key((string) text_nonce, 12);
+    text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
   }
 
-  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
-  cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
+//  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
+  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
+  cry_obj.poly->init((unsigned char *)key_hash.getHash().data());
   if(cry_obj.conf.DE){
     cry_obj.rd_file_encr(infile_name_copy,outstr);
   }
@@ -658,22 +741,23 @@ void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outs
   key_hash.add(stob(text_key).data(),text_key.size());
   key_hash.add(stob(text_key).data(),text_key.size());
   string infile_name_copy;
-  uint8_t line1[13]={0};
+  uint8_t line1[NONCE_SIZE]={0};
   if(cry_obj.conf.DE){
-    for (unsigned int i=0;i<12;i++)
+    for (unsigned int i=0;i<NONCE_SIZE;i++)
       line1[i]=(buf[i]);
     text_nonce=(char*)line1;
   }
   else {
-    init_byte_rand_cc20(nonce,12);
+    init_byte_rand_cc20(nonce,NONCE_SIZE);
     text_nonce = btos(nonce);
   }
   if (text_nonce.size() != 0) {
-    text_nonce = pad_to_key((string) text_nonce, 12);
+    text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
   }
 
-  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
-  cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
+  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
+//  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
+  cry_obj.poly->init((unsigned char *)key_hash.getHash().data());
   if(cry_obj.conf.DE){
     cry_obj.rd_file_encr(buf,oufile_name, outsize );
   }
@@ -686,7 +770,7 @@ void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outs
 void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_key){
   // cout<<"[cc20_multi] encryption start."<<endl;
   Bytes cur;
-  init_byte_rand_cc20(cur,12);
+  init_byte_rand_cc20(cur,NONCE_SIZE);
   string text_nonce = btos(cur);
   Cc20  cry_obj;
         cry_obj.conf.DE=0;
@@ -696,9 +780,10 @@ void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
         key_hash.add(stob(text_key).data(),text_key.size());
   cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
   if (text_nonce.size() != 0) {
-    text_nonce = pad_to_key((string) text_nonce, 12);
+    text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
   }
-  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
+  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
+//  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
   cry_obj.rd_file_encr(buf, outstr, input_length);
 }
 
@@ -714,13 +799,14 @@ void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
         key_hash.add(stob(text_key).data(),text_key.size());
   cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
   Bytes input_vc;
-  for(size_t i=0 ; i<12;i++)
+  for(size_t i=0 ; i<NONCE_SIZE;i++)
     input_vc.push_back(buf[i]);
   string text_nonce = btos(input_vc);
   if (text_nonce.size() != 0) {
-    text_nonce = pad_to_key((string) text_nonce, 12);
+    text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
   }
   cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
+//  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
   if(cry_obj.conf.DE){
     cry_obj.rd_file_encr(buf,outstr, input_length);
   }
@@ -730,52 +816,52 @@ void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
 }
 
 
-void set_config(char*inp, c20::config * sts){
-  string a = inp;
-  for(unsigned int i=0;i<a.size();i++){
-    if      (a[i] == 'S' ) sts->ENABLE_SHA3_OUTPUT = 1;
-    else if (a[i] == 'H' ) sts->DISPLAY_PROG = 0;
-    else if (a[i] == 'd' ) sts->poly1305_toggle = 0;
-    else if (a[i] == 'E' ) sts->DE = 0;
-    else if (a[i] == 'D' ) sts->DE = 1;
-    else if (a[i] == 'h'){
-      printf("Usage: %s\nOptions:\n-d\t%s\n-S\t%s\n-H\t%s\n-E\t%s\n-D\t%s\n-h\t%s\n%s\n",
-        "c20 [OPTIONS] FILE_NAME",
-        "Fast mode, disable poly1305 checking",
-        "Enable sha3 output on plain text",
-        "Hide progress bar",
-        "Encrypt(default)",
-        "Decrypt",
-        "Help menu (current)",
-        "Personal Data Manager Encryption Module\nWarning: This program overwrittes files with .pdm extension, make sure you are not overwritting unintended files by mistake! \nby Yi Yang, 2021");
-      exit(0);
-    }
-    else if (a[i]!='-') {
-      printf("Unrecognized option \"%c\", -h for help",a[i]);
-    }
-  }
-}
+//void set_config(char*inp, c20::config * sts){
+//  string a = inp;
+//  for(unsigned int i=0;i<a.size();i++){
+//    if      (a[i] == 'S' ) sts->ENABLE_SHA3_OUTPUT = 1;
+//    else if (a[i] == 'H' ) sts->DISPLAY_PROG = 0;
+//    else if (a[i] == 'd' ) sts->poly1305_toggle = 0;
+//    else if (a[i] == 'E' ) sts->DE = 0;
+//    else if (a[i] == 'D' ) sts->DE = 1;
+//    else if (a[i] == 'h'){
+//      printf("Usage: %s\nOptions:\n-d\t%s\n-S\t%s\n-H\t%s\n-E\t%s\n-D\t%s\n-h\t%s\n%s\n",
+//        "c20 [OPTIONS] FILE_NAME",
+//        "Fast mode, disable poly1305 checking",
+//        "Enable sha3 output on plain text",
+//        "Hide progress bar",
+//        "Encrypt(default)",
+//        "Decrypt",
+//        "Help menu (current)",
+//        "Personal Data Manager Encryption Module\nWarning: This program overwrittes files with .pdm extension, make sure you are not overwritting unintended files by mistake! \nby Yi Yang, 2021");
+//      exit(0);
+//    }
+//    else if (a[i]!='-') {
+//      printf("Unrecognized option \"%c\", -h for help",a[i]);
+//    }
+//  }
+//}
 
 
 
-c20::config rd_inp(unsigned int argc, char ** argv, string *infile){
-  c20::config sts;
-  for (unsigned int i = 1; i< argc;i++){
-    if (argv[i][0] == '-'){
-      set_config(argv[i], &sts);
-    }
-    else{
-      if (infile->empty()){
-        sts.arg_c++;
-        *infile = argv[i];
-      }
-      else
-        return sts;
-    }
-  }
-  
-  return sts;
-}
+//c20::config rd_inp(unsigned int argc, char ** argv, string *infile){
+//  c20::config sts;
+//  for (unsigned int i = 1; i< argc;i++){
+//    if (argv[i][0] == '-'){
+//      set_config(argv[i], &sts);
+//    }
+//    else{
+//      if (infile->empty()){
+//        sts.arg_c++;
+//        *infile = argv[i];
+//      }
+//      else
+//        return sts;
+//    }
+//  }
+//
+//  return sts;
+//}
 
 Cc20::~Cc20() {
   if(poly !=NULL) delete poly;
@@ -783,20 +869,21 @@ Cc20::~Cc20() {
     delete arg_track[i];
   }
 }
-
-#ifdef HAS_MAIN 
-
-int main(int argc, char ** argv) {
-  string infile,oufile,nonce;
-  c20::config configs = rd_inp(argc,argv,&infile);
-  if (configs.arg_c!=2){
-    cout<<"Must have 1 file input, -h for help."<<endl;
-    return 0;
-  }
-  Bytes cur ;
-  init_byte_rand_cc20(cur,12);
-  nonce="1";
-  cmd_enc(infile,"",btos(cur), configs);
-  return 0;
-}
-#endif
+//
+//#ifdef HAS_MAIN
+//
+//int main(int argc, char ** argv) {
+//  string infile,oufile,nonce;
+//  c20::config configs = rd_inp(argc,argv,&infile);
+//  if (configs.arg_c!=2){
+//    cout<<"Must have 1 file input, -h for help."<<endl;
+//    return 0;
+//  }
+//  Bytes cur ;
+////  init_byte_rand_cc20(cur,XNONCE_SIZE); // xchacha20
+//  init_byte_rand_cc20(cur,NONCE_SIZE); // chacha20
+//  nonce="1";
+//  cmd_enc(infile,"",btos(cur), configs);
+//  return 0;
+//}
+//#endif

@@ -19,6 +19,9 @@ author:     Yi Yang
 #include <wchar.h>
 #include <fstream>
 
+// Types
+#include "types.h"
+
 #ifdef DEEP_DEBUG
 #include <iomanip>
 #include <iostream>
@@ -49,7 +52,6 @@ using namespace std;
 // unsigned int i=0;
 
 // Types
-typedef std::vector<uint8_t> Bytes;
 template<typename T, int N> using raw_array = T[N];
 
 
@@ -103,11 +105,14 @@ std::string btos (Bytes &src){
     return str;
 }
 
-std::string pad_to_key (std::string text_key, const int len){
-    std::string key;
-    key = std::string((len - text_key.size()), '0');
-    key = key+text_key;
-    return key;
+std::string pad_to_key (const std::string& text_key, const int len){
+#ifdef VERBOSE
+  cout<<"pad to key length: "<<text_key.size()<<endl;
+#endif
+  std::string key;
+  key = std::string((len - text_key.size()), '0');
+  key = key+text_key;
+  return key;
 }
 
 #define U32T8_S(p, v)    \
@@ -222,15 +227,28 @@ void p_state (NT * state){
     }
     cout<<endl;
 }
-template <> 
+template <>
 void p_state<uint8_t> (uint8_t * state){
-    int n=16;
-    for(unsigned int i=0; i<64;i++){
-        // if((i+1)%n==0)cout<<setw(1)<<right<<"\t";
-        p_hex(state[i]);
-        if((i+1)%n==0)cout<<"\n";
-    }
-    cout<<endl;
+  int n=16;
+  for(unsigned int i=0; i<64;i++){
+    // if((i+1)%n==0)cout<<setw(1)<<right<<"\t";
+    p_hex(state[i]);
+    if((i+1)%n==0)cout<<"\n";
+  }
+  cout<<endl;
+}
+
+void p_hex (uint8_t * state,size_t size){
+  int n=4;
+  if(size%4!=0){
+    cout<<"Hex cannot be print, length error."<<endl;
+  }
+  for(unsigned int i=0; i<size/4;i++){
+    // if((i+1)%n==0)cout<<setw(1)<<right<<"\t";
+    p_hex(U8T32_S(state+4*i));
+    cout<<"\n";
+  }
+  cout<<endl;
 }
 #endif
 

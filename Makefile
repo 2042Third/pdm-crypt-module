@@ -1,3 +1,6 @@
+# By Yi Yang
+# PDM
+# May 2022
 
 CC  ?= gcc
 CXX ?= g++

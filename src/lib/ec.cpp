@@ -12,7 +12,7 @@ author:     Yi Yang
 #include <stdio.h>
 #include <string.h>
 #include <random>
-#include "ecdh_curve25519.h"
+#include "ecc/ecdh_curve25519.h"
 #include "ec.h"
 
 // #include <iostream>
