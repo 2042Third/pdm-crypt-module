@@ -16,6 +16,6 @@ target_compile_options(
     c20_multi PUBLIC
     -g -lpthread -m64 -O3
 )
-set(PDM_OPTIONS ${PDM_OPTIONS} VERBOSE)
+set(PDM_OPTIONS ${PDM_OPTIONS} )
 target_compile_definitions(c20_multi PUBLIC WINDOWS LINUX HAS_MAIN PRINTING DEEP_DEBUG ${PDM_OPTIONS})
 #install(FILES libc20_multi.dll DESTINATION ../../)

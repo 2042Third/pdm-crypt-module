@@ -59,11 +59,6 @@ c20::config rd_inp(unsigned int argc, char ** argv, string *infile){
   return sts;
 }
 int main(int argc, char ** argv) {
-  c20_scrypt atest;
-  cout<< "scrypt out :"<<endl;
-  atest.test();
-  if(argc != -1)
-    return 0;
   string infile,oufile,nonce;
   c20::config configs = rd_inp(argc,argv,&infile);
   if (configs.arg_c!=2){

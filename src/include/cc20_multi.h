@@ -8,7 +8,7 @@ author:     Yi Yang
 */
 #ifndef _cc20_multi_
 #define _cc20_multi_
-#define THREAD_COUNT 20
+#define THREAD_COUNT 8
 #ifdef WEB_RELEASE
 #undef HAS_MAIN
 #endif//WEB_RELEASE
@@ -18,7 +18,7 @@ author:     Yi Yang
 #endif//DESKTOP_RELEASE
 
 #ifndef SINGLETHREADING
-#define THREAD_COUNT 20
+#define THREAD_COUNT 8
 #elif FOURCORE
 #define THREAD_COUNT 4 
 #else
@@ -77,14 +77,14 @@ public:
  * Should contain all things a thread needs, including the encryption
  * */
   struct worker {
-    void set(int thrd, uint8_t* linew0, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr);
+    void set(int thread_number, uint8_t* linew0, size_t num_need, uint8_t * xline, uint64_t xcount, Cc20 * ptr);
 //  void x_set(int thrd, uint8_t* linew0, size_t n,  uint8_t * line, Cc20 * ptr);
     void multi_enc_pthrd();
 //  void x_multi_enc_pthrd();
     unsigned long int thrd;
     uint8_t* line;
     uint8_t* linew1;
-    uint32_t count;
+    uint64_t count;
     size_t n;
   };
   void start_seq();
@@ -99,7 +99,7 @@ public:
   void h_set_vals(uint8_t * nonce0, uint8_t * key0);
   void x_set_vals(uint8_t *nonce0, uint8_t *key0);
 
-  void one_block (int thrd, uint32_t count);
+  void one_block (int thrd, uint64_t xcount);
 
   void endicha(uint8_t *a, uint32_t *b);
   void set_configurations (c20::config configs);
@@ -130,7 +130,7 @@ protected:
   const unsigned long b3 =  0B01111001111000101010110100110010 ;
   const unsigned long b4 =  0B01101011001001000110010101110100 ;
   int FILE_WRITTEN =0;
-  uint32_t count;
+  uint64_t count;
   uint32_t cy[THREAD_COUNT][17];
   uint32_t folow[THREAD_COUNT][17];
   char *linew;

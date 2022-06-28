@@ -32,6 +32,10 @@ add_library(c20_lib SHARED
     scrypt/src/scrypt.c
     scrypt/src/sha256.c
     )
+target_compile_options(
+    c20_lib PUBLIC
+    -m64 -O3
+)
 target_include_directories(c20_lib PUBLIC
     ../include
     ./

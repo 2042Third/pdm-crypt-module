@@ -27,6 +27,7 @@ author:     Yi Yang
 #include "cc20_dev.hpp"
 #endif // PDM_CC20_DEV_HPP
 #include "cc20_multi.h"
+#include "cc20_scrypt.h"
 //#include "xCc20.h"
 
 #include <functional> // std::ref
@@ -94,17 +95,19 @@ template < typename NU >
   }
 
 /*
-    Given nonce is already set, one_block takes the thrd number and the block count and 
+    Given nonce is already set, one_block takes the thrd number and the block xcount and
     modifies nex[thrd] for the next block of chacha20.
 
-    This doesn't track whether or not the count is increamented; thus, to ensure security
-    please increament the count before passing it into one_block
+    This doesn't track whether or not the xcount is increamented; thus, to ensure security
+    please increament the xcount before passing it into one_block
 
 */
 
-void Cc20::one_block(int thrd, uint32_t count) {
-  cy[thrd][12] = count;
+void Cc20::one_block(int thrd, uint64_t xcount) {
+  cy[thrd][12] = upper(xcount);
+  cy[thrd][13] = lower(xcount);
   memcpy(folow[thrd], cy[thrd], sizeof(uint32_t) * 16);
+
 #ifdef ROUNDCOUNTTWLV
   for (unsigned int i = 0; i < 6; i++) tworounds(folow[thrd]); // 12 rounds
 #else
@@ -123,7 +126,7 @@ void Cc20::rd_file_encr(const std::string file_name, string oufile_name) {
   cc20_file r_file;
   r_file.read_new(file_name.data());
 #ifdef VERBOSE
-  cout << "Staring file size " << (size_t) r_file.file_size() << endl;
+  printf("file size: %llu\n",r_file.file_size());
   #if defined(_WIN64)
   cout << "_WIN64 defined" <<endl;
   #else
@@ -235,7 +238,7 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
     n-=POLY_SIZE;
     ttn-=POLY_SIZE;
   }
-  uint32_t count = 0;
+  uint64_t count = 0;
   for (long int i = 0; i < THREAD_COUNT; i++) {
     writing_track[i] = 0;
   }
@@ -386,20 +389,19 @@ void display_progress(size_t n) {
     Sets arguments in arg_track for threads.
 
 */
-void Cc20::worker::set(int thrd, uint8_t* linew0, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) {
-  // arg_track[thrd].thrd = thrd;
-  // arg_track[thrd].linew = linew1;
-  // arg_track[thrd].n = n;
-  // arg_track[thrd].line = line;
-  // arg_track[thrd].count = count;
+void Cc20::worker::set(int thread_number, uint8_t* linew0, size_t num_need, uint8_t * xline, uint64_t xcount, Cc20 * ptr) {
+  // arg_track[thread_number].thread_number = thread_number;
+  // arg_track[thread_number].linew = linew1;
+  // arg_track[thread_number].num_need = num_need;
+  // arg_track[thread_number].xline = xline;
+  // arg_track[thread_number].xcount = xcount;
 
-  this->thrd = thrd;
+  this->thrd = thread_number;
   this->linew1 = linew0;
-  this->n = n;
-  this->line = line;
-  this->count = count*BLOCK_SIZE; // changed to time block size , Jun/28/2022
-  cout<<"setting block (count) -> "<<this->count<<endl;
-  arg_ptr[thrd] = ptr;
+  this->n = num_need;
+  this->line = xline;
+  this->count = xcount * BLOCK_SIZE;
+  arg_ptr[thread_number] = ptr;
 }
 
 
@@ -415,7 +417,8 @@ void Cc20::worker::multi_enc_pthrd() {
   cout<<"[calc] "<<thrd<<" locks, starting write " << endl;
 #endif
   for (size_t k = 0; k < BLOCK_SIZE / 64; k++) {
-    ptr -> one_block((int) thrd, (int) count*64); // change to time 64 , Jun/28/2022
+    ptr -> one_block((int) thrd, count);
+
     if (n >= 64) {
       for (long int i = 0; i < 64; i++) {
         linew1[i + tracker] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
@@ -478,7 +481,6 @@ void Cc20::x_set_vals(uint8_t *nonce0, uint8_t *key0) {
   this -> nonce = nonce0;
   copy(nonce,nonce+NONCE_SIZE,this -> nonce_orig );
   this -> count = 0;
-  cout<<"making init"<<endl;
   for (unsigned int i = 0; i < THREAD_COUNT; i++) {
     // x chacha subkey setup
     cy[i][4] = cy[i][0];
@@ -497,14 +499,13 @@ void Cc20::x_set_vals(uint8_t *nonce0, uint8_t *key0) {
 
     expan(this -> cy[i], 14, this -> nonce+16, 2); // * explained below
     expan(this -> cy[i], 4, key0, 8);
-    cy[i][13]=0;  // originally nonce is only at index 13,14,15
+    cy[i][12]=0;
+    cy[i][13]=1;  // originally nonce is only at index 13,14,15
                   // , now the nonce is generating the xchacha-subkey
                   // ; thus, only last 8 bytes of the 24 bytes can be used for
-                  // nonce, prefixed by a null (this line)
-
+                  // nonce, prefixed by a null or 1 (this line)
     //algo change #2
     one_block((int)i, (int)1);
-//    p_state(cy[i]);
   }
 }
 /**
@@ -522,11 +523,6 @@ void Cc20::h_set_vals(uint8_t * nonce0, uint8_t * key0) {
     this -> cy[i][3] = 0x6b206574;
     expan(this -> cy[i], 12, this -> nonce, 4);
     expan(this -> cy[i], 4, key0, 8);
-    if(i==0){
-      p_state(cy[i]);
-      p_hex(nonce0,24);
-      cout<<endl;
-    }
     one_block((int)i, (int)1);
 
   }
@@ -587,11 +583,11 @@ int Cc20::check_file (string a){
 }
 
 void Cc20::get_key_hash(string a, uint8_t* hash){
-  SHA3 key_hash;
-  key_hash.add(stob(a).data(),a.size());
-  key_hash.add(stob(a).data(),a.size());
-  cout<<"key hash size "<< key_hash.getHash().size()<<endl;
-  memcpy(hash, key_hash.getHash().data(), sizeof(uint8_t) * 64);
+  c20_scrypt k;
+  string key_hash;
+  key_hash.reserve(32);
+  k.make_ps((const uint8_t *)a.data(),hash);
+//  cout<<"out key: "<<hash<<endl;
 }
 
 char* Cc20::get_inp_nonce(string infile_name, uint8_t* line1){
@@ -644,27 +640,18 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce, c20::con
   string text_key;
   cout << "Password:" << endl;
   std::getline(std::cin, text_key);
-  cout<< cry_obj.conf.DE<<endl;
   cry_obj.get_key_hash(text_key, key_hash);
   string infile_name_copy=infile_name+".pdm";
   if(cry_obj.is_dec()){
-    cout<<"making init1"<<endl;
-
     text_nonce = cry_obj.get_inp_nonce(infile_name_copy, inonce);
-    cout<<"making init2"<<endl;
-//    cout<<"hex:"<< stoh(text_key)<<endl;
-
     text_nonce = text_nonce.substr(0,24);//pad_to_key((string) text_nonce.substr(0,24), NONCE_SIZE);
   }
   std::chrono::time_point<std::chrono::high_resolution_clock> start = std::chrono::high_resolution_clock::now();
-  cout << "check 1" << endl;
-
 #ifdef VERBOSE
-  cout<<"key hex:"<< stoh(text_key)<<endl;
+  cout<<"key hex:"<< stoh(string((const char*)key_hash))<<endl;
   cout<<"nonce hex:"<< stoh(text_nonce)<<endl;
 #endif
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
-//  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
   cry_obj.poly->init((unsigned char *)key_hash);
   if(cry_obj.is_dec()){
     cry_obj.rd_file_encr(infile_name_copy,cry_obj.get_dec_loc(infile_name));
@@ -673,6 +660,15 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce, c20::con
     cry_obj.rd_file_encr(infile_name, infile_name+".pdm");
   }
   cry_obj.get_time_diff(start);
+
+  // uint64_t to 2 * uint32_t test
+//  uint64_t v = 0x00000001fffffffeULL;
+//  printf("%llu %llx upper => %lu\n",v,v,upper(v));
+//  printf("%llu %llx lower => %lu\n",v,v,lower(v));
+//  v+=2;
+//  printf("%llu %llx  upper => %lu\n",v,v,upper(v));
+//  printf("%llu %llx  lower => %lu\n",v,v,lower(v));
+
 }
 
 

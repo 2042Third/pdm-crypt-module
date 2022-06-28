@@ -177,6 +177,19 @@ void endicha(uint8_t *a, uint32_t *b){
   }
 }
 
+uint32_t upper(uint64_t a){
+  uint32_t b;
+  a&= 0xffffffff00000000ull;
+  b=a>>32;
+  return b;
+}
+uint32_t lower(uint64_t a){
+  uint32_t b;
+  a&= 0x00000000ffffffffull;
+  a=a<<32;
+  b=a>>32;
+  return (uint32_t)b;
+}
 void expan(uint32_t * ot, unsigned int off, const uint8_t* in, unsigned int n) {
   for(unsigned int i=0;i<n;i++){
     ot[off+i] = U8T32_S(in+4*i);
@@ -238,7 +251,7 @@ void p_state<uint8_t> (uint8_t * state){
   cout<<endl;
 }
 
-void p_hex (uint8_t * state,size_t size){
+void p_hex (const uint8_t * state,size_t size){
   int n=4;
   if(size%4!=0){
     cout<<"Hex cannot be print, length error."<<endl;
