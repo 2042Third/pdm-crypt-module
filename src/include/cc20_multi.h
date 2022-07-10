@@ -145,6 +145,7 @@ std::string stoh (std::string a);
 void cmd_enc(uint8_t* buf, std::string oufile_name, std::string text_key, size_t outsize);
 void cmd_enc(std::string infile_name, std::string oufile_name, std::string text_nonce);
 void cmd_enc(std::string infile_name, uint8_t* outstr, std::string text_key);
+void cmd_enc(std::string infile_name, std::string oufile_name, c20::config configs);
 void display_progress(size_t n);
 void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , std::string text_key);
 void cmd_enc(std::string infile_name, std::string oufile_name, std::string text_nonce, c20::config configs);

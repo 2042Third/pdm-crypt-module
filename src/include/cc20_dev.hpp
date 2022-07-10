@@ -100,11 +100,23 @@ std::string bts(uint8_t *inp,unsigned int n){
     return ot;
 }
 
+/**
+ * Also copies exists in stand_alone.cpp
+ * */
 std::string btos (Bytes &src){
     std::string str(src.begin(), src.end());
     return str;
 }
-
+/**
+ * Also copies exists in stand_alone.cpp
+ * */
+void init_byte_rand_cc20 (Bytes & a, int n){
+  for (int i=0;i<n;i++) {
+    std::random_device rd;   // non-deterministic generator
+    std::mt19937 gen(rd());
+    a.push_back((uint8_t) gen());
+  }
+}
 std::string pad_to_key (const std::string& text_key, const int len){
 #ifdef VERBOSE
   cout<<"pad to key length: "<<text_key.size()<<endl;
@@ -347,15 +359,7 @@ OutIter hex_from(const string &a, OutIter out ){
 
 void init_byte (Bytes & a, int n){
     for (int i=0;i<n;i++) a.push_back((uint8_t) 0);
-} 
-void init_byte_rand_cc20 (Bytes & a, int n){
-    for (int i=0;i<n;i++) {
-        random_device rd;   // non-deterministic generator
-        mt19937 gen(rd());
-        a.push_back((uint8_t) gen());
-    }
-} 
-
+}
 
 
 void filterin(unsigned char * r){

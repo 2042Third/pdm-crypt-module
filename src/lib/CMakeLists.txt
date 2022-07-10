@@ -31,7 +31,7 @@ add_library(c20_lib SHARED
     scrypt/src/salsa20.c
     scrypt/src/scrypt.c
     scrypt/src/sha256.c
-    )
+    stand_alone.cpp)
 target_compile_options(
     c20_lib PUBLIC
     -m64 -O3

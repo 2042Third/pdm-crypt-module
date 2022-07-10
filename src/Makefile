@@ -18,15 +18,7 @@ src_ = ../src
 libr = -I../lib/poly1305-donna-master/ 
 win32 = -D WINDOWS 
 
-srcs = ../src/cc20_file.cpp \
-../lib/sha3.cpp \
-../lib/cpp-mmf/memory_mapped_file.cpp \
-../lib/poly1305-donna-master/poly1305-donna.c \
-../lib/ecc/ecdh_curve25519.c \
-../lib/ecc/curve25519.c \
-../lib/ecc/fe25519.c \
-../lib/ecc/bigint.c \
-../src/ec.cpp
+
 release_en= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX  -o c20.o
 release_de= -m64 -std=c++17  cc20_multi.cpp -D DEEP_DEBUG -lm  -Wall -fconcepts -D PRINTING -O1 -D LINUX -D DE -o c20de.o
 release_en1= -m64 -std=c++17  cc20_multi.cpp  -D LINUX -o c20
@@ -38,8 +30,38 @@ en_debug= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING 
 de_debug= -m64 -std=c++11  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D LINUX -D DE -o d20de
 release_en12= -m64 -std=c++17  cc20_multi.cpp  -lm  -Wall -D DEEP_DEBUG -D PRINTING -D ROUNDCOUNTTWLV -D LINUX -o c20.c
 release_de12= -m64 -std=c++17  cc20_multi.cpp -lm  -Wall -D DEEP_DEBUG -D PRINTING -D ROUNDCOUNTTWLV -D LINUX -D DE -o c20de.c
+
+# new version
+srcs = lib/cc20_file.cpp \
+	lib/sha3.cpp \
+	lib/cpp-mmf/memory_mapped_file.cpp \
+	lib/poly1305-donna-master/poly1305-donna.c \
+	lib/ecc/ecdh_curve25519.c \
+	lib/ecc/curve25519.c \
+	lib/ecc/fe25519.c \
+	lib/ecc/bigint.c \
+	lib/scrypt/src/hmac.c \
+	lib/scrypt/src/pbkdf2.c \
+	lib/scrypt/src/salsa20.c \
+	lib/scrypt/src/scrypt.c \
+	lib/scrypt/src/sha256.c \
+	lib/ec.cpp \
+	cc20core/cc20_multi.cpp
+
+all_includes = -I./include \
+-I./lib \
+-I./lib/cpp-mmf \
+-I./lib/poly1305-donna-master \
+-I./lib/ecc \
+-I./lib/scrypt/include \
+-I./lib/scrypt
+
+all_defs = -DWINDOWS -DLINUX -DHAS_MAIN
+options = -g -lpthread -m64 -O3 -pthread
+
+
 windows:
-	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -Wall
+	g++ $(all_includes) $(srcs) $(options) $(all_defs) -fpermissive -std=c++17 desktop.cpp -Wall -o build/c20
 linux:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) -Wall -g
 xwindows:

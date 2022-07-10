@@ -10,7 +10,7 @@
 #include "cc20_scrypt.h"
 
 #ifndef PDM_CC20_DEV_HPP
-#include "cc20_dev.hpp"
+#include "lib/stand_alone.cpp"
 #endif // PDM_CC20_DEV_HPP
 using namespace std;
 
@@ -65,10 +65,7 @@ int main(int argc, char ** argv) {
     cout<<"Must have 1 file input, -h for help."<<endl;
     return 0;
   }
-  Bytes cur ;
-  init_byte_rand_cc20(cur,NONCE_SIZE); // xchacha20
-  nonce="1";
-  cmd_enc(infile,"",btos(cur), configs);
+  cmd_enc(infile,"", configs);
   return 0;
 }
 //#endif // HAS_MAIN

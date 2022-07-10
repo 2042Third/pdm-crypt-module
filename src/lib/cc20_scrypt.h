@@ -13,7 +13,7 @@
 #include <string.h>
 #include <iostream>
 #include "scrypt.h"
-#include "cc20_dev.hpp"
+//#include "cc20_dev.hpp"
 
 using std::cout;
 using std::endl;
@@ -88,9 +88,9 @@ public:
            out,
            sizeof(out));
     // PDM tests
-    cout<<"==scrypt test=="<<endl;
-    p_hex((uint8_t*)out,(size_t) 32);
-    cout<<"===="<<endl;
+//    cout<<"==scrypt test=="<<endl;
+//    p_hex((uint8_t*)out,(size_t) 32);
+//    cout<<"===="<<endl;
     scrypt_state_destroy(&state);
   }
   void make_ps(const uint8_t* inps, uint8_t* outps ){
@@ -136,7 +136,7 @@ public:
            strlen(v->salt),
            out,
            sizeof(out));
-    copy(out,out+32,outps);
+    std::copy(out,out+32,outps);
     scrypt_state_destroy(&state);
   }
 };
