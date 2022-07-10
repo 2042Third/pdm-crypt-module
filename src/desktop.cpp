@@ -2,10 +2,8 @@
 // Created by Yi Yang on 6/26/2022.
 //
 #include "types.h"
-
-//#include "xCc20.h"
 #include "cc20_multi.h"
-
+#include "empp.cpp"
 // KDF test
 #include "cc20_scrypt.h"
 
@@ -59,6 +57,7 @@ c20::config rd_inp(unsigned int argc, char ** argv, string *infile){
   return sts;
 }
 int main(int argc, char ** argv) {
+#ifndef WEB_RELEASE_LINUX_TEST
   string infile,oufile,nonce;
   c20::config configs = rd_inp(argc,argv,&infile);
   if (configs.arg_c!=2){
@@ -66,6 +65,26 @@ int main(int argc, char ** argv) {
     return 0;
   }
   cmd_enc(infile,"", configs);
+#else // start linux web test
+  if(argc < 2){
+    cout<<"Must have 1 input to start testing. \n \"1\" for curve test. \n \"2\" for encryption test. "<<endl;
+    return 0;
+  }
+  if(stoi(argv[1]) == 1){
+    cout<<"Curve test for web release.\n"<<endl;
+    web_test::curve_test();
+  }
+  else if (stoi(argv[1]) == 2){
+    cout<<"Encryption test for web release.\n"<<endl;
+
+    std::string pas = "1234";
+    std::string msg = "hello this is a message";
+    web_test::test(pas, msg);
+  }
+  else {
+   cout<<"Command not found, exiting."<<endl;
+  }
+#endif
   return 0;
 }
 //#endif // HAS_MAIN

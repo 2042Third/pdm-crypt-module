@@ -793,6 +793,11 @@ void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outs
   }
 }
 
+
+/**
+ * For web, memory to memory encryption.
+ * Takes plain, outputs hex string
+ * */
 // EMSCRIPTEN_KEEPALIVE
 void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_key){
   // cout<<"[cc20_multi] encryption start."<<endl;
@@ -802,18 +807,17 @@ void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
   Cc20  cry_obj;
         cry_obj.conf.DE=0;
         cry_obj.conf.DISPLAY_PROG=0;
-  SHA3  key_hash;
-        key_hash.add(stob(text_key).data(),text_key.size());
-        key_hash.add(stob(text_key).data(),text_key.size());
-  cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
-  if (text_nonce.size() != 0) {
-    text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
-  }
-  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
-//  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
+  uint8_t key_hash[65]= {0};
+          cry_obj.get_key_hash(text_key, key_hash);
+  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
+  cry_obj.poly->init((unsigned char *)key_hash);
   cry_obj.rd_file_encr(buf, outstr, input_length);
 }
 
+/**
+ * For web, memory to memory decryption.
+ * Takes hex string, outputs plain
+ * */
 // EMSCRIPTEN_KEEPALIVE 
 void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_key){
   // cout<<"[cc20_multi] decryption start."<<endl;
@@ -821,10 +825,9 @@ void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
   Cc20  cry_obj;
         cry_obj.conf.DE=1;
         cry_obj.conf.DISPLAY_PROG=0;
-  SHA3  key_hash;
-        key_hash.add(stob(text_key).data(),text_key.size());
-        key_hash.add(stob(text_key).data(),text_key.size());
-  cry_obj.poly->init((unsigned char *)key_hash.getHash().data()); 
+  uint8_t key_hash[65]= {0};
+  cry_obj.get_key_hash(text_key, key_hash);
+  cry_obj.poly->init((unsigned char *)key_hash);
   Bytes input_vc;
   for(size_t i=0 ; i<NONCE_SIZE;i++)
     input_vc.push_back(buf[i]);
@@ -832,14 +835,8 @@ void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
   if (text_nonce.size() != 0) {
     text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
   }
-  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
-//  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
-  if(cry_obj.conf.DE){
-    cry_obj.rd_file_encr(buf,outstr, input_length);
-  }
-  else {
-    cry_obj.rd_file_encr(buf, outstr, input_length);
-  }
+  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
+  cry_obj.rd_file_encr(buf, outstr, input_length);
 }
 
 

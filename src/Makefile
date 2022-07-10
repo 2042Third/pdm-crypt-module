@@ -85,11 +85,13 @@ en_single:
 de:
 	clang++ $(boost) $(srcs) $(release_de1) $(inc) -g
 
-web_linux:
-	clang++  -I../lib/ecc -I../include/ $(src_)/empp.cpp $(srcs) $(debug_web) $(inc) -g -D SINGLETHREADING -o ../test/web_debug 
-
 desktop_c:
 	gcc  -I$(MINGW_INC_PATH)/include/llvm/Support -I../lib/ecc -I../include/ $(src_)/empp.cpp $(srcs) $(debug_web) $(inc) -g -D SINGLETHREADING -o ../test/web_debug
+
+web_linux:
+	clang++  $(all_includes) $(srcs) $(all_defs) -fpermissive -std=c++17 desktop.cpp -Wall \
+ -O3 -D LINUX  -D WEB_RELEASE -D SINGLETHREADING \
+ -D WEB_RELEASE_LINUX_TEST -g -o ./tests/webc20
 
 
 CC  ?= gcc

@@ -85,8 +85,10 @@ void use_vector_string(const std::vector<uint8_t> &vec) {
 string loader_check(const std::string key, const std::string input)
 {
   string buf(input);    //= new vector<uint8_t>();
-  string outstr(input.size() + 28,0); // = new vector<uint8_t>();
+  string outstr(input.size() + (NONCE_SIZE+POLY_SIZE),0); // = new vector<uint8_t>();
+//  cout<<"entering cmd_enc((uint8_t *)((&buf)->data()), (size_t)input.size(), (uint8_t *)((&outstr)->data()), key)"<<endl;
   cmd_enc((uint8_t *)((&buf)->data()), (size_t)input.size(), (uint8_t *)((&outstr)->data()), key);
+//  cout<<"existing cmd_enc((uint8_t *)((&buf)->data()), (size_t)input.size(), (uint8_t *)((&outstr)->data()), key)"<<endl;
   return stoh( outstr);
 }
 
@@ -96,7 +98,7 @@ string loader_check(const std::string key, const std::string input)
 C20_EXPORT 
 void loader_check_convert(const char* key,  const char* input, size_t input_n, char* outstr){
   string str_key(key);
-  string outstring(input_n+ 28,0); // = new vector<uint8_t>();
+  string outstring(input_n + (NONCE_SIZE+POLY_SIZE),0); // = new vector<uint8_t>();
   cmd_enc((uint8_t *)(input), (size_t)input_n, (uint8_t *)((&outstring)->data()), str_key);
   string none_tmp=stoh( outstring);
   cout<<"encrypted hax size: "<<none_tmp.size()<<endl;
@@ -106,9 +108,11 @@ void loader_check_convert(const char* key,  const char* input, size_t input_n, c
 string loader_out(const std::string key, const std::string inputi)
 {
   string buf(htos(inputi));    //= new vector<uint8_t>();
-  string outstr((buf.size()) - 28,0);    //= new vector<uint8_t>();
+  string outstr((buf.size()) - (NONCE_SIZE+POLY_SIZE),0);    //= new vector<uint8_t>();
   size_t inpsize = (buf.size()) ;
+//  cout<<"entering cmd_dec((uint8_t *)((&buf)->data()), inpsize, (uint8_t *)((&outstr)->data()), key)"<<endl;
   cmd_dec((uint8_t *)((&buf)->data()), inpsize, (uint8_t *)((&outstr)->data()), key);
+//  cout<<"existing cmd_dec((uint8_t *)((&buf)->data()), inpsize, (uint8_t *)((&outstr)->data()), key)"<<endl;
   return outstr;
 }
 
@@ -119,7 +123,7 @@ void loader_out_convert(const char* key,  const char* inputi, size_t inputi_n, c
   string bufbuf(inputi);
   string buf(htos(bufbuf));    //= new vector<uint8_t>();
   cout<<"decryption start: "<<buf.size()<<endl;
-  string outstring((buf.size()) - 28,0); 
+  string outstring((buf.size()) - (NONCE_SIZE+POLY_SIZE),0);
   size_t inpsize = (buf.size()) ;
   cout<<"decryption size: "<<buf.size()<<endl;
   cmd_dec((uint8_t *)((&buf)->data()), inpsize, (uint8_t *)((&outstring)->data()), str_key);
@@ -170,7 +174,7 @@ string gen_pub(string a){
  * @param - c the other public key
  * */
 string gen_shr(string a,  string c){
-  uint8_t shr[33];
+  uint8_t shr[C20_ECC_SIZE+1];
   shr[C20_ECC_SIZE]='\0';
   string tmpsec=htos(a);
   string tmp2pub=htos(c);
@@ -202,24 +206,94 @@ void get_hash_convert(const char* a, size_t a_n, char* outstr){
     outstr[i] = b[i];
   }
 }
-namespace testing{
+namespace web_test{
+  /**
+   * Basic encryption and decryption demo
+   * @param a key for encryption
+   * @param b message to be encrypted
+   * @param accum for r_test() only, default -1
+   * */
+  int test (const string& a, const string& b, int accum=-1){
+    string enc = loader_check(a, b);
+    string dec = loader_out(a, enc);
+    int ttl = 1000000;
+    if(accum==-1){
+      cout<<"Input key: \t"<<a<<endl;
+      cout<<"Input message: \t"<<b<<endl;
+      cout<<"Encrypted message: \t"<<enc<<endl;
+      cout<<"Decrypted message: \t"<<dec<<endl;
+      return 1;
+    }
+    if (dec == b){
+      accum+=1;
+      cout<<accum/10000<< "% pass\r";
+    }
+    else {
+      cout<<"failure!!"<<endl;
+      cout<< "\tgot     : "<<dec<<endl;
+      cout<< "\texpected: "<<b<<endl;
+    }
+    return accum;
+  }
+  /**
+   * Runs the encryption and decryption for 1,000,000 times
+   * and count the accuracy.
+   * *Not useful after the initial implementation.
+   * */
+  int r_test(int count){
+    char* pas = "1234";
+    char* tmp2 = "hello this is a message";
+    int accum =0;
+    for (unsigned int i=0 ; i< count;i++){
+      accum = test(pas, tmp2, accum);
+    }
+    cout<<endl;
+    return 1;
+  }
+  /**
+   * Basic public key DH test
+   * */
+  int curve_test (){
+     size_t testsize=0;
+     uint8_t test[C20_ECC_SIZE];
+     string ttmp="3a57718b1da04cc0c52f626212e5c82a";
+     for(auto i:ttmp){
+       test[testsize]=i;
+       testsize++;
+     }
+     string tmpshr="";
+     for(int i=0;i<C20_ECC_SIZE;i++)
+       tmpshr.append(1,(char)test[i]);
+     // cout<<test<<endl;
+     // cout<<stoh(tmpshr)<<endl;
 
-int test (string a, string b, int accum){
-  string enc = loader_check(a, b);
-  string dec = loader_out(a, enc);
-  int ttl = 1000000;
-  if (dec ==
-      b){
-    accum+=1;
-    cout<<accum/10000<< "% pass\r";
+     // Alice
+     string seca = gen_sec();
+     string puba = gen_pub(seca);
+
+     // Bob
+     string secb = gen_sec();
+     string pubb = gen_pub(secb);
+
+     //agreenent
+     string shra = gen_shr(seca,pubb);
+     string shrb = gen_shr(secb,puba);
+     printf("Alice secret and public: \"%s\", \"%s\"\n",seca.data(),puba.data());
+     printf("Bob   secret and public: \"%s\", \"%s\"\n",secb.data(),pubb.data());
+     printf("Alice shared: \"%s\"\n",shra.data());
+     printf("Bob   shared: \"%s\"\n",shrb.data());
+     return 1;
   }
-  else {
-    cout<<"failure!!"<<endl;
-    cout<< "\tgot     : "<<dec<<endl;
-    cout<< "\texpected: "<<b<<endl;
+
+  int test1(){
+    // ecryption adn decryption test
+//    string enc = loader_check(pas, tmp2);
+//    string dec = loader_out(pas, enc);
+//
+//    printf("input: \"%s\"\n",tmp2.data());
+//    printf("encrypted: \"%s\"\n",enc.data());
+//    printf("decrypted: \"%s\"\n",dec.data());
   }
-  return accum;
-}
 
 } // namespace testing
 
@@ -246,50 +320,7 @@ private:
 
 int main2(int argc, char **argv)
 {
-  // size_t testsize=0;
-  // uint8_t test[32];
-  // string ttmp="3a57718b1da04cc0c52f626212e5c82a";
-  // for(auto i:ttmp){
-  //   test[testsize]=i;
-  //   testsize++;
-  // }
-  // string tmpshr="";
-  // for(int i=0;i<C20_ECC_SIZE;i++)
-  //   tmpshr.append(1,(char)test[i]);
-  // // cout<<test<<endl;
-  // // cout<<stoh(tmpshr)<<endl;
 
-  // // Alice
-  // string seca = gen_sec();
-  // string puba = gen_pub(seca);
-
-  // // Bob
-  // string secb = gen_sec();
-  // string pubb = gen_pub(secb);
-
-  // //agreenent
-  // string shra = gen_shr(seca,pubb);
-  // string shrb = gen_shr(secb,puba);
-  // printf("Alice secret and public: \"%s\", \"%s\"\n",seca.data(),puba.data());
-  // printf("Bob   secret and public: \"%s\", \"%s\"\n",secb.data(),pubb.data());
-  // printf("Alice shared: \"%s\"\n",shra.data());
-  // printf("Bob   shared: \"%s\"\n",shrb.data());
-// ecryption adn decryption test
-  char* pas = "1234";
-  char* tmp2 = "hello this is a message";
-  // string enc = loader_check(pas, tmp2);
-  // string dec = loader_out(pas, enc);
-
-  // printf("input: \"%s\"\n",tmp2.data());
-  // printf("encrypted: \"%s\"\n",enc.data());
-  // printf("decrypted: \"%s\"\n",dec.data());
-
-
-  // int accum =0;
-  // for (unsigned int i=0 ; i< 1000000;i++){
-  //   accum = testing::test(pas, tmp2, accum);
-  // }
-  // cout<<endl;
 
   return 0;
 }

@@ -230,19 +230,19 @@ void scrypt(scrypt_state_t* state,
 int scrypt_state_init(scrypt_state_t* state) {
   state->block_size = kScryptBlockMultiplier * state->r;
 
-  state->b = malloc(state->p * state->block_size);
+  state->b = (uint8_t *)malloc(state->p * state->block_size);
   if (state->b == NULL)
     goto failed_alloc_b;
 
-  state->x = malloc(state->block_size);
+  state->x = (uint8_t *)malloc(state->block_size);
   if (state->x == NULL)
     goto failed_alloc_x;
 
-  state->v = malloc(state->block_size * state->n);
+  state->v = (uint8_t *)malloc(state->block_size * state->n);
   if (state->v == NULL)
     goto failed_alloc_v;
 
-  state->t = malloc(state->block_size);
+  state->t = (uint8_t *)malloc(state->block_size);
   if (state->t == NULL)
     goto failed_alloc_t;
 
