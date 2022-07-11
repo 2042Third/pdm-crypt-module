@@ -40,13 +40,14 @@ author:     Yi Yang
 #endif
 
 #ifdef WINDOWS
+#ifndef WEB_RELEASE
 #include <locale.h>
 #include <windows.h>
 #define _MBCS
 #include <io.h>
 #include <fcntl.h>
-
-#endif
+#endif // WEB_RELEASE
+#endif // WINDOWS
 
 using namespace std;
 // unsigned int i=0;
