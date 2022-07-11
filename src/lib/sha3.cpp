@@ -17,7 +17,11 @@
 #ifdef __APPLE__
 #include <machine/endian.h>
 #else
+#ifdef WEB_RELEASE
+#include "wasm/endian.h"
+#else
 #include "nonwasm/endian.h"
+#endif
 #endif // MAC_OS
 #endif // _MSC_VER
 #endif // WINDOWS
