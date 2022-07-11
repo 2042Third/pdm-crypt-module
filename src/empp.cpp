@@ -285,36 +285,8 @@ namespace web_test{
      return 1;
   }
 
-  int test1(){
-    // ecryption adn decryption test
-//    string enc = loader_check(pas, tmp2);
-//    string dec = loader_out(pas, enc);
-//
-//    printf("input: \"%s\"\n",tmp2.data());
-//    printf("encrypted: \"%s\"\n",enc.data());
-//    printf("decrypted: \"%s\"\n",dec.data());
-  }
 
 } // namespace testing
-
-class MyClass {
-public:
-  MyClass(int x, std::string y)
-    : x(x)
-    , y(y)
-  {}
-  void incrementX() {
-    ++x;
-  }
-  int getX() const { return x; }
-  void setX(int x_) { x = x_; }
-  static std::string getStringFromInstance(const MyClass& instance) {
-    return instance.y;
-  }
-private:
-  int x;
-  std::string y;
-};
 
 #ifdef cplusplus_main_compilation
 
@@ -336,12 +308,6 @@ EMSCRIPTEN_BINDINGS(raw_pointers) {
   emscripten::function("gen_sec",&gen_sec);
   emscripten::function("gen_pub",&gen_pub);
   emscripten::function("gen_shr",&gen_shr);
-  emscripten::class_<MyClass>("MyClass")
-    .constructor<int, std::string>()
-    .function("incrementX", &MyClass::incrementX)
-    .property("x", &MyClass::getX, &MyClass::setX)
-    .class_function("getStringFromInstance", &MyClass::getStringFromInstance)
-    ;
 }
 #endif
 
