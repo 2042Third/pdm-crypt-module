@@ -50,6 +50,7 @@ srcs = lib/cc20_file.cpp \
 
 all_includes = -I./include \
 -I./lib \
+-I./lib/nonwasm \
 -I./lib/cpp-mmf \
 -I./lib/poly1305-donna-master \
 -I./lib/ecc \
