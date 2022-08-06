@@ -7,7 +7,7 @@ set (PDM_BUILD_TYPE  ANDROID)
 
 if(${PDM_BUILD_TYPE} MATCHES ANDROID)
     project(c20)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
 
