@@ -46,7 +46,7 @@ if(${PDM_BUILD_TYPE} MATCHES ANDROID)
         c20 PUBLIC
         -g -lpthread -m64 -O3
         -DTARGET_ARCH=ANDROID
-#        --arch
+        --arch
     )
     target_include_directories(
         ${PROJECT_NAME}
