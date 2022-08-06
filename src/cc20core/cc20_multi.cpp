@@ -18,9 +18,7 @@ author:     Yi Yang
 #include <iomanip>
 #include <numeric>
 #include <memory>
-#ifndef ANDROID
 #include <filesystem>
-#endif
 #include <unistd.h>
 #include <sstream>
 #include <string.h>
@@ -574,9 +572,6 @@ void Cc20::set_configurations(c20::config configs){
   conf.DE = configs.DE;
 }
 int Cc20::check_file (string a){
-#ifdef ANDROID
-  return 0;
-#else
   std::filesystem::path f{ a };
   if ((std::filesystem::file_size(f) < 150000000) && conf.DISPLAY_PROG ) // Default to disable progress display if less than 150 mb
     conf.DISPLAY_PROG=0;
@@ -585,7 +580,6 @@ int Cc20::check_file (string a){
     return 0;
   }
   return 1;
-#endif
 }
 
 void Cc20::get_key_hash(string a, uint8_t* hash){

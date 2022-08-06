@@ -21,5 +21,5 @@ set(PDM_OPTIONS ${PDM_OPTIONS} )
 # WINDOWS
 #target_compile_definitions(c20_multi PUBLIC WINDOWS LINUX HAS_MAIN PRINTING DEEP_DEBUG ${PDM_OPTIONS})
 # ANDROID
-target_compile_definitions(c20_multi PUBLIC  ANDROID  ANDROID_STL=c++_shared LINUX HAS_MAIN PRINTING DEEP_DEBUG ${PDM_OPTIONS})
+target_compile_definitions(c20_multi PUBLIC ANDROID_STL=c++_shared LINUX HAS_MAIN PRINTING DEEP_DEBUG ${PDM_OPTIONS})
 #install(FILES libc20_multi.dll DESTINATION ../../)
