@@ -49,6 +49,7 @@ if(${PDM_BUILD_TYPE} MATCHES ANDROID)
     target_include_directories(
         ${PROJECT_NAME}
         PUBLIC
+        ../java/com/pdmnotes/
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/wasm
