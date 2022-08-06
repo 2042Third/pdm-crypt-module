@@ -16,6 +16,10 @@ cmake_policy(SET CMP0076 NEW)
 
 # ANDROID
 add_library(c20 SHARED src/empp.cpp)
+find_library(fs-lib
+    stdc++fs )
+
+
 
 #target_compile_options(
 #    c20
@@ -41,11 +45,18 @@ target_include_directories(c20 PUBLIC
     src/lib/poly1305-donna-master/
     src/lib/ecc/
     )
+
 #
 add_subdirectory(src/lib)
 add_subdirectory(src/cc20core)
 target_link_libraries(c20_multi c20_lib)
-target_link_libraries(c20 c20_lib  c20_multi)
+#other
+#target_link_libraries(c20 c20_lib  c20_multi )
+#android
+target_link_libraries(c20 c20_lib  c20_multi ${fs-lib} )
+
+
+
 
 
 
