@@ -10,7 +10,7 @@ if(${PDM_BUILD_TYPE} MATCHES ANDROID)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
-    target_compile_definitions(c20 PUBLIC ANDROID LINUX ${PDM_OPTIONS})
+
     add_library(
         ${PROJECT_NAME}
         SHARED
@@ -40,7 +40,11 @@ if(${PDM_BUILD_TYPE} MATCHES ANDROID)
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt
     )
-
+    target_compile_definitions(c20 PUBLIC ANDROID LINUX ${PDM_OPTIONS})
+    target_compile_options(
+        c20 PUBLIC
+        -g -lpthread -m64 -O3
+    )
     target_include_directories(
         ${PROJECT_NAME}
         PUBLIC
