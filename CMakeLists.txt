@@ -44,9 +44,7 @@ if(${PDM_BUILD_TYPE} MATCHES ANDROID)
     target_compile_definitions(c20 PUBLIC ANDROID LINUX ${PDM_OPTIONS})
     target_compile_options(
         c20 PUBLIC
-        -g -lpthread -m64 -O3
-        -DTARGET_ARCH=ANDROID
-        --arch
+        -g -lpthread -O3
     )
     target_include_directories(
         ${PROJECT_NAME}
