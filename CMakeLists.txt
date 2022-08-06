@@ -3,6 +3,79 @@ set (CMAKE_CXX_STANDARD 17)
 project(c20 LANGUAGES CXX C)
 cmake_policy(SET CMP0076 NEW)
 
+set (PDM_BUILD_TYPE  ANDROID)
+
+if(${PDM_BUILD_TYPE} MATCHES ANDROID)
+    project(c20)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+    file(
+        GLOB_RECURSE shared_library_sources
+        ./src/app/pdm-crypt-module/src/lib/cc20_file.cpp
+        ./src/app/pdm-crypt-module/src/lib/sha3.cpp
+        ./src/app/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.cpp
+        ./src/app/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.c
+        ./src/app/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.c
+        ./src/app/pdm-crypt-module/src/lib/ecc/curve25519.c
+        ./src/app/pdm-crypt-module/src/lib/ecc/fe25519.c
+        ./src/app/pdm-crypt-module/src/lib/ecc/bigint.c
+        ./src/app/pdm-crypt-module/src/lib/scrypt/src/hmac.c
+        ./src/app/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.c
+        ./src/app/pdm-crypt-module/src/lib/scrypt/src/salsa20.c
+        ./src/app/pdm-crypt-module/src/lib/scrypt/src/scrypt.c
+        ./src/app/pdm-crypt-module/src/empp.cpp
+        ./src/app/pdm-crypt-module/src/lib/scrypt/src/sha256.c
+        ./src/app/pdm-crypt-module/src/lib/ec.cpp
+        ../java/com/pdmnotes/com_pdmnotes_PdmCrypt.c
+        ./src/app/pdm-crypt-module/src/cc20core/cc20_multi.cpp)
+
+    file(
+        GLOB_RECURSE shared_library_headers
+        ./src/app/pdm-crypt-module/src/include
+        ./src/app/pdm-crypt-module/src/lib
+        ./src/app/pdm-crypt-module/src/lib/wasm
+        ./src/app/pdm-crypt-module/src/lib/cpp-mmf
+        ./src/app/pdm-crypt-module/src/lib/poly1305-donna-master
+        ./src/app/pdm-crypt-module/src/lib/ecc
+        ./src/app/pdm-crypt-module/src/lib/scrypt/include
+        ./src/app/pdm-crypt-module/src/lib/scrypt
+    )
+    add_library(
+        ${PROJECT_NAME}
+        SHARED
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_file.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/sha3.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cpp-mmf/memory_mapped_file.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/ecdh_curve25519.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/curve25519.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/fe25519.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/bigint.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/hmac.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/pbkdf2.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/salsa20.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/scrypt.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/empp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/sha256.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ec.cpp
+        ../java/com/pdmnotes/com_pdmnotes_PdmCrypt.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/cc20core/cc20_multi.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/wasm
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cpp-mmf
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt
+    )
+
+    target_include_directories(
+        ${PROJECT_NAME}
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include/
+    )
+else()
 
 # LIBRARY COMPILE FINISH
 
@@ -39,3 +112,4 @@ target_link_libraries(c20 c20_lib  c20_multi)
 #install(TARGETS c20 )
 
 
+endif()
