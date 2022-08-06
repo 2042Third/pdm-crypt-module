@@ -45,10 +45,7 @@ if(${PDM_BUILD_TYPE} MATCHES ANDROID)
         c20 PUBLIC
         -g -lpthread -m64 -O3
         -DTARGET_ARCH=ANDROID
-        -DANDROID_ABI=armeabi-v7a
-        -DANDROID_PLATFORM=android-21
-        -DANDROID_STL=c++_shared
-        -DCMAKE_TOOLCHAIN_FILE=${NDK_ROOT}/build/cmake/android.toolchain.cmake
+        --arch
     )
     target_include_directories(
         ${PROJECT_NAME}
