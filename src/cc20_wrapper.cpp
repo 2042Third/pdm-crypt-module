@@ -4,9 +4,9 @@
  * Yi Yang 
  * */
 #include "cc20_wrapper.h"
-
+#ifndef EMPP_CPP
 #include "empp.cpp"
-
+#endif
 // void pp_hash_wrap(const char* u1, size_t u1_n, const char* u2, size_t u2_n, char* outstr){
 void pp_hash_wrap(const char* u1, const char* u2, char* outstr){
   pp_hash_convert( u1,  u2, outstr);
