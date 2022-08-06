@@ -34,7 +34,7 @@ add_library(c20_lib SHARED
     stand_alone.cpp wasm/endian.h)
 target_compile_options(
     c20_lib PUBLIC
-    -m64 -O3 -lstdc++fs
+    -m64 -O3
 )
 target_include_directories(c20_lib PUBLIC
     ../include

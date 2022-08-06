@@ -16,7 +16,7 @@ cmake_policy(SET CMP0076 NEW)
 
 # ANDROID
 add_library(c20 SHARED src/empp.cpp)
-find_library(fslib
+find_library(fs-lib
     stdc++fs )
 
 
