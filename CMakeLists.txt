@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 set (CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 project(c20 LANGUAGES CXX C)
 cmake_policy(SET CMP0076 NEW)
 
