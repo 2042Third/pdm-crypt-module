@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 cmake_policy(SET CMP0076 NEW)
 add_library(c20_multi SHARED
     cc20_multi.cpp

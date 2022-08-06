@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 17)
 cmake_policy(SET CMP0076 NEW)
 add_library(c20_lib SHARED
     ../include/cc20_dev.hpp
