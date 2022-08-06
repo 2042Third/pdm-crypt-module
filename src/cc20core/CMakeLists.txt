@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.19)
 
 cmake_policy(SET CMP0076 NEW)
 add_library(c20_multi SHARED
