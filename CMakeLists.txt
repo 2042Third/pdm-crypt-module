@@ -9,37 +9,8 @@ if(${PDM_BUILD_TYPE} MATCHES ANDROID)
     project(c20)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
-    file(
-        GLOB_RECURSE shared_library_sources
-        ./src/app/pdm-crypt-module/src/lib/cc20_file.cpp
-        ./src/app/pdm-crypt-module/src/lib/sha3.cpp
-        ./src/app/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.cpp
-        ./src/app/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.c
-        ./src/app/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.c
-        ./src/app/pdm-crypt-module/src/lib/ecc/curve25519.c
-        ./src/app/pdm-crypt-module/src/lib/ecc/fe25519.c
-        ./src/app/pdm-crypt-module/src/lib/ecc/bigint.c
-        ./src/app/pdm-crypt-module/src/lib/scrypt/src/hmac.c
-        ./src/app/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.c
-        ./src/app/pdm-crypt-module/src/lib/scrypt/src/salsa20.c
-        ./src/app/pdm-crypt-module/src/lib/scrypt/src/scrypt.c
-        ./src/app/pdm-crypt-module/src/empp.cpp
-        ./src/app/pdm-crypt-module/src/lib/scrypt/src/sha256.c
-        ./src/app/pdm-crypt-module/src/lib/ec.cpp
-        ../java/com/pdmnotes/com_pdmnotes_PdmCrypt.c
-        ./src/app/pdm-crypt-module/src/cc20core/cc20_multi.cpp)
 
-    file(
-        GLOB_RECURSE shared_library_headers
-        ./src/app/pdm-crypt-module/src/include
-        ./src/app/pdm-crypt-module/src/lib
-        ./src/app/pdm-crypt-module/src/lib/wasm
-        ./src/app/pdm-crypt-module/src/lib/cpp-mmf
-        ./src/app/pdm-crypt-module/src/lib/poly1305-donna-master
-        ./src/app/pdm-crypt-module/src/lib/ecc
-        ./src/app/pdm-crypt-module/src/lib/scrypt/include
-        ./src/app/pdm-crypt-module/src/lib/scrypt
-    )
+    target_compile_definitions(c20 PUBLIC ANDROID LINUX ${PDM_OPTIONS})
     add_library(
         ${PROJECT_NAME}
         SHARED
