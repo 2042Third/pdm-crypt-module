@@ -37,7 +37,6 @@ void memclear(uint8_t* a, size_t b ){
  * @param b user2
  * 
  * */
-// EMSCRIPTEN_KEEPALIVE
 string pp_hash(std::string user1, std::string user2){
   std::cout<<std::flush;//flush
   string c = user1.size()>user2.size()?user1:user2;
@@ -83,7 +82,6 @@ void use_vector_string(const std::vector<uint8_t> &vec) {
 }
 
 
-// EMSCRIPTEN_KEEPALIVE
 string loader_check(const std::string key, const std::string input)
 {
   string buf(input);    //= new vector<uint8_t>();
@@ -107,7 +105,6 @@ void loader_check_convert(const char* key,  const char* input, size_t input_n, c
   memcpy(outstr,(uint8_t *)((&none_tmp)->data()), none_tmp.size());
 }
 
-// EMSCRIPTEN_KEEPALIVE
 string loader_out(const std::string key, const std::string inputi)
 {
   string buf(htos(inputi));    //= new vector<uint8_t>();
@@ -138,7 +135,6 @@ void loader_out_convert(const char* key,  const char* inputi, size_t inputi_n, c
  * Return the secret key
  * 
  * */
-// EMSCRIPTEN_KEEPALIVE
 string gen_sec(){
   uint8_t sec[C20_ECC_SIZE+1];
   sec[C20_ECC_SIZE]='\0';
@@ -156,7 +152,6 @@ string gen_sec(){
  * Return the public key
  * @param - a the secret key
  * */
-// EMSCRIPTEN_KEEPALIVE
 string gen_pub(string a){
   uint8_t pub[33];
   pub[C20_ECC_SIZE]='\0';
@@ -178,7 +173,6 @@ string gen_pub(string a){
  * @param - a the secret key
  * @param - c the other public key
  * */
-// EMSCRIPTEN_KEEPALIVE
 string gen_shr(string a,  string c){
   uint8_t shr[C20_ECC_SIZE+1];
   shr[C20_ECC_SIZE]='\0';
@@ -196,7 +190,6 @@ string gen_shr(string a,  string c){
   return stoh(tmpshr);
 }
 
-// EMSCRIPTEN_KEEPALIVE
 string get_hash(string a){
   SHA3 vh;
   vh.add(a.data(),a.size());
