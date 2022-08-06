@@ -17,7 +17,7 @@ if(${PDM_BUILD_TYPE} MATCHES ANDROID)
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_file.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/sha3.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cpp-mmf/memory_mapped_file.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/ecdh_curve25519.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/curve25519.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/fe25519.c
@@ -29,8 +29,28 @@ if(${PDM_BUILD_TYPE} MATCHES ANDROID)
         ${CMAKE_CURRENT_SOURCE_DIR}/src/empp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/sha256.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ec.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_poly.hpp
         ../java/com/pdmnotes/com_pdmnotes_PdmCrypt.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/cc20core/cc20_multi.cpp
+#        ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+#        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib
+#        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/wasm
+#        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cpp-mmf
+#        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master
+#        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc
+#        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/include
+#        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt
+    )
+    target_compile_definitions(c20 PUBLIC ANDROID LINUX ${PDM_OPTIONS})
+    target_compile_options(
+        c20 PUBLIC
+        -g -lpthread -m64 -O3
+        -DTARGET_ARCH=ANDROID
+#        --arch
+    )
+    target_include_directories(
+        ${PROJECT_NAME}
+        PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/wasm
@@ -39,18 +59,6 @@ if(${PDM_BUILD_TYPE} MATCHES ANDROID)
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt
-    )
-    target_compile_definitions(c20 PUBLIC ANDROID LINUX ${PDM_OPTIONS})
-    target_compile_options(
-        c20 PUBLIC
-        -g -lpthread -m64 -O3
-        -DTARGET_ARCH=ANDROID
-        --arch
-    )
-    target_include_directories(
-        ${PROJECT_NAME}
-        PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/include/
     )
 else()
 
