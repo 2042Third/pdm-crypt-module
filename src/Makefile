@@ -90,10 +90,13 @@ desktop_c:
 	gcc  -I$(MINGW_INC_PATH)/include/llvm/Support -I../lib/ecc -I../include/ $(src_)/empp.cpp $(srcs) $(debug_web) $(inc) -g -D SINGLETHREADING -o ../test/web_debug
 
 web_linux:
-	clang++  $(all_includes) $(srcs) $(all_defs) -fpermissive -std=c++17 desktop.cpp -Wall \
- -O3 -D LINUX  -D WEB_RELEASE -D SINGLETHREADING \
+	g++  $(all_includes) $(srcs) $(all_defs) -fpermissive -std=c++17 desktop.cpp -Wall \
+ -O3 -D LINUX  -D WEB_RELEASE -lpthread \
  -D WEB_RELEASE_LINUX_TEST -g -o ./tests/webc20
-
+web_linux_debug:
+	g++  $(all_includes) $(srcs) $(all_defs) -fpermissive -std=c++17 desktop.cpp -Wall \
+ -D LINUX  -D WEB_RELEASE -lpthread -Wall -D DEEP_DEBUG -D PRINTING \
+ -D WEB_RELEASE_LINUX_TEST -g -o ./tests/webc20
 
 CC  ?= gcc
 CXX ?= g++

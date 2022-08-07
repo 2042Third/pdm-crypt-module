@@ -67,7 +67,9 @@ int main(int argc, char ** argv) {
   cmd_enc(infile,"", configs);
 #else // start linux web test
   if(argc < 2){
-    cout<<"Must have 1 input to start testing. \n \"1\" for curve test. \n \"2\" for encryption test. "<<endl;
+    cout<<"Must have 1 input to start testing. \n \"1\" for curve test. \n "
+          "\"2\" for encryption test. "
+          "\"3\" for scrypt test. \n "<<endl;
     return 0;
   }
   if(stoi(argv[1]) == 1){
@@ -80,6 +82,19 @@ int main(int argc, char ** argv) {
     std::string pas = "1234";
     std::string msg = "hello this is a message";
     web_test::test(pas, msg);
+  }
+  else if (stoi(argv[1]) == 3){
+    cout<<"Scrypt Test.\n"<<endl;
+
+    std::string pas = "1234";
+    std::string msg = "hello this is a messagehello this is a messagehello this is a message";
+    string out1 = scrypt(pas);
+    string out2 = scrypt(msg);
+
+    cout<<"#1: \""<< pas<<"\"\n"<<endl;
+    cout<<"#1 out: \""<< out1<<"\"\n"<<endl;
+    cout<<"#2: \""<< msg<<"\"\n"<<endl;
+    cout<<"#2 out: \""<< out2<<"\"\n"<<endl;
   }
   else {
    cout<<"Command not found, exiting."<<endl;

@@ -269,5 +269,6 @@ void scrypt_state_destroy(scrypt_state_t* state) {
   free(state->v);
   free(state->x);
   free(state->t);
+  free(state->b);
   memset(state, 0, sizeof(*state));
 }

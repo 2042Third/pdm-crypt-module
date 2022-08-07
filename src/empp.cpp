@@ -14,7 +14,9 @@
 #include "ec.h"
 #include "empp.h"
 #include "sha3.h"
+#include "cc20_scrypt.h"
 #include <iostream>
+#include <string.h>
 #include <sstream>
 #include <stdlib.h>
 #ifdef __EMSCRIPTEN__
@@ -122,7 +124,7 @@ void loader_out_convert(const char* key,  const char* inputi, size_t inputi_n, c
   size_t inpsize = (buf.size()) ;
   cout<<"decryption size: "<<buf.size()<<endl;
   cmd_dec((uint8_t *)((&buf)->data()), inpsize, (uint8_t *)((&outstring)->data()), str_key);
-  memcpy(outstr,(uint8_t *)((&outstring)->data()), outstring.size());
+  memcpy(outstr,(char *)((&outstring)->data()), outstring.size());
   return ;
 }
 
@@ -192,6 +194,13 @@ string get_hash(string a){
   return b;
 }
 
+string scrypt(string a){
+  c20_scrypt k;
+  string key_hash_str(32,0);
+  k.make_ps((const uint8_t *)a.data(), (uint8_t *)(key_hash_str.data()));
+  return stoh(key_hash_str);
+}
+
 void get_hash_convert(const char* a, size_t a_n, char* outstr){
   SHA3 vh;
   vh.add(a,a_n);
@@ -210,12 +219,14 @@ namespace web_test{
   int test (const string& a, const string& b, int accum=-1){
     string enc = loader_check(a, b);
     string dec = loader_out(a, enc);
+    string decWrong = loader_out("12345",enc);
     int ttl = 1000000;
     if(accum==-1){
       cout<<"Input key: \t"<<a<<endl;
       cout<<"Input message: \t"<<b<<endl;
       cout<<"Encrypted message: \t"<<enc<<endl;
       cout<<"Decrypted message: \t"<<dec<<endl;
+      cout<<"\"12345\" Decrypted message: \t"<<decWrong<<endl;
       return 1;
     }
     if (dec == b){
