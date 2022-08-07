@@ -12,6 +12,7 @@
 #include <vector>
 #include "cc20_multi.h"
 #include "ec.h"
+#include "empp.h"
 #include "sha3.h"
 #include <iostream>
 #include <sstream>
@@ -22,10 +23,6 @@
 #endif
 using namespace std;
 
-#define C20_ECC_SIZE 32
-
-#define C20_EXPORT extern "C"
-#define cplusplus_main_compilation (__cplusplus & WEB_TEST)
 
 void memclear(uint8_t* a, size_t b ){
   for (size_t i=0; i<b;i++){
@@ -61,7 +58,6 @@ const char* pp_hash_c(char* user1, char* user2){
   return out.data();
 }
 
-C20_EXPORT 
 void pp_hash_convert(const char* user1, const char* user2, char* outstr){
   std::string u1 = std::string(user1);
   std::string u2 = std::string(user2);
@@ -95,7 +91,6 @@ string loader_check(const std::string key, const std::string input)
 /**
  * @requires outstr must have input_n+28 bytes.
  * */
-C20_EXPORT 
 void loader_check_convert(const char* key,  const char* input, size_t input_n, char* outstr){
   string str_key(key);
   string outstring(input_n + (NONCE_SIZE+POLY_SIZE),0); // = new vector<uint8_t>();
@@ -197,7 +192,6 @@ string get_hash(string a){
   return b;
 }
 
-C20_EXPORT
 void get_hash_convert(const char* a, size_t a_n, char* outstr){
   SHA3 vh;
   vh.add(a,a_n);
