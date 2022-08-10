@@ -193,6 +193,12 @@ string get_hash(string a){
   string b = vh.getHash();
   return b;
 }
+string get_hash_arr(const char* a, size_t asize){
+  SHA3 vh;
+  vh.add(a,asize);
+  string b = vh.getHash();
+  return b;
+}
 
 string scrypt(string a){
   c20_scrypt k;

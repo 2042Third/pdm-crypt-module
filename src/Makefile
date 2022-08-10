@@ -98,6 +98,9 @@ web_linux_debug:
  -D LINUX  -D WEB_RELEASE -lpthread -Wall -D DEEP_DEBUG -D PRINTING \
  -D WEB_RELEASE_LINUX_TEST -g -o ./tests/webc20
 
+pdm_ios:
+	clang++ -c -D LINUX -lpthread -Wall -DANDROID $(all_includes) $(srcs) -fpermissive -std=c++17 && \
+ 	libtool -static -o builder/libc20.a *.o
 CC  ?= gcc
 CXX ?= g++
 

@@ -28,5 +28,6 @@ std::string gen_sec();
 std::string gen_pub(std::string a);
 std::string gen_shr(std::string a,  std::string c);
 std::string get_hash(std::string a);
+std::string get_hash_arr(const char* a, size_t asize);
 C20_EXPORT
 void get_hash_convert(const char* a, size_t a_n, char* outstr);
