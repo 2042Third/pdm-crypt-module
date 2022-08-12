@@ -9,7 +9,7 @@ enable_language(OBJC)
 MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
 MESSAGE( STATUS "CMAKE_OBJC_FLAGS: " ${CMAKE_OBJC_FLAGS} )
 
-cmake_policy(SET CMP0076 NEW)
+# cmake_policy(SET CMP0076 NEW)
 
 
 
@@ -46,6 +46,42 @@ set(PDM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt)
+set(PDM_INCLUDE_FILES 
+${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_parts.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/include/types.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_multi.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/include/pdm-service.hpp
+${CMAKE_CURRENT_SOURCE_DIR}/src/include/xCc20.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_diff.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_wrapper.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_dev.hpp
+${CMAKE_CURRENT_SOURCE_DIR}/src/include/empp.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna-8.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna-16.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna-64.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna-32.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_file.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/nonwasm/endian.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cpp-mmf/memory_mapped_file.hpp
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/sha3.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/wasm/endian.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_poly.hpp
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ec.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/test/test.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/include/scrypt.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/scrypt.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/sha256.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/pbkdf2.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/salsa20.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/common.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/hmac.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/fe25519.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/ecdh_curve25519.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/bigint.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/avrnacl.h
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_scrypt.h
+    )
 
 set(PDM_OPTIONS PUBLIC  LINUX ${PDM_OPTIONS})
 set(PDM_COMPILER_FLAGS -g -lpthread -O3)
@@ -76,7 +112,7 @@ elseif(${PDM_BUILD_TYPE} MATCHES MOBILE_IOS)
     else()
       message(STATUS "kqueue found!")
     endif()
-
+    set(CMAKE_INSTALL_PREFIX ./libs)
     # Hook up XCTest for the supported plaforms (all but WatchOS)
     if(NOT PLATFORM MATCHES ".*WATCHOS.*")
       # Use the standard find_package, broken between 3.14.0 and 3.14.4 at least for XCtest...
@@ -97,13 +133,7 @@ elseif(${PDM_BUILD_TYPE} MATCHES MOBILE_IOS)
 
     # Headers
     set(HEADERS
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/include/*.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/*.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cpp-mmf/*.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/*.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/*.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/include/*.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/*.h
+      ${PDM_INCLUDE_FILES}
     )
 
     # Library

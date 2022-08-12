@@ -16,6 +16,9 @@
 
 APPLE:BOOL=ON
 
+//No help, variable specified on the command line.
+BUILD_SHARED:UNINITIALIZED=0
+
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=CMAKE_ADDR2LINE-NOTFOUND
 
@@ -78,7 +81,7 @@ CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
 CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
 //Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=
+CMAKE_INSTALL_PREFIX:PATH=/usr/local
 
 //Path to a program.
 CMAKE_LINKER:FILEPATH=/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
@@ -191,8 +194,8 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
 CMAKE_STRIP:FILEPATH=strip
 
-//No help, variable specified on the command line.
-CMAKE_TOOLCHAIN_FILE:UNINITIALIZED=../ios.toolchain.cmake
+//The CMake toolchain file
+CMAKE_TOOLCHAIN_FILE:FILEPATH=/Users/mikeyang/Documents/pdm/pdm-crypt-module/ios.toolchain.cmake
 
 //If this value is on, makefiles will be generated without the
 // .SILENT directive, and all commands will be echoed to the console
@@ -215,8 +218,11 @@ ENABLE_BITCODE_INT:BOOL=0
 //Whether or not to use strict compiler checks
 ENABLE_STRICT_TRY_COMPILE_INT:BOOL=OFF
 
+//No help, variable specified on the command line.
+ENABLE_VISIBILITY:UNINITIALIZED=TRUE
+
 //Whether or not to hide symbols from the dynamic linker (-fvisibility=hidden)
-ENABLE_VISIBILITY_INT:BOOL=OFF
+ENABLE_VISIBILITY_INT:BOOL=TRUE
 
 IOS:BOOL=ON
 
@@ -224,12 +230,15 @@ IOS:BOOL=ON
 NAMED_LANGUAGE_SUPPORT_INT:BOOL=ON
 
 //No help, variable specified on the command line.
-PLATFORM:UNINITIALIZED=OS64
+PLATFORM:UNINITIALIZED=OS64COMBINED
 
 UNIX:BOOL=ON
 
 //Path to a program.
 XCODEBUILD_EXECUTABLE:FILEPATH=/usr/bin/xcodebuild
+
+//No help, variable specified on the command line.
+XCODE_VERSION:UNINITIALIZED=14
 
 //Value Computed by CMake
 c20_BINARY_DIR:STATIC=/Users/mikeyang/Documents/pdm/pdm-crypt-module/build
@@ -255,8 +264,8 @@ pdm-crypt-module_SOURCE_DIR:STATIC=/Users/mikeyang/Documents/pdm/pdm-crypt-modul
 ########################
 
 //Stored Xcode object GUID
-ALL_BUILD_GUID_CMAKE:INTERNAL=7516AFB150D048B5AAAAF4CA
-APPLE_TARGET_TRIPLE:INTERNAL=aarch64-apple-ios11.0
+ALL_BUILD_GUID_CMAKE:INTERNAL=1E3B5E9FA71542AD9BCFF5EB
+APPLE_TARGET_TRIPLE:INTERNAL=aarch64-x86_64-apple-ios11.0
 //ADVANCED property for variable: CMAKE_ADDR2LINE
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
@@ -315,7 +324,7 @@ CMAKE_FIND_ROOT_PATH_MODE_INCLUDE:INTERNAL=BOTH
 CMAKE_FIND_ROOT_PATH_MODE_LIBRARY:INTERNAL=BOTH
 CMAKE_FIND_ROOT_PATH_MODE_PACKAGE:INTERNAL=BOTH
 CMAKE_FIND_ROOT_PATH_MODE_PROGRAM:INTERNAL=BOTH
-CMAKE_FRAMEWORK_PATH:INTERNAL=/Library/PrivateFrameworks;/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk/System/Library/Frameworks;/Library/PrivateFrameworks;/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk/System/Library/Frameworks
+CMAKE_FRAMEWORK_PATH:INTERNAL=/Library/PrivateFrameworks;/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk/System/Library/Frameworks
 //Name of generator.
 CMAKE_GENERATOR:INTERNAL=Xcode
 //Generator instance identifier.
@@ -328,6 +337,8 @@ CMAKE_GENERATOR_TOOLSET:INTERNAL=
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=/Users/mikeyang/Documents/pdm/pdm-crypt-module
 CMAKE_IGNORE_PATH:INTERNAL=/System/Library/Frameworks;/usr/local/lib
+//ADVANCED property for variable: CMAKE_INSTALL_NAME_TOOL
+CMAKE_INSTALL_NAME_TOOL-ADVANCED:INTERNAL=1
 CMAKE_INSTALL_NAME_TOOL:INTERNAL=/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool
 //ADVANCED property for variable: CMAKE_LINKER
 CMAKE_LINKER-ADVANCED:INTERNAL=1
@@ -359,7 +370,7 @@ CMAKE_OBJC_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_OBJC_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
 CMAKE_OBJDUMP-ADVANCED:INTERNAL=1
-CMAKE_OSX_ARCHITECTURES:INTERNAL=arm64
+CMAKE_OSX_ARCHITECTURES:INTERNAL=arm64;x86_64
 CMAKE_OSX_SYSROOT:INTERNAL=/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk
 CMAKE_OSX_SYSROOT_INT:INTERNAL=/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk
 //Platform information initialized
@@ -403,12 +414,12 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 DEPLOYMENT_TARGET:INTERNAL=11.0
 //Stored Xcode object GUID
-PROJECT_c20_GUID_CMAKE:INTERNAL=98C5A3B8307447C9843487E4
+PROJECT_c20_GUID_CMAKE:INTERNAL=EB84EA72805D4F44A208D823
 //Stored Xcode object GUID
-RUN_TESTS_GUID_CMAKE:INTERNAL=19B3E1E1786745CABC4FF924
+RUN_TESTS_GUID_CMAKE:INTERNAL=446B270A37234AB3B02F0756
 XCODE_VERSION_INT:INTERNAL=14.0
 //Stored Xcode object GUID
-ZERO_CHECK_GUID_CMAKE:INTERNAL=21167BD9E1154DC29128FB0F
+ZERO_CHECK_GUID_CMAKE:INTERNAL=EFE105A2ADA04768A9CF0E29
 //Stored Xcode object GUID
-c20_GUID_CMAKE:INTERNAL=E024ABD617864C7FB19576FB
+c20_GUID_CMAKE:INTERNAL=ECBA27E89AA747E79ABF6AE6
 
