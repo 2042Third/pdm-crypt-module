@@ -78,7 +78,7 @@ CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
 CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
 //Install path
-CMAKE_INSTALL_PREFIX:PATH=../pdm-native-lib/libs
+CMAKE_INSTALL_PREFIX:PATH=/Users/mikeyang/Documents/pdm/pdm-crypt-module/pdm-native-lib/libs
 
 //Path to a program.
 CMAKE_LINKER:FILEPATH=/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
@@ -204,16 +204,13 @@ CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 ENABLE_ARC_INT:BOOL=ON
 
 //Whether or not to enable bitcode
-ENABLE_BITCODE_INT:BOOL=ON
+ENABLE_BITCODE_INT:BOOL=OFF
 
 //Whether or not to use strict compiler checks
 ENABLE_STRICT_TRY_COMPILE_INT:BOOL=OFF
 
-//No help, variable specified on the command line.
-ENABLE_VISIBILITY:UNINITIALIZED=1
-
 //Whether or not to hide symbols from the dynamic linker (-fvisibility=hidden)
-ENABLE_VISIBILITY_INT:BOOL=1
+ENABLE_VISIBILITY_INT:BOOL=OFF
 
 //Path to a library.
 FOUNDATION_LIBRARY:FILEPATH=/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk/System/Library/Frameworks/Foundation.framework
@@ -224,7 +221,7 @@ IOS:BOOL=ON
 NAMED_LANGUAGE_SUPPORT_INT:BOOL=ON
 
 //No help, variable specified on the command line.
-PLATFORM:UNINITIALIZED=OS64
+PLATFORM:UNINITIALIZED=OS64COMBINED
 
 //Path to a library.
 UIKIT_LIBRARY:FILEPATH=/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk/System/Library/Frameworks/UIKit.framework
@@ -258,8 +255,8 @@ cc20-ios_SOURCE_DIR:STATIC=/Users/mikeyang/Documents/pdm/pdm-crypt-module
 ########################
 
 //Stored Xcode object GUID
-ALL_BUILD_GUID_CMAKE:INTERNAL=F29F16D5EDB04401AF20193B
-APPLE_TARGET_TRIPLE:INTERNAL=aarch64-apple-ios11.0
+ALL_BUILD_GUID_CMAKE:INTERNAL=DC329CE3B458496C9FC7ABD8
+APPLE_TARGET_TRIPLE:INTERNAL=aarch64-x86_64-apple-ios11.0
 //ADVANCED property for variable: CMAKE_ADDR2LINE
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
@@ -364,7 +361,7 @@ CMAKE_OBJC_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_OBJC_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
 CMAKE_OBJDUMP-ADVANCED:INTERNAL=1
-CMAKE_OSX_ARCHITECTURES:INTERNAL=arm64
+CMAKE_OSX_ARCHITECTURES:INTERNAL=arm64;x86_64
 CMAKE_OSX_SYSROOT:INTERNAL=/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk
 CMAKE_OSX_SYSROOT_INT:INTERNAL=/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk
 //Platform information initialized
@@ -420,9 +417,9 @@ HAVE_STDINT_H:INTERNAL=1
 //Have include sys/types.h
 HAVE_SYS_TYPES_H:INTERNAL=1
 //Stored Xcode object GUID
-PROJECT_cc20-ios_GUID_CMAKE:INTERNAL=79C7903F7FB348E9B9C62773
+PROJECT_cc20-ios_GUID_CMAKE:INTERNAL=62BBD299B4A0400391A821D3
 //Stored Xcode object GUID
-RUN_TESTS_GUID_CMAKE:INTERNAL=5D551140DD454509A970367E
+RUN_TESTS_GUID_CMAKE:INTERNAL=A597FC0AB37E4ECEA51B3F7C
 //CHECK_TYPE_SIZE: sizeof(time_t)
 SIZEOF_TIME_T:INTERNAL=8
 XCODE_VERSION_INT:INTERNAL=14.0
@@ -433,9 +430,9 @@ XCTest_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: XCTest_LIBRARY
 XCTest_LIBRARY-ADVANCED:INTERNAL=1
 //Stored Xcode object GUID
-ZERO_CHECK_GUID_CMAKE:INTERNAL=2C6CCB6674BF4D80BBA4DA7C
+ZERO_CHECK_GUID_CMAKE:INTERNAL=08C7F6132EA6465FB7D6685A
 //Stored Xcode object GUID
-cc20_GUID_CMAKE:INTERNAL=0D00ADEC22AC421ABC0E0243
+cc20_GUID_CMAKE:INTERNAL=E8C66B903813426B9F261733
 //Stored Xcode object GUID
-install_GUID_CMAKE:INTERNAL=43D77FB437014A2DBE36ADD9
+install_GUID_CMAKE:INTERNAL=79B379B7325544D694B77582
 

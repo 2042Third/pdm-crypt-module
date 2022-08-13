@@ -2,7 +2,7 @@
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "../pdm-native-lib/libs")
+  set(CMAKE_INSTALL_PREFIX "/Users/mikeyang/Documents/pdm/pdm-crypt-module/pdm-native-lib/libs")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -62,24 +62,32 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static" TYPE STATIC_LIBRARY FILES "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/Debug${EFFECTIVE_PLATFORM_NAME}/libcc20.a")
     if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a" AND
        NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a")
+      include(CMakeIOSInstallCombined)
+      ios_install_combined("cc20" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a")
       execute_process(COMMAND "ranlib" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a")
     endif()
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
     file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static" TYPE STATIC_LIBRARY FILES "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/Release${EFFECTIVE_PLATFORM_NAME}/libcc20.a")
     if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a" AND
        NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a")
+      include(CMakeIOSInstallCombined)
+      ios_install_combined("cc20" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a")
       execute_process(COMMAND "ranlib" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a")
     endif()
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Mm][Ii][Nn][Ss][Ii][Zz][Ee][Rr][Ee][Ll])$")
     file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static" TYPE STATIC_LIBRARY FILES "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/MinSizeRel${EFFECTIVE_PLATFORM_NAME}/libcc20.a")
     if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a" AND
        NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a")
+      include(CMakeIOSInstallCombined)
+      ios_install_combined("cc20" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a")
       execute_process(COMMAND "ranlib" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a")
     endif()
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
     file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static" TYPE STATIC_LIBRARY FILES "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/RelWithDebInfo${EFFECTIVE_PLATFORM_NAME}/libcc20.a")
     if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a" AND
        NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a")
+      include(CMakeIOSInstallCombined)
+      ios_install_combined("cc20" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a")
       execute_process(COMMAND "ranlib" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/ios/pdm-lib/static/libcc20.a")
     endif()
   endif()

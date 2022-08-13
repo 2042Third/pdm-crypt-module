@@ -2,6 +2,6 @@
 
 @interface EmppIOS : NSObject
 
-- (NSString*)getHash;
+- (NSString*)getHash:(NSString*)a;
 
 @end

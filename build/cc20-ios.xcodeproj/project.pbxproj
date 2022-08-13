@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		2C6CCB6674BF4D80BBA4DA7C /* ZERO_CHECK */ = {
+		08C7F6132EA6465FB7D6685A /* ZERO_CHECK */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = A7C2974902C94AD28D3D0582 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildConfigurationList = 57D5AA4CBA914CE284572E60 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
 			buildPhases = (
 				294389DEC51664B963A35756 /* Generate CMakeFiles/ZERO_CHECK */,
 			);
@@ -18,21 +18,21 @@
 			name = ZERO_CHECK;
 			productName = ZERO_CHECK;
 		};
-		43D77FB437014A2DBE36ADD9 /* install */ = {
+		79B379B7325544D694B77582 /* install */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 44EB38FC6F504874B39D624A /* Build configuration list for PBXAggregateTarget "install" */;
+			buildConfigurationList = 14D956AB2FF74C7D9D053C1D /* Build configuration list for PBXAggregateTarget "install" */;
 			buildPhases = (
 				93426DA6A4AC2C2AC9CE883C /* CMake PostBuild Rules */,
 			);
 			dependencies = (
-				E71C613EA9544A8A8BCBF550 /* PBXTargetDependency */,
+				9213041D5071489AB9F3D964 /* PBXTargetDependency */,
 			);
 			name = install;
 			productName = install;
 		};
-		5D551140DD454509A970367E /* RUN_TESTS */ = {
+		A597FC0AB37E4ECEA51B3F7C /* RUN_TESTS */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 78536207C42F4851925EB07B /* Build configuration list for PBXAggregateTarget "RUN_TESTS" */;
+			buildConfigurationList = 1606F05C03C740DE9797CCF2 /* Build configuration list for PBXAggregateTarget "RUN_TESTS" */;
 			buildPhases = (
 				003C8D08B0008F35F218E126 /* CMake PostBuild Rules */,
 			);
@@ -41,15 +41,15 @@
 			name = RUN_TESTS;
 			productName = RUN_TESTS;
 		};
-		F29F16D5EDB04401AF20193B /* ALL_BUILD */ = {
+		DC329CE3B458496C9FC7ABD8 /* ALL_BUILD */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 8E2ACF02916741389C4119DB /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildConfigurationList = AF20A1239B1646A1953D1AE3 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
 			buildPhases = (
 				6A9BA53867D70D58C637F5E6 /* Generate CMakeFiles/ALL_BUILD */,
 			);
 			dependencies = (
-				F7694805BFD6492F817990C5 /* PBXTargetDependency */,
-				A3A23A4762A34568941CC306 /* PBXTargetDependency */,
+				32101A5622834B95BDEDD9D7 /* PBXTargetDependency */,
+				826FB48F45954342B8A94652 /* PBXTargetDependency */,
 			);
 			name = ALL_BUILD;
 			productName = ALL_BUILD;
@@ -57,86 +57,86 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		050B9F5882D7401C8F07F30F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_wrapper.h */ = {isa = PBXBuildFile; fileRef = CCC98F7CF01242B0839474FD /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_wrapper.h */; };
-		0A98158169A448BFB226EAC8 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.h */ = {isa = PBXBuildFile; fileRef = 7CD3E8BB91E942948F78C102 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.h */; };
-		10D1441A310E44BEAC9D4D3E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-8.h */ = {isa = PBXBuildFile; fileRef = E1E9C647236245C3973BABEE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-8.h */; };
-		13508C1D807C43F2A5AD4FB8 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.h */ = {isa = PBXBuildFile; fileRef = 3917191D8AEF4BCDA81CC7C3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.h */; };
-		1DCCE65565684187939ACF36 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.mm */ = {isa = PBXBuildFile; fileRef = 08BDD7A6C5454C2D9B366A14 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.mm */; };
-		23600046CEF44477AF9362BB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.h */ = {isa = PBXBuildFile; fileRef = 25910F727FA34AF7AF121CB3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.h */; };
-		261A6FAC229F4A5AA5E595F8 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/empp.h */ = {isa = PBXBuildFile; fileRef = CDAE0D81A2F5406ABD535F3F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/empp.h */; };
-		276EFAE78EAF434DB0F1AB40 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/curve25519.c */ = {isa = PBXBuildFile; fileRef = BC26A80945CA44258B035EEF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/curve25519.c */; };
-		2C0E1FEA3C654F62B8AFC052 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_scrypt.h */ = {isa = PBXBuildFile; fileRef = EB78C84C83264D5C924148D2 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_scrypt.h */; };
-		3101CC0E5A6C49D9913C5B81 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-32.h */ = {isa = PBXBuildFile; fileRef = A23BE78024B74F84A285A68D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-32.h */; };
-		3AD8DA801BE744D4B7623F64 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.cpp */ = {isa = PBXBuildFile; fileRef = ABF49EF8FEC14344A1B2675F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.cpp */; };
-		3EB7B1E635FE4ED6B1EDE3D8 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-16.h */ = {isa = PBXBuildFile; fileRef = 59FFE7796DAF4E2591064933 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-16.h */; };
-		3F422D2C024F4DE98EE83ABA /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_dev.hpp */ = {isa = PBXBuildFile; fileRef = A06A4AA14C5E4FB2998DEBA3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_dev.hpp */; };
-		4278247E8F464F718A6E03AF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_diff.h */ = {isa = PBXBuildFile; fileRef = C3220DF43B564C14BA958C8B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_diff.h */; };
-		450C1E76E4334EFAB0DBC68F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.c */ = {isa = PBXBuildFile; fileRef = DB35633326C94721B9BD6982 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.c */; };
-		4860A63BE54D4ABDB7442B4F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/cc20core/cc20_multi.cpp */ = {isa = PBXBuildFile; fileRef = 3A081FC4F73B4AC4A1F4B2D3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/cc20core/cc20_multi.cpp */; };
-		49BF8BA191F34D2C88B9F969 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.h */ = {isa = PBXBuildFile; fileRef = B8E295C3FDE1492AABB1E08C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.h */; };
-		4ACD0366F0914532BC50D45F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.h */ = {isa = PBXBuildFile; fileRef = 4202032A0AF74C8ABC924ED5 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.h */; };
-		4DCB656A3C65426BAFB47E5B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/build/CMakeFiles/cc20.dir/Info.plist */ = {isa = PBXBuildFile; fileRef = 67DF63BB688A4577B5EE119F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/build/CMakeFiles/cc20.dir/Info.plist */; };
-		52CC0F50356F47D4B5C175FF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_parts.h */ = {isa = PBXBuildFile; fileRef = D7D844A10E7B46B29A263B9E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_parts.h */; };
-		58148441D38547FF8E0B939D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/test/test.h */ = {isa = PBXBuildFile; fileRef = B5950B5356C748058F48AC41 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/test/test.h */; };
-		5A31C4E1E0E842A0BCADF1E3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.c */ = {isa = PBXBuildFile; fileRef = 83F76D5ECCDA46AA93AA7986 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.c */; };
-		5B00746F6B5743FBB6A77BC7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_poly.hpp */ = {isa = PBXBuildFile; fileRef = 657B957318E14AE2BE58C811 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_poly.hpp */; };
-		66A127CA2C384FFA8DE384EE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.c */ = {isa = PBXBuildFile; fileRef = B1EC0835EA924650AAA233F7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.c */; };
-		67363B687920462DA5283184 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/xCc20.h */ = {isa = PBXBuildFile; fileRef = 962CE7EFB2FD44A8B89D0A0D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/xCc20.h */; };
-		6BD97019F00F4313AD717B04 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/include/scrypt.h */ = {isa = PBXBuildFile; fileRef = EEC47AB485234251843ADD94 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/include/scrypt.h */; };
-		70796EF4D7234B4AAF1158B5 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.h */ = {isa = PBXBuildFile; fileRef = A9F1F512B29E4572AFABD437 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.h */; };
-		772F11CC18A24FFAB98E95EB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.h */ = {isa = PBXBuildFile; fileRef = FA87022EBDE1486F9F96EF1C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.h */; };
-		7AC21832969D44E98E1CBB64 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.cpp */ = {isa = PBXBuildFile; fileRef = BA1177D080DD4AD69C4B2D5D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.cpp */; };
-		81AF4DC3EFA54455AAE68BEB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.cpp */ = {isa = PBXBuildFile; fileRef = FB0413AA2EA04AE6BBEC04C2 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.cpp */; };
-		874BE93EE0BF4C4A85291117 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_multi.h */ = {isa = PBXBuildFile; fileRef = 81BE6203B4B04718BA8CDBBB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_multi.h */; };
-		877D3FD103ED497AA210D31C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.c */ = {isa = PBXBuildFile; fileRef = 549E72D33FBF49C6915AA9C6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.c */; };
-		8A3568566B814212908D2E59 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.c */ = {isa = PBXBuildFile; fileRef = B24D1DCFE57D40A6810BC459 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.c */; };
-		96C42842576D4500B5A764AE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.c */ = {isa = PBXBuildFile; fileRef = 3A72BBB011F543CFB301C306 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.c */; };
-		977C0FDEE9684BE68AD1E149 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.h */ = {isa = PBXBuildFile; fileRef = DCE295BB614447A2B8BAE681 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.h */; };
-		9FFC0EBABCB64078B2130EEE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.cpp */ = {isa = PBXBuildFile; fileRef = E26DBC3F7F6144899244004F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.cpp */; };
-		A1815C1A88B045BC98C024BA /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.h */ = {isa = PBXBuildFile; fileRef = 568CADDF84344667B43F739B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.h */; };
-		A5AD500EA7204B17B413D09A /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 4850EAFC0B584E0BB336142B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/CMakeLists.txt */; };
-		ACE1DBB3AF61483E9A0DB599 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.cpp */ = {isa = PBXBuildFile; fileRef = E49A793235DA48ECBA38D8F6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.cpp */; };
-		AF63D2F8C4854998B8D454BC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-64.h */ = {isa = PBXBuildFile; fileRef = 2CC1F0BEB1C6422E96033237 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-64.h */; };
-		B1A2E26FCB2442318AB69FCF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/types.h */ = {isa = PBXBuildFile; fileRef = 20820C1BFB8E407182DE2F0A /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/types.h */; };
-		BD9557823DFF45ECB2882B3B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/pdm-service.hpp */ = {isa = PBXBuildFile; fileRef = E817E1A3791648529A1629C6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/pdm-service.hpp */; };
-		BE38683DA3934A55807F5687 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/common.h */ = {isa = PBXBuildFile; fileRef = F7BDD31AB2D0489FA2614CCC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/common.h */; };
-		C53B5933AC97419A920EABDF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/wasm/endian.h */ = {isa = PBXBuildFile; fileRef = 391A10A36AEB4860895FE51E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/wasm/endian.h */; };
-		CD6645F9769843CE9CC9FBEB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/avrnacl.h */ = {isa = PBXBuildFile; fileRef = 75B5572D7E7E42A5B39F146A /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/avrnacl.h */; };
-		D94AB881DE464CC0AD3BCDF2 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.h */ = {isa = PBXBuildFile; fileRef = DA297C5C6F6A4A18949FE742 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.h */; };
-		DBF8426EA8F94E729EF6D426 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.h */ = {isa = PBXBuildFile; fileRef = 5E0806B07F854A9B8817EB3F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.h */; };
-		E0E74FB3B49C4BC994AC48D4 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.h */ = {isa = PBXBuildFile; fileRef = E9C2D9071EA543D381DFE343 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.h */; };
-		E3A211C2AED04A4BA4C6BDEE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.hpp */ = {isa = PBXBuildFile; fileRef = 73C627865ABD470485730973 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.hpp */; };
-		E40D14FBE0BE4C3CB93E63E5 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.c */ = {isa = PBXBuildFile; fileRef = 2E98C14602984EA0B76D19D2 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.c */; };
-		EA7550DA84B2467FAF990476 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.h */ = {isa = PBXBuildFile; fileRef = AB206CA8191A4E54B7C96513 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.h */; };
-		EA819F786E5148248B095F5E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.c */ = {isa = PBXBuildFile; fileRef = 4B4D55EDC76D4254948A0158 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.c */; };
-		F399F9DB73E4441E8BB2CB7A /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/nonwasm/endian.h */ = {isa = PBXBuildFile; fileRef = 0D9B7A5F2EF14D95A197802B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/nonwasm/endian.h */; };
-		F7D94C54DAF94E5D82ADACBF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.cpp */ = {isa = PBXBuildFile; fileRef = C9E5F8712F1D442592A9793D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.cpp */; };
-		FA4489D3A02D4C32A0826A6F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.hpp */ = {isa = PBXBuildFile; fileRef = 0621E12CFBE04A0FB77FF559 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.hpp */; };
+		01AE321862154EC3A748EA23 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.cpp */ = {isa = PBXBuildFile; fileRef = C7A5C2760FB54617B15620BD /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.cpp */; };
+		121CE5B1F27C4A6B9CEB96D3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_scrypt.h */ = {isa = PBXBuildFile; fileRef = 567E053FE1354628B0B40F00 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_scrypt.h */; };
+		1A9525EA07D44C36B50D8625 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.cpp */ = {isa = PBXBuildFile; fileRef = A95CB09354F44909BE977D6F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.cpp */; };
+		1D7276D13EA24FB9ABBC3DE3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.h */ = {isa = PBXBuildFile; fileRef = 869A4B95B7BB4C3DB3B14710 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.h */; };
+		248E9603A9774CA2B7B61B6D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/nonwasm/endian.h */ = {isa = PBXBuildFile; fileRef = A5757ED190384EAEB91DA1F5 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/nonwasm/endian.h */; };
+		25C379D44F2E446690331359 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_poly.hpp */ = {isa = PBXBuildFile; fileRef = FE1B71012BC24964B038313F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_poly.hpp */; };
+		29B561B34E094A6998A2B68E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.c */ = {isa = PBXBuildFile; fileRef = CBB6D9EB30A647EEBED0A847 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.c */; };
+		347B1C555DF94918BA8268E7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.h */ = {isa = PBXBuildFile; fileRef = 02FB9F6B687C4F029F669C78 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.h */; };
+		35236F6FFF7B4FB8A41E228E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.cpp */ = {isa = PBXBuildFile; fileRef = 9B634B1EFF01452BAE3A839B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.cpp */; };
+		399A1918C1B349DDB01CA3EA /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/curve25519.c */ = {isa = PBXBuildFile; fileRef = 06D858EBD2984772988C7703 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/curve25519.c */; };
+		410FD86C9EB5494F9CB846B8 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.c */ = {isa = PBXBuildFile; fileRef = 344A025BC7F44BB6BED27D4D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.c */; };
+		481EF33E05D34291B6530BD9 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-16.h */ = {isa = PBXBuildFile; fileRef = 60DCBD31DA15445B8EE98237 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-16.h */; };
+		4BC1C5B1865442B480C6D332 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/build/CMakeFiles/cc20.dir/Info.plist */ = {isa = PBXBuildFile; fileRef = 081C163803FB48299D41BE03 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/build/CMakeFiles/cc20.dir/Info.plist */; };
+		4D290997E6674820B89DF2CF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.h */ = {isa = PBXBuildFile; fileRef = 5600986323214932975797EB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.h */; };
+		4F4E26B2CE3748B7B70128F6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.c */ = {isa = PBXBuildFile; fileRef = ECD7BDD1540846408D83EFC7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.c */; };
+		519AD8B68C0543078C4F2186 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.h */ = {isa = PBXBuildFile; fileRef = F6D908C886D94517BA6DF5B8 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.h */; };
+		51E6882186144D1B836DE3C4 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/avrnacl.h */ = {isa = PBXBuildFile; fileRef = B9E1C63629FF4ED3B92D5DE9 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/avrnacl.h */; };
+		54FCD0896BEF4CE08C2EDAF0 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.hpp */ = {isa = PBXBuildFile; fileRef = 251EB4B2B5054B2FBBF4A00D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.hpp */; };
+		57A90EC9CF4E4D58897FF48F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-8.h */ = {isa = PBXBuildFile; fileRef = 9D0D0A59CF944FCFA5D90CEB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-8.h */; };
+		5F9BCB0C00B04A6A97E27A34 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_wrapper.h */ = {isa = PBXBuildFile; fileRef = 042C55AC8AEA4827972DDD9B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_wrapper.h */; };
+		602CD90D735746FD930938D1 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.mm */ = {isa = PBXBuildFile; fileRef = C49247C1F6944C6C93DB3C3F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.mm */; };
+		60B19608E610484CA03B0BFE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_dev.hpp */ = {isa = PBXBuildFile; fileRef = F398D834439C4C029A905DD9 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_dev.hpp */; };
+		6252EFA549374F80A34C8E77 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_diff.h */ = {isa = PBXBuildFile; fileRef = 2AE00C8FDFB34A7E8FA6DF36 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_diff.h */; };
+		64665B87063C420BA0118A80 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 6015B44DE38B4CF59626E29F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/CMakeLists.txt */; };
+		665375F0E44D49A08544EDBC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-64.h */ = {isa = PBXBuildFile; fileRef = 1EA11390AA934F7795AE53DC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-64.h */; };
+		67156908789A4750A348ED6D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/wasm/endian.h */ = {isa = PBXBuildFile; fileRef = 4EAA592EC70747B9ACBD632C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/wasm/endian.h */; };
+		678F78F9F3E14347A7E67B2A /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/pdm-service.hpp */ = {isa = PBXBuildFile; fileRef = A8119815E8A1408F9C04AC0E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/pdm-service.hpp */; };
+		6A43FC425B1A4B39B4BDFAF3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.c */ = {isa = PBXBuildFile; fileRef = 0B19F88F93D54D58B40EBB68 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.c */; };
+		76D0D98C23A34881B509768E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.cpp */ = {isa = PBXBuildFile; fileRef = 9ED6C98E4F81442E83A6E89C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.cpp */; };
+		775FCF25763B48D38BD9790B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.c */ = {isa = PBXBuildFile; fileRef = 82BAFB658443436297E687D6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.c */; };
+		7C852D163BC04952BF6D38D2 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/empp.h */ = {isa = PBXBuildFile; fileRef = 56B27E8A315147C18C97E657 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/empp.h */; };
+		7E2E416792B242B4ADCFCE9B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/include/scrypt.h */ = {isa = PBXBuildFile; fileRef = FE8B647EFE8545349F077948 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/include/scrypt.h */; };
+		89E7A8973D9943B599D3AA38 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/xCc20.h */ = {isa = PBXBuildFile; fileRef = 3DC3B00517184D47A1AB2546 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/xCc20.h */; };
+		8AB45FE0B1024930A81CE548 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.hpp */ = {isa = PBXBuildFile; fileRef = B9477FDB41CF496A80B76414 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.hpp */; };
+		9A946FA391AA4E6EB2865B26 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_parts.h */ = {isa = PBXBuildFile; fileRef = B02E2F0CB5E3450FBB5E8244 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_parts.h */; };
+		9F2063BD8AB147AF9D5FD3DE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.c */ = {isa = PBXBuildFile; fileRef = 8E056D0EF70E43D3883AD5AC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.c */; };
+		A5FE1E6BB1F545759C287823 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.cpp */ = {isa = PBXBuildFile; fileRef = CDED5B0DF9C141A79956BD0D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.cpp */; };
+		A927EA44D93C4FBBA053B126 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/test/test.h */ = {isa = PBXBuildFile; fileRef = 0D0E45B6362A4B4EAC31986D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/test/test.h */; };
+		AE1FA1F0E5CB4C33946C2CDF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/types.h */ = {isa = PBXBuildFile; fileRef = E8A54330E7364D4694CE5AEB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/types.h */; };
+		B7B37DB73242410596A76858 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.c */ = {isa = PBXBuildFile; fileRef = 3AA095B6CC654B58B3D5B83E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.c */; };
+		BEBB86C239B74F5AAF3A69EC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-32.h */ = {isa = PBXBuildFile; fileRef = 58B0FA1418874F489743EE23 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-32.h */; };
+		C35474BBF4434E3F8B4B3AA3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.h */ = {isa = PBXBuildFile; fileRef = A4AB859C50C64F3BBFB794DC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.h */; };
+		C5DDDA5919704E858C4BA9EF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.h */ = {isa = PBXBuildFile; fileRef = 2E83BF5DC6454391AE1E5A3C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.h */; };
+		CB5C2729056B46CC816DB72D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.h */ = {isa = PBXBuildFile; fileRef = 721613B657C54C5FBB34F168 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.h */; };
+		CE4740A4A32D48FD842CBD8B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_multi.h */ = {isa = PBXBuildFile; fileRef = 58E6BDEB36624F158157498C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_multi.h */; };
+		CF24187E755A480D8BA6E090 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/common.h */ = {isa = PBXBuildFile; fileRef = 52DB4CBF5D474B038278CF87 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/common.h */; };
+		D49C86D5D89F4EE689FE8C2F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.h */ = {isa = PBXBuildFile; fileRef = D3371BBD152841DAA15690B7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.h */; };
+		D726DC822E154EDD86AA266A /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.c */ = {isa = PBXBuildFile; fileRef = 698F1245C8B444C09F2E785C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.c */; };
+		D9538089BB0447469CEA0264 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.h */ = {isa = PBXBuildFile; fileRef = D0FFB560BD0D4975B025BC42 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.h */; };
+		E0E8C9446D3B4324A81E4816 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.h */ = {isa = PBXBuildFile; fileRef = 42DEFE31A4CF4E19BF34BC00 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.h */; };
+		E30685280FD04F71BFA58237 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.h */ = {isa = PBXBuildFile; fileRef = 28C53E1A52424590BD6F6DD7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.h */; };
+		E934B93F8AEA4D8587E3C5DE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.h */ = {isa = PBXBuildFile; fileRef = 381E9A18F9B2471F9FE1127D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.h */; };
+		ECE438EFECC14A35AA9FF415 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.h */ = {isa = PBXBuildFile; fileRef = B8A89857A79649B1BCB608D4 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.h */; };
+		F1AD0EC2872B4ED499F064E5 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.cpp */ = {isa = PBXBuildFile; fileRef = 8DB1103BA7D54BD3BD56608B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.cpp */; };
+		FD011982D11D4FDE87EBBA3A /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/cc20core/cc20_multi.cpp */ = {isa = PBXBuildFile; fileRef = 2F23BFEFCE8741929CD7C4EF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/cc20core/cc20_multi.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
-		0BFB3E6164F144C590C218DA /* RelWithDebInfo */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-			};
-			name = RelWithDebInfo;
-		};
-		B784476229964B53A24BAF6E /* Release */ = {
+		8D41C492FDFB4C0DABA8C4AB /* Release */ = {
 			isa = PBXBuildStyle;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 			};
 			name = Release;
 		};
-		BE1CF6075B6340B3871B9F27 /* Debug */ = {
+		9A0A4D3716E74FCA89E892AE /* RelWithDebInfo */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = RelWithDebInfo;
+		};
+		DE8EC07762E74C6FA3AB4481 /* Debug */ = {
 			isa = PBXBuildStyle;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 			};
 			name = Debug;
 		};
-		D92D8301AF8E412082CD3509 /* MinSizeRel */ = {
+		F678578297D947ACBF69ABE7 /* MinSizeRel */ = {
 			isa = PBXBuildStyle;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -146,98 +146,98 @@
 /* End PBXBuildStyle section */
 
 /* Begin PBXContainerItemProxy section */
-		176F0CA5E5204597AC346D1D /* PBXContainerItemProxy */ = {
+		BE747114FA714C2C85A9599F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 79C7903F7FB348E9B9C62773 /* Project object */;
+			containerPortal = 62BBD299B4A0400391A821D3 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 2C6CCB6674BF4D80BBA4DA7C;
+			remoteGlobalIDString = 08C7F6132EA6465FB7D6685A;
 			remoteInfo = ZERO_CHECK;
 		};
-		464D7C5E06BE4E78807E2813 /* PBXContainerItemProxy */ = {
+		D8C1F941C9F5479982A554DF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 79C7903F7FB348E9B9C62773 /* Project object */;
+			containerPortal = 62BBD299B4A0400391A821D3 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F29F16D5EDB04401AF20193B;
-			remoteInfo = ALL_BUILD;
-		};
-		64DC7FD147B9434A8B7A0053 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 79C7903F7FB348E9B9C62773 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0D00ADEC22AC421ABC0E0243;
+			remoteGlobalIDString = E8C66B903813426B9F261733;
 			remoteInfo = cc20;
 		};
-		6A1B78CD4B3D4E92AA4AC463 /* PBXContainerItemProxy */ = {
+		F3E4FF68E72943AEAC2EF17B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 79C7903F7FB348E9B9C62773 /* Project object */;
+			containerPortal = 62BBD299B4A0400391A821D3 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 2C6CCB6674BF4D80BBA4DA7C;
+			remoteGlobalIDString = DC329CE3B458496C9FC7ABD8;
+			remoteInfo = ALL_BUILD;
+		};
+		FB578BB4DDA5491EA76189B6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 62BBD299B4A0400391A821D3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 08C7F6132EA6465FB7D6685A;
 			remoteInfo = ZERO_CHECK;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0621E12CFBE04A0FB77FF559 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = empp.hpp; path = src/empp.hpp; sourceTree = SOURCE_ROOT; };
-		08BDD7A6C5454C2D9B366A14 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = emppIOS.mm; path = src/emppIOS.mm; sourceTree = SOURCE_ROOT; };
-		0D9B7A5F2EF14D95A197802B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/nonwasm/endian.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = endian.h; path = src/lib/nonwasm/endian.h; sourceTree = SOURCE_ROOT; };
-		20820C1BFB8E407182DE2F0A /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/types.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = types.h; path = src/include/types.h; sourceTree = SOURCE_ROOT; };
-		25910F727FA34AF7AF121CB3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "poly1305-donna.h"; path = "src/lib/poly1305-donna-master/poly1305-donna.h"; sourceTree = SOURCE_ROOT; };
-		2CC1F0BEB1C6422E96033237 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-64.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "poly1305-donna-64.h"; path = "src/lib/poly1305-donna-master/poly1305-donna-64.h"; sourceTree = SOURCE_ROOT; };
-		2E98C14602984EA0B76D19D2 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ecdh_curve25519.c; path = src/lib/ecc/ecdh_curve25519.c; sourceTree = SOURCE_ROOT; };
-		3917191D8AEF4BCDA81CC7C3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = salsa20.h; path = src/lib/scrypt/src/salsa20.h; sourceTree = SOURCE_ROOT; };
-		391A10A36AEB4860895FE51E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/wasm/endian.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = endian.h; path = src/lib/wasm/endian.h; sourceTree = SOURCE_ROOT; };
-		3A081FC4F73B4AC4A1F4B2D3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/cc20core/cc20_multi.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = cc20_multi.cpp; path = src/cc20core/cc20_multi.cpp; sourceTree = SOURCE_ROOT; };
-		3A72BBB011F543CFB301C306 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = salsa20.c; path = src/lib/scrypt/src/salsa20.c; sourceTree = SOURCE_ROOT; };
-		4202032A0AF74C8ABC924ED5 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sha256.h; path = src/lib/scrypt/src/sha256.h; sourceTree = SOURCE_ROOT; };
-		4850EAFC0B584E0BB336142B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
-		4B4D55EDC76D4254948A0158 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = hmac.c; path = src/lib/scrypt/src/hmac.c; sourceTree = SOURCE_ROOT; };
-		549E72D33FBF49C6915AA9C6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = scrypt.c; path = src/lib/scrypt/src/scrypt.c; sourceTree = SOURCE_ROOT; };
-		568CADDF84344667B43F739B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sha3.h; path = src/lib/sha3.h; sourceTree = SOURCE_ROOT; };
-		59FFE7796DAF4E2591064933 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-16.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "poly1305-donna-16.h"; path = "src/lib/poly1305-donna-master/poly1305-donna-16.h"; sourceTree = SOURCE_ROOT; };
-		5E0806B07F854A9B8817EB3F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bigint.h; path = src/lib/ecc/bigint.h; sourceTree = SOURCE_ROOT; };
-		5E3CD997120046BBBDD0175C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
-		657B957318E14AE2BE58C811 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_poly.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = cc20_poly.hpp; path = src/lib/cc20_poly.hpp; sourceTree = SOURCE_ROOT; };
-		67DF63BB688A4577B5EE119F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/build/CMakeFiles/cc20.dir/Info.plist */ = {isa = PBXFileReference; explicitFileType = sourcecode.text.plist; fileEncoding = 4; name = Info.plist; path = build/CMakeFiles/cc20.dir/Info.plist; sourceTree = SOURCE_ROOT; };
-		73C627865ABD470485730973 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = memory_mapped_file.hpp; path = "src/lib/cpp-mmf/memory_mapped_file.hpp"; sourceTree = SOURCE_ROOT; };
-		75B5572D7E7E42A5B39F146A /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/avrnacl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = avrnacl.h; path = src/lib/ecc/avrnacl.h; sourceTree = SOURCE_ROOT; };
-		7CD3E8BB91E942948F78C102 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = pbkdf2.h; path = src/lib/scrypt/src/pbkdf2.h; sourceTree = SOURCE_ROOT; };
-		81BE6203B4B04718BA8CDBBB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_multi.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cc20_multi.h; path = src/include/cc20_multi.h; sourceTree = SOURCE_ROOT; };
-		83F76D5ECCDA46AA93AA7986 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sha256.c; path = src/lib/scrypt/src/sha256.c; sourceTree = SOURCE_ROOT; };
-		962CE7EFB2FD44A8B89D0A0D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/xCc20.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = xCc20.h; path = src/include/xCc20.h; sourceTree = SOURCE_ROOT; };
-		9EE20BFBC67448C183B43488 /* cc20 */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libcc20.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		A06A4AA14C5E4FB2998DEBA3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_dev.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = cc20_dev.hpp; path = src/include/cc20_dev.hpp; sourceTree = SOURCE_ROOT; };
-		A23BE78024B74F84A285A68D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-32.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "poly1305-donna-32.h"; path = "src/lib/poly1305-donna-master/poly1305-donna-32.h"; sourceTree = SOURCE_ROOT; };
-		A9F1F512B29E4572AFABD437 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ec.h; path = src/lib/ec.h; sourceTree = SOURCE_ROOT; };
-		AB206CA8191A4E54B7C96513 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ecdh_curve25519.h; path = src/lib/ecc/ecdh_curve25519.h; sourceTree = SOURCE_ROOT; };
-		ABF49EF8FEC14344A1B2675F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = cc20_file.cpp; path = src/lib/cc20_file.cpp; sourceTree = SOURCE_ROOT; };
-		B1EC0835EA924650AAA233F7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = fe25519.c; path = src/lib/ecc/fe25519.c; sourceTree = SOURCE_ROOT; };
-		B24D1DCFE57D40A6810BC459 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = bigint.c; path = src/lib/ecc/bigint.c; sourceTree = SOURCE_ROOT; };
-		B5950B5356C748058F48AC41 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/test/test.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = test.h; path = src/lib/scrypt/test/test.h; sourceTree = SOURCE_ROOT; };
-		B8E295C3FDE1492AABB1E08C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = hmac.h; path = src/lib/scrypt/src/hmac.h; sourceTree = SOURCE_ROOT; };
-		BA1177D080DD4AD69C4B2D5D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = "poly1305-donna.cpp"; path = "src/lib/poly1305-donna-master/poly1305-donna.cpp"; sourceTree = SOURCE_ROOT; };
-		BC26A80945CA44258B035EEF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/curve25519.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = curve25519.c; path = src/lib/ecc/curve25519.c; sourceTree = SOURCE_ROOT; };
-		C3220DF43B564C14BA958C8B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_diff.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cc20_diff.h; path = src/include/cc20_diff.h; sourceTree = SOURCE_ROOT; };
-		C9E5F8712F1D442592A9793D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = empp.cpp; path = src/empp.cpp; sourceTree = SOURCE_ROOT; };
-		CCC98F7CF01242B0839474FD /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_wrapper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cc20_wrapper.h; path = src/include/cc20_wrapper.h; sourceTree = SOURCE_ROOT; };
-		CDAE0D81A2F5406ABD535F3F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/empp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = empp.h; path = src/include/empp.h; sourceTree = SOURCE_ROOT; };
-		D7D844A10E7B46B29A263B9E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_parts.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cc20_parts.h; path = src/include/cc20_parts.h; sourceTree = SOURCE_ROOT; };
-		DA297C5C6F6A4A18949FE742 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = scrypt.h; path = src/lib/scrypt/src/scrypt.h; sourceTree = SOURCE_ROOT; };
-		DB35633326C94721B9BD6982 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = pbkdf2.c; path = src/lib/scrypt/src/pbkdf2.c; sourceTree = SOURCE_ROOT; };
-		DCE295BB614447A2B8BAE681 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = fe25519.h; path = src/lib/ecc/fe25519.h; sourceTree = SOURCE_ROOT; };
-		E1E9C647236245C3973BABEE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-8.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "poly1305-donna-8.h"; path = "src/lib/poly1305-donna-master/poly1305-donna-8.h"; sourceTree = SOURCE_ROOT; };
-		E26DBC3F7F6144899244004F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ec.cpp; path = src/lib/ec.cpp; sourceTree = SOURCE_ROOT; };
-		E49A793235DA48ECBA38D8F6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = memory_mapped_file.cpp; path = "src/lib/cpp-mmf/memory_mapped_file.cpp"; sourceTree = SOURCE_ROOT; };
-		E817E1A3791648529A1629C6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/pdm-service.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = "pdm-service.hpp"; path = "src/include/pdm-service.hpp"; sourceTree = SOURCE_ROOT; };
-		E9C2D9071EA543D381DFE343 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = emppIOS.h; path = src/emppIOS.h; sourceTree = SOURCE_ROOT; };
-		EB78C84C83264D5C924148D2 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_scrypt.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cc20_scrypt.h; path = src/lib/cc20_scrypt.h; sourceTree = SOURCE_ROOT; };
-		EEC47AB485234251843ADD94 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/include/scrypt.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = scrypt.h; path = src/lib/scrypt/include/scrypt.h; sourceTree = SOURCE_ROOT; };
-		F7BDD31AB2D0489FA2614CCC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/common.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = common.h; path = src/lib/scrypt/src/common.h; sourceTree = SOURCE_ROOT; };
-		FA87022EBDE1486F9F96EF1C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cc20_file.h; path = src/lib/cc20_file.h; sourceTree = SOURCE_ROOT; };
-		FB0413AA2EA04AE6BBEC04C2 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = sha3.cpp; path = src/lib/sha3.cpp; sourceTree = SOURCE_ROOT; };
+		02FB9F6B687C4F029F669C78 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ec.h; path = src/lib/ec.h; sourceTree = SOURCE_ROOT; };
+		042C55AC8AEA4827972DDD9B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_wrapper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cc20_wrapper.h; path = src/include/cc20_wrapper.h; sourceTree = SOURCE_ROOT; };
+		06D858EBD2984772988C7703 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/curve25519.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = curve25519.c; path = src/lib/ecc/curve25519.c; sourceTree = SOURCE_ROOT; };
+		081C163803FB48299D41BE03 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/build/CMakeFiles/cc20.dir/Info.plist */ = {isa = PBXFileReference; explicitFileType = sourcecode.text.plist; fileEncoding = 4; name = Info.plist; path = build/CMakeFiles/cc20.dir/Info.plist; sourceTree = SOURCE_ROOT; };
+		0B19F88F93D54D58B40EBB68 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = scrypt.c; path = src/lib/scrypt/src/scrypt.c; sourceTree = SOURCE_ROOT; };
+		0D0E45B6362A4B4EAC31986D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/test/test.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = test.h; path = src/lib/scrypt/test/test.h; sourceTree = SOURCE_ROOT; };
+		1EA11390AA934F7795AE53DC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-64.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "poly1305-donna-64.h"; path = "src/lib/poly1305-donna-master/poly1305-donna-64.h"; sourceTree = SOURCE_ROOT; };
+		251EB4B2B5054B2FBBF4A00D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = empp.hpp; path = src/empp.hpp; sourceTree = SOURCE_ROOT; };
+		28C53E1A52424590BD6F6DD7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = emppIOS.h; path = src/emppIOS.h; sourceTree = SOURCE_ROOT; };
+		2AE00C8FDFB34A7E8FA6DF36 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_diff.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cc20_diff.h; path = src/include/cc20_diff.h; sourceTree = SOURCE_ROOT; };
+		2E83BF5DC6454391AE1E5A3C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = pbkdf2.h; path = src/lib/scrypt/src/pbkdf2.h; sourceTree = SOURCE_ROOT; };
+		2F23BFEFCE8741929CD7C4EF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/cc20core/cc20_multi.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = cc20_multi.cpp; path = src/cc20core/cc20_multi.cpp; sourceTree = SOURCE_ROOT; };
+		344A025BC7F44BB6BED27D4D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = pbkdf2.c; path = src/lib/scrypt/src/pbkdf2.c; sourceTree = SOURCE_ROOT; };
+		381E9A18F9B2471F9FE1127D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "poly1305-donna.h"; path = "src/lib/poly1305-donna-master/poly1305-donna.h"; sourceTree = SOURCE_ROOT; };
+		3AA095B6CC654B58B3D5B83E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = hmac.c; path = src/lib/scrypt/src/hmac.c; sourceTree = SOURCE_ROOT; };
+		3DC3B00517184D47A1AB2546 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/xCc20.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = xCc20.h; path = src/include/xCc20.h; sourceTree = SOURCE_ROOT; };
+		42DEFE31A4CF4E19BF34BC00 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ecdh_curve25519.h; path = src/lib/ecc/ecdh_curve25519.h; sourceTree = SOURCE_ROOT; };
+		4EAA592EC70747B9ACBD632C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/wasm/endian.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = endian.h; path = src/lib/wasm/endian.h; sourceTree = SOURCE_ROOT; };
+		52DB4CBF5D474B038278CF87 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/common.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = common.h; path = src/lib/scrypt/src/common.h; sourceTree = SOURCE_ROOT; };
+		5600986323214932975797EB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = hmac.h; path = src/lib/scrypt/src/hmac.h; sourceTree = SOURCE_ROOT; };
+		567E053FE1354628B0B40F00 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_scrypt.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cc20_scrypt.h; path = src/lib/cc20_scrypt.h; sourceTree = SOURCE_ROOT; };
+		56B27E8A315147C18C97E657 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/empp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = empp.h; path = src/include/empp.h; sourceTree = SOURCE_ROOT; };
+		58B0FA1418874F489743EE23 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-32.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "poly1305-donna-32.h"; path = "src/lib/poly1305-donna-master/poly1305-donna-32.h"; sourceTree = SOURCE_ROOT; };
+		58E6BDEB36624F158157498C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_multi.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cc20_multi.h; path = src/include/cc20_multi.h; sourceTree = SOURCE_ROOT; };
+		59C228D62EBA420289100591 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		6015B44DE38B4CF59626E29F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		60DCBD31DA15445B8EE98237 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-16.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "poly1305-donna-16.h"; path = "src/lib/poly1305-donna-master/poly1305-donna-16.h"; sourceTree = SOURCE_ROOT; };
+		698F1245C8B444C09F2E785C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = bigint.c; path = src/lib/ecc/bigint.c; sourceTree = SOURCE_ROOT; };
+		721613B657C54C5FBB34F168 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = scrypt.h; path = src/lib/scrypt/src/scrypt.h; sourceTree = SOURCE_ROOT; };
+		82BAFB658443436297E687D6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = fe25519.c; path = src/lib/ecc/fe25519.c; sourceTree = SOURCE_ROOT; };
+		869A4B95B7BB4C3DB3B14710 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sha256.h; path = src/lib/scrypt/src/sha256.h; sourceTree = SOURCE_ROOT; };
+		8DB1103BA7D54BD3BD56608B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = cc20_file.cpp; path = src/lib/cc20_file.cpp; sourceTree = SOURCE_ROOT; };
+		8E056D0EF70E43D3883AD5AC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ecdh_curve25519.c; path = src/lib/ecc/ecdh_curve25519.c; sourceTree = SOURCE_ROOT; };
+		9B634B1EFF01452BAE3A839B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ec.cpp; path = src/lib/ec.cpp; sourceTree = SOURCE_ROOT; };
+		9D0D0A59CF944FCFA5D90CEB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-8.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "poly1305-donna-8.h"; path = "src/lib/poly1305-donna-master/poly1305-donna-8.h"; sourceTree = SOURCE_ROOT; };
+		9ED6C98E4F81442E83A6E89C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = empp.cpp; path = src/empp.cpp; sourceTree = SOURCE_ROOT; };
+		A4AB859C50C64F3BBFB794DC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bigint.h; path = src/lib/ecc/bigint.h; sourceTree = SOURCE_ROOT; };
+		A5757ED190384EAEB91DA1F5 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/nonwasm/endian.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = endian.h; path = src/lib/nonwasm/endian.h; sourceTree = SOURCE_ROOT; };
+		A8119815E8A1408F9C04AC0E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/pdm-service.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = "pdm-service.hpp"; path = "src/include/pdm-service.hpp"; sourceTree = SOURCE_ROOT; };
+		A95CB09354F44909BE977D6F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = "poly1305-donna.cpp"; path = "src/lib/poly1305-donna-master/poly1305-donna.cpp"; sourceTree = SOURCE_ROOT; };
+		AF85CF95C2AD4FC0AD9E3A25 /* cc20 */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libcc20.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B02E2F0CB5E3450FBB5E8244 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_parts.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cc20_parts.h; path = src/include/cc20_parts.h; sourceTree = SOURCE_ROOT; };
+		B8A89857A79649B1BCB608D4 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = fe25519.h; path = src/lib/ecc/fe25519.h; sourceTree = SOURCE_ROOT; };
+		B9477FDB41CF496A80B76414 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = memory_mapped_file.hpp; path = "src/lib/cpp-mmf/memory_mapped_file.hpp"; sourceTree = SOURCE_ROOT; };
+		B9E1C63629FF4ED3B92D5DE9 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/avrnacl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = avrnacl.h; path = src/lib/ecc/avrnacl.h; sourceTree = SOURCE_ROOT; };
+		C49247C1F6944C6C93DB3C3F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = emppIOS.mm; path = src/emppIOS.mm; sourceTree = SOURCE_ROOT; };
+		C7A5C2760FB54617B15620BD /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = memory_mapped_file.cpp; path = "src/lib/cpp-mmf/memory_mapped_file.cpp"; sourceTree = SOURCE_ROOT; };
+		CBB6D9EB30A647EEBED0A847 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = salsa20.c; path = src/lib/scrypt/src/salsa20.c; sourceTree = SOURCE_ROOT; };
+		CDED5B0DF9C141A79956BD0D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = sha3.cpp; path = src/lib/sha3.cpp; sourceTree = SOURCE_ROOT; };
+		D0FFB560BD0D4975B025BC42 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sha3.h; path = src/lib/sha3.h; sourceTree = SOURCE_ROOT; };
+		D3371BBD152841DAA15690B7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cc20_file.h; path = src/lib/cc20_file.h; sourceTree = SOURCE_ROOT; };
+		E8A54330E7364D4694CE5AEB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/types.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = types.h; path = src/include/types.h; sourceTree = SOURCE_ROOT; };
+		ECD7BDD1540846408D83EFC7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sha256.c; path = src/lib/scrypt/src/sha256.c; sourceTree = SOURCE_ROOT; };
+		F398D834439C4C029A905DD9 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_dev.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = cc20_dev.hpp; path = src/include/cc20_dev.hpp; sourceTree = SOURCE_ROOT; };
+		F6D908C886D94517BA6DF5B8 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = salsa20.h; path = src/lib/scrypt/src/salsa20.h; sourceTree = SOURCE_ROOT; };
+		FE1B71012BC24964B038313F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_poly.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = cc20_poly.hpp; path = src/lib/cc20_poly.hpp; sourceTree = SOURCE_ROOT; };
+		FE8B647EFE8545349F077948 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/include/scrypt.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = scrypt.h; path = src/lib/scrypt/include/scrypt.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A8490AC0E96943E79CE7D8C1 /* Frameworks */ = {
+		960149659A004D0D92B3C15D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -247,182 +247,182 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		090FE0C5DD7F44638A34BBF5 /* Source Files */ = {
+		0579FDAAB0EF4BCCAADCABE4 /* Source Files */ = {
 			isa = PBXGroup;
 			children = (
-				3A081FC4F73B4AC4A1F4B2D3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/cc20core/cc20_multi.cpp */,
-				C9E5F8712F1D442592A9793D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.cpp */,
-				08BDD7A6C5454C2D9B366A14 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.mm */,
-				ABF49EF8FEC14344A1B2675F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.cpp */,
-				E49A793235DA48ECBA38D8F6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.cpp */,
-				E26DBC3F7F6144899244004F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.cpp */,
-				B24D1DCFE57D40A6810BC459 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.c */,
-				BC26A80945CA44258B035EEF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/curve25519.c */,
-				2E98C14602984EA0B76D19D2 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.c */,
-				B1EC0835EA924650AAA233F7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.c */,
-				BA1177D080DD4AD69C4B2D5D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.cpp */,
-				4B4D55EDC76D4254948A0158 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.c */,
-				DB35633326C94721B9BD6982 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.c */,
-				3A72BBB011F543CFB301C306 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.c */,
-				549E72D33FBF49C6915AA9C6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.c */,
-				83F76D5ECCDA46AA93AA7986 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.c */,
-				FB0413AA2EA04AE6BBEC04C2 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.cpp */,
+				2F23BFEFCE8741929CD7C4EF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/cc20core/cc20_multi.cpp */,
+				9ED6C98E4F81442E83A6E89C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.cpp */,
+				C49247C1F6944C6C93DB3C3F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.mm */,
+				8DB1103BA7D54BD3BD56608B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.cpp */,
+				C7A5C2760FB54617B15620BD /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.cpp */,
+				9B634B1EFF01452BAE3A839B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.cpp */,
+				698F1245C8B444C09F2E785C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.c */,
+				06D858EBD2984772988C7703 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/curve25519.c */,
+				8E056D0EF70E43D3883AD5AC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.c */,
+				82BAFB658443436297E687D6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.c */,
+				A95CB09354F44909BE977D6F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.cpp */,
+				3AA095B6CC654B58B3D5B83E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.c */,
+				344A025BC7F44BB6BED27D4D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.c */,
+				CBB6D9EB30A647EEBED0A847 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.c */,
+				0B19F88F93D54D58B40EBB68 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.c */,
+				ECD7BDD1540846408D83EFC7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.c */,
+				CDED5B0DF9C141A79956BD0D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.cpp */,
 			);
 			name = "Source Files";
 			sourceTree = "<group>";
 		};
-		380A56CA46B241DF9BA53698 /* Frameworks */ = {
+		06F74A2E7E18440CBF94D56D /* Header Files */ = {
+			isa = PBXGroup;
+			children = (
+				251EB4B2B5054B2FBBF4A00D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.hpp */,
+				28C53E1A52424590BD6F6DD7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.h */,
+				F398D834439C4C029A905DD9 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_dev.hpp */,
+				2AE00C8FDFB34A7E8FA6DF36 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_diff.h */,
+				58E6BDEB36624F158157498C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_multi.h */,
+				B02E2F0CB5E3450FBB5E8244 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_parts.h */,
+				042C55AC8AEA4827972DDD9B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_wrapper.h */,
+				56B27E8A315147C18C97E657 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/empp.h */,
+				A8119815E8A1408F9C04AC0E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/pdm-service.hpp */,
+				E8A54330E7364D4694CE5AEB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/types.h */,
+				3DC3B00517184D47A1AB2546 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/xCc20.h */,
+				D3371BBD152841DAA15690B7 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.h */,
+				FE1B71012BC24964B038313F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_poly.hpp */,
+				567E053FE1354628B0B40F00 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_scrypt.h */,
+				B9477FDB41CF496A80B76414 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.hpp */,
+				02FB9F6B687C4F029F669C78 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.h */,
+				B9E1C63629FF4ED3B92D5DE9 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/avrnacl.h */,
+				A4AB859C50C64F3BBFB794DC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.h */,
+				42DEFE31A4CF4E19BF34BC00 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.h */,
+				B8A89857A79649B1BCB608D4 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.h */,
+				A5757ED190384EAEB91DA1F5 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/nonwasm/endian.h */,
+				60DCBD31DA15445B8EE98237 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-16.h */,
+				58B0FA1418874F489743EE23 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-32.h */,
+				1EA11390AA934F7795AE53DC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-64.h */,
+				9D0D0A59CF944FCFA5D90CEB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-8.h */,
+				381E9A18F9B2471F9FE1127D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.h */,
+				FE8B647EFE8545349F077948 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/include/scrypt.h */,
+				52DB4CBF5D474B038278CF87 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/common.h */,
+				5600986323214932975797EB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.h */,
+				2E83BF5DC6454391AE1E5A3C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.h */,
+				F6D908C886D94517BA6DF5B8 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.h */,
+				721613B657C54C5FBB34F168 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.h */,
+				869A4B95B7BB4C3DB3B14710 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.h */,
+				0D0E45B6362A4B4EAC31986D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/test/test.h */,
+				D0FFB560BD0D4975B025BC42 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.h */,
+				4EAA592EC70747B9ACBD632C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/wasm/endian.h */,
+			);
+			name = "Header Files";
+			sourceTree = "<group>";
+		};
+		2E4BFB02A09846FAAED8D320 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				081C163803FB48299D41BE03 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/build/CMakeFiles/cc20.dir/Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		44B0483366894C5C8244CC15 /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				9D4686B95B51413391234944 /* CMake Rules */,
+				59C228D62EBA420289100591 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/CMakeLists.txt */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+		835B219157F84C9BA15081A9 /* cc20 */ = {
+			isa = PBXGroup;
+			children = (
+				0579FDAAB0EF4BCCAADCABE4 /* Source Files */,
+				06F74A2E7E18440CBF94D56D /* Header Files */,
+				2E4BFB02A09846FAAED8D320 /* Resources */,
+				6015B44DE38B4CF59626E29F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/CMakeLists.txt */,
+			);
+			name = cc20;
+			sourceTree = "<group>";
+		};
+		856FF90471D543BCA429F98B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3B909C1BC44B4244B17E51ED /* Header Files */ = {
-			isa = PBXGroup;
-			children = (
-				0621E12CFBE04A0FB77FF559 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.hpp */,
-				E9C2D9071EA543D381DFE343 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.h */,
-				A06A4AA14C5E4FB2998DEBA3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_dev.hpp */,
-				C3220DF43B564C14BA958C8B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_diff.h */,
-				81BE6203B4B04718BA8CDBBB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_multi.h */,
-				D7D844A10E7B46B29A263B9E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_parts.h */,
-				CCC98F7CF01242B0839474FD /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/cc20_wrapper.h */,
-				CDAE0D81A2F5406ABD535F3F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/empp.h */,
-				E817E1A3791648529A1629C6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/pdm-service.hpp */,
-				20820C1BFB8E407182DE2F0A /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/types.h */,
-				962CE7EFB2FD44A8B89D0A0D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include/xCc20.h */,
-				FA87022EBDE1486F9F96EF1C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.h */,
-				657B957318E14AE2BE58C811 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_poly.hpp */,
-				EB78C84C83264D5C924148D2 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_scrypt.h */,
-				73C627865ABD470485730973 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.hpp */,
-				A9F1F512B29E4572AFABD437 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.h */,
-				75B5572D7E7E42A5B39F146A /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/avrnacl.h */,
-				5E0806B07F854A9B8817EB3F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.h */,
-				AB206CA8191A4E54B7C96513 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.h */,
-				DCE295BB614447A2B8BAE681 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.h */,
-				0D9B7A5F2EF14D95A197802B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/nonwasm/endian.h */,
-				59FFE7796DAF4E2591064933 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-16.h */,
-				A23BE78024B74F84A285A68D /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-32.h */,
-				2CC1F0BEB1C6422E96033237 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-64.h */,
-				E1E9C647236245C3973BABEE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna-8.h */,
-				25910F727FA34AF7AF121CB3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.h */,
-				EEC47AB485234251843ADD94 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/include/scrypt.h */,
-				F7BDD31AB2D0489FA2614CCC /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/common.h */,
-				B8E295C3FDE1492AABB1E08C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.h */,
-				7CD3E8BB91E942948F78C102 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.h */,
-				3917191D8AEF4BCDA81CC7C3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.h */,
-				DA297C5C6F6A4A18949FE742 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.h */,
-				4202032A0AF74C8ABC924ED5 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.h */,
-				B5950B5356C748058F48AC41 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/test/test.h */,
-				568CADDF84344667B43F739B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.h */,
-				391A10A36AEB4860895FE51E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/wasm/endian.h */,
-			);
-			name = "Header Files";
-			sourceTree = "<group>";
-		};
-		4F535AB61FC14ADCAD37C8C5 /* cc20 */ = {
-			isa = PBXGroup;
-			children = (
-				090FE0C5DD7F44638A34BBF5 /* Source Files */,
-				3B909C1BC44B4244B17E51ED /* Header Files */,
-				8D27A48130604856A06F4CD6 /* Resources */,
-				4850EAFC0B584E0BB336142B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/CMakeLists.txt */,
-			);
-			name = cc20;
-			sourceTree = "<group>";
-		};
-		8D27A48130604856A06F4CD6 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				67DF63BB688A4577B5EE119F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/build/CMakeFiles/cc20.dir/Info.plist */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		9D674D8D0FB542729E71721C /* CMake Rules */ = {
+		9D4686B95B51413391234944 /* CMake Rules */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = "CMake Rules";
 			sourceTree = "<group>";
 		};
-		CD368279B2D244BD896BBC78 = {
+		D27E46C7604246DC903FB517 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4F535AB61FC14ADCAD37C8C5 /* cc20 */,
-				FED654B9F1E4419AB0232072 /* ALL_BUILD */,
-				DAC038981C314357BFA3CE30 /* Products */,
-				380A56CA46B241DF9BA53698 /* Frameworks */,
-			);
-			sourceTree = "<group>";
-		};
-		DAC038981C314357BFA3CE30 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				9EE20BFBC67448C183B43488 /* cc20 */,
+				AF85CF95C2AD4FC0AD9E3A25 /* cc20 */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		FED654B9F1E4419AB0232072 /* ALL_BUILD */ = {
+		D82F84FC406B4876AD4C63DF = {
 			isa = PBXGroup;
 			children = (
-				9D674D8D0FB542729E71721C /* CMake Rules */,
-				5E3CD997120046BBBDD0175C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/CMakeLists.txt */,
+				835B219157F84C9BA15081A9 /* cc20 */,
+				44B0483366894C5C8244CC15 /* ALL_BUILD */,
+				D27E46C7604246DC903FB517 /* Products */,
+				856FF90471D543BCA429F98B /* Frameworks */,
 			);
-			name = ALL_BUILD;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0D00ADEC22AC421ABC0E0243 /* cc20 */ = {
+		E8C66B903813426B9F261733 /* cc20 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E81B919DA18D4A3BBD4DAF9D /* Build configuration list for PBXNativeTarget "cc20" */;
+			buildConfigurationList = 003D8548C9FF4A79AADDDEBD /* Build configuration list for PBXNativeTarget "cc20" */;
 			buildPhases = (
-				73F2BFCE24CC44909173709D /* Sources */,
-				A8490AC0E96943E79CE7D8C1 /* Frameworks */,
+				8819A745BDA7436B91D24726 /* Sources */,
+				960149659A004D0D92B3C15D /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				0E483DE4C4C94519AD6138DF /* PBXTargetDependency */,
+				2A99235E6EB14E3BB924042E /* PBXTargetDependency */,
 			);
 			name = cc20;
 			productName = cc20;
-			productReference = 9EE20BFBC67448C183B43488 /* cc20 */;
+			productReference = AF85CF95C2AD4FC0AD9E3A25 /* cc20 */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		79C7903F7FB348E9B9C62773 /* Project object */ = {
+		62BBD299B4A0400391A821D3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1400;
 			};
-			buildConfigurationList = 02571E81391C4442A2F32988 /* Build configuration list for PBXProject "cc20-ios" */;
+			buildConfigurationList = 2EF3FCBBC6DE40EF9039A7FC /* Build configuration list for PBXProject "cc20-ios" */;
 			buildSettings = {
 			};
 			buildStyles = (
-				BE1CF6075B6340B3871B9F27 /* Debug */,
-				B784476229964B53A24BAF6E /* Release */,
-				D92D8301AF8E412082CD3509 /* MinSizeRel */,
-				0BFB3E6164F144C590C218DA /* RelWithDebInfo */,
+				DE8EC07762E74C6FA3AB4481 /* Debug */,
+				8D41C492FDFB4C0DABA8C4AB /* Release */,
+				F678578297D947ACBF69ABE7 /* MinSizeRel */,
+				9A0A4D3716E74FCA89E892AE /* RelWithDebInfo */,
 			);
 			compatibilityVersion = "Xcode 3.2";
 			hasScannedForEncodings = 0;
-			mainGroup = CD368279B2D244BD896BBC78;
+			mainGroup = D82F84FC406B4876AD4C63DF;
 			projectDirPath = ../;
 			projectRoot = "";
 			targets = (
-				F29F16D5EDB04401AF20193B /* ALL_BUILD */,
-				5D551140DD454509A970367E /* RUN_TESTS */,
-				2C6CCB6674BF4D80BBA4DA7C /* ZERO_CHECK */,
-				0D00ADEC22AC421ABC0E0243 /* cc20 */,
-				43D77FB437014A2DBE36ADD9 /* install */,
+				DC329CE3B458496C9FC7ABD8 /* ALL_BUILD */,
+				A597FC0AB37E4ECEA51B3F7C /* RUN_TESTS */,
+				08C7F6132EA6465FB7D6685A /* ZERO_CHECK */,
+				E8C66B903813426B9F261733 /* cc20 */,
+				79B379B7325544D694B77582 /* install */,
 			);
 		};
 /* End PBXProject section */
@@ -619,57 +619,77 @@ exit 0";
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		73F2BFCE24CC44909173709D /* Sources */ = {
+		8819A745BDA7436B91D24726 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4860A63BE54D4ABDB7442B4F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/cc20core/cc20_multi.cpp */,
-				F7D94C54DAF94E5D82ADACBF /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.cpp */,
-				1DCCE65565684187939ACF36 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.mm */,
-				3AD8DA801BE744D4B7623F64 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.cpp */,
-				ACE1DBB3AF61483E9A0DB599 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.cpp */,
-				9FFC0EBABCB64078B2130EEE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.cpp */,
-				8A3568566B814212908D2E59 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.c */,
-				276EFAE78EAF434DB0F1AB40 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/curve25519.c */,
-				E40D14FBE0BE4C3CB93E63E5 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.c */,
-				66A127CA2C384FFA8DE384EE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.c */,
-				7AC21832969D44E98E1CBB64 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.cpp */,
-				EA819F786E5148248B095F5E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.c */,
-				450C1E76E4334EFAB0DBC68F /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.c */,
-				96C42842576D4500B5A764AE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.c */,
-				877D3FD103ED497AA210D31C /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.c */,
-				5A31C4E1E0E842A0BCADF1E3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.c */,
-				81AF4DC3EFA54455AAE68BEB /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.cpp */,
+				FD011982D11D4FDE87EBBA3A /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/cc20core/cc20_multi.cpp */,
+				76D0D98C23A34881B509768E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/empp.cpp */,
+				602CD90D735746FD930938D1 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/emppIOS.mm */,
+				F1AD0EC2872B4ED499F064E5 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cc20_file.cpp */,
+				01AE321862154EC3A748EA23 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf/memory_mapped_file.cpp */,
+				35236F6FFF7B4FB8A41E228E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ec.cpp */,
+				D726DC822E154EDD86AA266A /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/bigint.c */,
+				399A1918C1B349DDB01CA3EA /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/curve25519.c */,
+				9F2063BD8AB147AF9D5FD3DE /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/ecdh_curve25519.c */,
+				775FCF25763B48D38BD9790B /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc/fe25519.c */,
+				1A9525EA07D44C36B50D8625 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master/poly1305-donna.cpp */,
+				B7B37DB73242410596A76858 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/hmac.c */,
+				410FD86C9EB5494F9CB846B8 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/pbkdf2.c */,
+				29B561B34E094A6998A2B68E /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/salsa20.c */,
+				6A43FC425B1A4B39B4BDFAF3 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/scrypt.c */,
+				4F4E26B2CE3748B7B70128F6 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/src/sha256.c */,
+				A5FE1E6BB1F545759C287823 /* /Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/sha3.cpp */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0E483DE4C4C94519AD6138DF /* PBXTargetDependency */ = {
+		2A99235E6EB14E3BB924042E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2C6CCB6674BF4D80BBA4DA7C /* ZERO_CHECK */;
-			targetProxy = 6A1B78CD4B3D4E92AA4AC463 /* PBXContainerItemProxy */;
+			target = 08C7F6132EA6465FB7D6685A /* ZERO_CHECK */;
+			targetProxy = BE747114FA714C2C85A9599F /* PBXContainerItemProxy */;
 		};
-		A3A23A4762A34568941CC306 /* PBXTargetDependency */ = {
+		32101A5622834B95BDEDD9D7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 0D00ADEC22AC421ABC0E0243 /* cc20 */;
-			targetProxy = 64DC7FD147B9434A8B7A0053 /* PBXContainerItemProxy */;
+			target = E8C66B903813426B9F261733 /* cc20 */;
+			targetProxy = D8C1F941C9F5479982A554DF /* PBXContainerItemProxy */;
 		};
-		E71C613EA9544A8A8BCBF550 /* PBXTargetDependency */ = {
+		826FB48F45954342B8A94652 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F29F16D5EDB04401AF20193B /* ALL_BUILD */;
-			targetProxy = 464D7C5E06BE4E78807E2813 /* PBXContainerItemProxy */;
+			target = 08C7F6132EA6465FB7D6685A /* ZERO_CHECK */;
+			targetProxy = FB578BB4DDA5491EA76189B6 /* PBXContainerItemProxy */;
 		};
-		F7694805BFD6492F817990C5 /* PBXTargetDependency */ = {
+		9213041D5071489AB9F3D964 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2C6CCB6674BF4D80BBA4DA7C /* ZERO_CHECK */;
-			targetProxy = 176F0CA5E5204597AC346D1D /* PBXContainerItemProxy */;
+			target = DC329CE3B458496C9FC7ABD8 /* ALL_BUILD */;
+			targetProxy = F3E4FF68E72943AEAC2EF17B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		02BF503B037845B6B6D71D55 /* MinSizeRel */ = {
+		06E86AD9B3104D2E8462CC0B /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = RUN_TESTS;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		06F577F1F2EE42AA865E7E3A /* RelWithDebInfo */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
@@ -687,40 +707,32 @@ exit 0";
 				USE_HEADERMAP = NO;
 				WARNING_CFLAGS = ("$(inherited)");
 			};
-			name = MinSizeRel;
+			name = RelWithDebInfo;
 		};
-		055C550FC1384A9E9317E64E /* RelWithDebInfo */ = {
+		0A11BE5FC61A4CAD9CFDDDCE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = arm64;
 				COMBINE_HIDPI_IMAGES = YES;
-				EXECUTABLE_PREFIX = lib;
-				EXECUTABLE_SUFFIX = .a;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",LINUX,ANDROID,"$(inherited)");
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = ("/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/wasm","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/include","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt","$(inherited)");
 				INSTALL_PATH = "";
-				LIBRARY_STYLE = STATIC;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CFLAGS = ("       -DNDEBUG    -lpthread     ","$(inherited)");
-				OTHER_CPLUSPLUSFLAGS = "       -DNDEBUG    -lpthread     '-std=gnu++17' ";
-				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_LDFLAGS = ("","$(inherited)");
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = cc20;
+				PRODUCT_NAME = RUN_TESTS;
 				SECTORDER_FLAGS = "";
 				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
 				USE_HEADERMAP = NO;
 				WARNING_CFLAGS = ("$(inherited)");
 			};
-			name = RelWithDebInfo;
+			name = Release;
 		};
-		1EE41105873242128A7BCCB0 /* Release */ = {
+		14B0A1F3DB2D4B2F9ED835C3 /* MinSizeRel */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = arm64;
+				ARCHS = (arm64,x86_64);
 				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				EXECUTABLE_SUFFIX = .a;
@@ -743,9 +755,30 @@ exit 0";
 				USE_HEADERMAP = NO;
 				WARNING_CFLAGS = ("$(inherited)");
 			};
-			name = Release;
+			name = MinSizeRel;
 		};
-		2373380A60D44BAF9166FC6C /* Debug */ = {
+		17CF1A6A390A41B58209981F /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "arm64 x86_64";
+				"ARCHS[sdk=iphoneos*]" = arm64;
+				"ARCHS[sdk=iphonesimulator*]" = x86_64;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = "/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk";
+				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/build";
+				"VALID_ARCHS[sdk=iphoneos*]" = arm64;
+				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
+			};
+			name = RelWithDebInfo;
+		};
+		19F92524B76F4A6680BAB999 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
@@ -765,50 +798,10 @@ exit 0";
 			};
 			name = Debug;
 		};
-		27AD0D52A6F349DFA2C79891 /* Release */ = {
+		32891ED59BCD4CB0B5E7757E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ALL_BUILD;
-				SECTORDER_FLAGS = "";
-				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Release;
-		};
-		32400F973B0A40BEBFCA938D /* MinSizeRel */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = RUN_TESTS;
-				SECTORDER_FLAGS = "";
-				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = MinSizeRel;
-		};
-		36867D2A9B514DC99F1367E1 /* MinSizeRel */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
+				ARCHS = (arm64,x86_64);
 				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				EXECUTABLE_SUFFIX = .a;
@@ -831,28 +824,9 @@ exit 0";
 				USE_HEADERMAP = NO;
 				WARNING_CFLAGS = ("$(inherited)");
 			};
-			name = MinSizeRel;
+			name = Release;
 		};
-		44669B27D3544675B5060A16 /* RelWithDebInfo */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
-				"ARCHS[sdk=iphoneos*]" = arm64;
-				BITCODE_GENERATION_MODE = bitcode;
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGNING_REQUIRED = NO;
-				ENABLE_BITCODE = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				SDKROOT = "/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk";
-				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/build";
-				"VALID_ARCHS[sdk=iphoneos*]" = arm64;
-			};
-			name = RelWithDebInfo;
-		};
-		446A62F461EF4B2D89ACFABA /* Release */ = {
+		383EF5E8F8604CF5A58C66FF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
@@ -864,7 +838,7 @@ exit 0";
 				INSTALL_PATH = "";
 				OTHER_LDFLAGS = ("","$(inherited)");
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = RUN_TESTS;
+				PRODUCT_NAME = ZERO_CHECK;
 				SECTORDER_FLAGS = "";
 				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
 				USE_HEADERMAP = NO;
@@ -872,69 +846,10 @@ exit 0";
 			};
 			name = Release;
 		};
-		4F269BACD5654F4EA52E587E /* RelWithDebInfo */ = {
+		38B33F3B61E84A41A28E5832 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = install;
-				SECTORDER_FLAGS = "";
-				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = RelWithDebInfo;
-		};
-		53F7C1CB245D4E5CBB69471C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = install;
-				SECTORDER_FLAGS = "";
-				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Release;
-		};
-		540BF749F83D4DB5AA0274F2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
-				"ARCHS[sdk=iphoneos*]" = arm64;
-				BITCODE_GENERATION_MODE = bitcode;
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGNING_REQUIRED = NO;
-				ENABLE_BITCODE = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				SDKROOT = "/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk";
-				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/build";
-				"VALID_ARCHS[sdk=iphoneos*]" = arm64;
-			};
-			name = Release;
-		};
-		685D4CB2F6B44804BF2E8F3F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
+				ARCHS = (arm64,x86_64);
 				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				EXECUTABLE_SUFFIX = .a;
@@ -959,47 +874,7 @@ exit 0";
 			};
 			name = Debug;
 		};
-		71A6976B032040A3A39039BC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = RUN_TESTS;
-				SECTORDER_FLAGS = "";
-				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Debug;
-		};
-		79BBAE7B6A744430BF7786AD /* RelWithDebInfo */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = RUN_TESTS;
-				SECTORDER_FLAGS = "";
-				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = RelWithDebInfo;
-		};
-		84851BF32DC94AD497576738 /* Release */ = {
+		4B1BEF6C8F0E4AC9B955E683 /* MinSizeRel */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1012,6 +887,86 @@ exit 0";
 				OTHER_LDFLAGS = ("","$(inherited)");
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		563C861612E148EDAC137FCC /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		5B85FA94737E482AA4A38EBA /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		5DDB3E121C25455680FDC1D9 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		6E03BC87817F4538822A1162 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
 				SECTORDER_FLAGS = "";
 				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
 				USE_HEADERMAP = NO;
@@ -1019,7 +974,28 @@ exit 0";
 			};
 			name = Release;
 		};
-		8DDDECB01FB04993988D18DB /* Debug */ = {
+		7937C8B70C044B9EB32A0432 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "arm64 x86_64";
+				"ARCHS[sdk=iphoneos*]" = arm64;
+				"ARCHS[sdk=iphonesimulator*]" = x86_64;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = "/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk";
+				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/build";
+				"VALID_ARCHS[sdk=iphoneos*]" = arm64;
+				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
+			};
+			name = Debug;
+		};
+		805D71A761594D8A943C8962 /* MinSizeRel */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1031,15 +1007,15 @@ exit 0";
 				INSTALL_PATH = "";
 				OTHER_LDFLAGS = ("","$(inherited)");
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = install;
+				PRODUCT_NAME = ALL_BUILD;
 				SECTORDER_FLAGS = "";
 				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
 				USE_HEADERMAP = NO;
 				WARNING_CFLAGS = ("$(inherited)");
 			};
-			name = Debug;
+			name = MinSizeRel;
 		};
-		A047FEE5DE774035B4CD8450 /* Debug */ = {
+		84F1CA7A0D6946329C104B6B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1059,26 +1035,7 @@ exit 0";
 			};
 			name = Debug;
 		};
-		B3DAAAB4F1DE4EE18C6CEE87 /* MinSizeRel */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
-				"ARCHS[sdk=iphoneos*]" = arm64;
-				BITCODE_GENERATION_MODE = bitcode;
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGNING_REQUIRED = NO;
-				ENABLE_BITCODE = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				SDKROOT = "/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk";
-				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/build";
-				"VALID_ARCHS[sdk=iphoneos*]" = arm64;
-			};
-			name = MinSizeRel;
-		};
-		B93D53736E9743719340F99D /* RelWithDebInfo */ = {
+		8D16BBE8A7F14286848FCC3F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1090,7 +1047,35 @@ exit 0";
 				INSTALL_PATH = "";
 				OTHER_LDFLAGS = ("","$(inherited)");
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ZERO_CHECK;
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		A6EA0D5B412743FDA34E5115 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (arm64,x86_64);
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",LINUX,ANDROID,"$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/include","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/wasm","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/cpp-mmf","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/poly1305-donna-master","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/ecc","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt/include","/Users/mikeyang/Documents/pdm/pdm-crypt-module/src/lib/scrypt","$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = ("       -DNDEBUG    -lpthread     ","$(inherited)");
+				OTHER_CPLUSPLUSFLAGS = "       -DNDEBUG    -lpthread     '-std=gnu++17' ";
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = cc20;
 				SECTORDER_FLAGS = "";
 				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
 				USE_HEADERMAP = NO;
@@ -1098,66 +1083,28 @@ exit 0";
 			};
 			name = RelWithDebInfo;
 		};
-		BA2F56500C7C40FA9A341EB6 /* MinSizeRel */ = {
+		AD49AAA8AA2B45BBBFD4CEEA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = install;
-				SECTORDER_FLAGS = "";
-				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = MinSizeRel;
-		};
-		D1AAB4CF82E1412CB6B1F0BB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
+				ARCHS = "arm64 x86_64";
 				"ARCHS[sdk=iphoneos*]" = arm64;
-				BITCODE_GENERATION_MODE = bitcode;
+				"ARCHS[sdk=iphonesimulator*]" = x86_64;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGNING_REQUIRED = NO;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = "/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk";
 				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/build";
 				"VALID_ARCHS[sdk=iphoneos*]" = arm64;
+				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
 			};
-			name = Debug;
+			name = Release;
 		};
-		DF649A4006D043CC9176B533 /* MinSizeRel */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ZERO_CHECK;
-				SECTORDER_FLAGS = "";
-				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = MinSizeRel;
-		};
-		E0CDB6BD3A4C4522A5D4FE5E /* RelWithDebInfo */ = {
+		CC5AA8A6FA634875A0009C37 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1170,6 +1117,67 @@ exit 0";
 				OTHER_LDFLAGS = ("","$(inherited)");
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		D4A421ECB8DA4746834333A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = RUN_TESTS;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		D7A543530EB249D5B12637D7 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "arm64 x86_64";
+				"ARCHS[sdk=iphoneos*]" = arm64;
+				"ARCHS[sdk=iphonesimulator*]" = x86_64;
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = "/Users/mikeyang/Downloads/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.0.sdk";
+				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/build";
+				"VALID_ARCHS[sdk=iphoneos*]" = arm64;
+				"VALID_ARCHS[sdk=iphonesimulator*]" = x86_64;
+			};
+			name = MinSizeRel;
+		};
+		F798D38B9D0F43FB914E89E4 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = RUN_TESTS;
 				SECTORDER_FLAGS = "";
 				SYMROOT = "/Users/mikeyang/Documents/pdm/pdm-crypt-module/build";
 				USE_HEADERMAP = NO;
@@ -1180,73 +1188,73 @@ exit 0";
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		02571E81391C4442A2F32988 /* Build configuration list for PBXProject "cc20-ios" */ = {
+		003D8548C9FF4A79AADDDEBD /* Build configuration list for PBXNativeTarget "cc20" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D1AAB4CF82E1412CB6B1F0BB /* Debug */,
-				540BF749F83D4DB5AA0274F2 /* Release */,
-				B3DAAAB4F1DE4EE18C6CEE87 /* MinSizeRel */,
-				44669B27D3544675B5060A16 /* RelWithDebInfo */,
+				38B33F3B61E84A41A28E5832 /* Debug */,
+				32891ED59BCD4CB0B5E7757E /* Release */,
+				14B0A1F3DB2D4B2F9ED835C3 /* MinSizeRel */,
+				A6EA0D5B412743FDA34E5115 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		44EB38FC6F504874B39D624A /* Build configuration list for PBXAggregateTarget "install" */ = {
+		14D956AB2FF74C7D9D053C1D /* Build configuration list for PBXAggregateTarget "install" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8DDDECB01FB04993988D18DB /* Debug */,
-				53F7C1CB245D4E5CBB69471C /* Release */,
-				BA2F56500C7C40FA9A341EB6 /* MinSizeRel */,
-				4F269BACD5654F4EA52E587E /* RelWithDebInfo */,
+				8D16BBE8A7F14286848FCC3F /* Debug */,
+				6E03BC87817F4538822A1162 /* Release */,
+				563C861612E148EDAC137FCC /* MinSizeRel */,
+				5B85FA94737E482AA4A38EBA /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		78536207C42F4851925EB07B /* Build configuration list for PBXAggregateTarget "RUN_TESTS" */ = {
+		1606F05C03C740DE9797CCF2 /* Build configuration list for PBXAggregateTarget "RUN_TESTS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				71A6976B032040A3A39039BC /* Debug */,
-				446A62F461EF4B2D89ACFABA /* Release */,
-				32400F973B0A40BEBFCA938D /* MinSizeRel */,
-				79BBAE7B6A744430BF7786AD /* RelWithDebInfo */,
+				D4A421ECB8DA4746834333A6 /* Debug */,
+				0A11BE5FC61A4CAD9CFDDDCE /* Release */,
+				06E86AD9B3104D2E8462CC0B /* MinSizeRel */,
+				F798D38B9D0F43FB914E89E4 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		8E2ACF02916741389C4119DB /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+		2EF3FCBBC6DE40EF9039A7FC /* Build configuration list for PBXProject "cc20-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A047FEE5DE774035B4CD8450 /* Debug */,
-				27AD0D52A6F349DFA2C79891 /* Release */,
-				02BF503B037845B6B6D71D55 /* MinSizeRel */,
-				E0CDB6BD3A4C4522A5D4FE5E /* RelWithDebInfo */,
+				7937C8B70C044B9EB32A0432 /* Debug */,
+				AD49AAA8AA2B45BBBFD4CEEA /* Release */,
+				D7A543530EB249D5B12637D7 /* MinSizeRel */,
+				17CF1A6A390A41B58209981F /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		A7C2974902C94AD28D3D0582 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+		57D5AA4CBA914CE284572E60 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2373380A60D44BAF9166FC6C /* Debug */,
-				84851BF32DC94AD497576738 /* Release */,
-				DF649A4006D043CC9176B533 /* MinSizeRel */,
-				B93D53736E9743719340F99D /* RelWithDebInfo */,
+				19F92524B76F4A6680BAB999 /* Debug */,
+				383EF5E8F8604CF5A58C66FF /* Release */,
+				4B1BEF6C8F0E4AC9B955E683 /* MinSizeRel */,
+				5DDB3E121C25455680FDC1D9 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		E81B919DA18D4A3BBD4DAF9D /* Build configuration list for PBXNativeTarget "cc20" */ = {
+		AF20A1239B1646A1953D1AE3 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				685D4CB2F6B44804BF2E8F3F /* Debug */,
-				1EE41105873242128A7BCCB0 /* Release */,
-				36867D2A9B514DC99F1367E1 /* MinSizeRel */,
-				055C550FC1384A9E9317E64E /* RelWithDebInfo */,
+				84F1CA7A0D6946329C104B6B /* Debug */,
+				CC5AA8A6FA634875A0009C37 /* Release */,
+				805D71A761594D8A943C8962 /* MinSizeRel */,
+				06F577F1F2EE42AA865E7E3A /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 79C7903F7FB348E9B9C62773 /* Project object */;
+	rootObject = 62BBD299B4A0400391A821D3 /* Project object */;
 }

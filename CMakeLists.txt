@@ -187,7 +187,7 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
     endif()
 
     if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-      set(CMAKE_INSTALL_PREFIX ../pdm-native-lib/libs CACHE PATH "Install path" FORCE)
+      set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/pdm-native-lib/libs CACHE PATH "Install path" FORCE)
     endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
     set(PDM_OPTIONS ${PDM_OPTIONS} ANDROID)

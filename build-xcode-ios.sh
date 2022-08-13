@@ -18,8 +18,7 @@ rm -rf build
 mkdir build
 cd build 
 
-cmake .. -G Xcode  -DCMAKE_TOOLCHAIN_FILE=../ios.toolchain.cmake -DPLATFORM=OS64 \
--DENABLE_VISIBILITY=1
+cmake .. -G Xcode  -DCMAKE_TOOLCHAIN_FILE=../ios.toolchain.cmake -DPLATFORM=OS64COMBINED 
     # -DCMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM='Yang Yi' 
 # cmake .. -G Xcode  -DENABLE_BITCODE=0  -DCMAKE_TOOLCHAIN_FILE=../ios.toolchain.cmake \
 #     -DPLATFORM=OS64COMBINED \
