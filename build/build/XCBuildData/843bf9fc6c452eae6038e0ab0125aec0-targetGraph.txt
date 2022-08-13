@@ -1,0 +1,7 @@
+Target dependency graph (3 targets)
+ZERO_CHECK in cc20-ios, no dependencies
+cc20 in cc20-ios, depends on:
+ZERO_CHECK in cc20-ios (explicit)
+ALL_BUILD in cc20-ios, depends on:
+ZERO_CHECK in cc20-ios (explicit)
+cc20 in cc20-ios (explicit)
