@@ -1,4 +1,4 @@
 .DS_Stor*
 \.DS_*
 c20*
-build
+build/
