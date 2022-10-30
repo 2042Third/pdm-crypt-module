@@ -69,6 +69,11 @@ namespace c20{
   };
 }
 
+namespace PDM_BRIDGE_MOBILE {
+  void ck_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , const std::string& text_key);
+  void ck_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , const std::string& text_key);
+}
+
 class Cc20{
 
 public:
@@ -150,4 +155,5 @@ void display_progress(size_t n);
 void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , std::string text_key);
 void cmd_enc(std::string infile_name, std::string oufile_name, std::string text_nonce, c20::config configs);
 void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , std::string text_key);
+
 #endif

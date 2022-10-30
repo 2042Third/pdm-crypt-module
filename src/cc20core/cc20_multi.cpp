@@ -33,6 +33,7 @@ author:     Yi Yang
 //#include "xCc20.h"
 
 #include <functional> // std::ref
+#include <utility>
 
 using namespace std;
 
@@ -587,13 +588,15 @@ int Cc20::check_file (string a){
   return 1;
 #endif
 }
-
+/**
+ * Helper of cc20.
+ * Yeah, it makes the key.
+ * */
 void Cc20::get_key_hash(string a, uint8_t* hash){
   c20_scrypt k;
   string key_hash;
   key_hash.reserve(32);
   k.make_ps((const uint8_t *)a.data(),hash);
-//  cout<<"out key: "<<hash<<endl;
 }
 
 char* Cc20::get_inp_nonce(string infile_name, uint8_t* line1){
@@ -803,6 +806,8 @@ void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outs
 /**
  * For web, memory to memory encryption.
  * Takes plain, outputs hex string
+ * Note: for mobile please hash the key in client code,
+ *          and use ck_enc(...).
  * */
 // EMSCRIPTEN_KEEPALIVE
 void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_key){
@@ -811,10 +816,10 @@ void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
   init_byte_rand_cc20(cur,NONCE_SIZE);
   string text_nonce = btos(cur);
   Cc20  cry_obj;
-        cry_obj.conf.DE=0;
-        cry_obj.conf.DISPLAY_PROG=0;
+  cry_obj.conf.DE=0;
+  cry_obj.conf.DISPLAY_PROG=0;
   uint8_t key_hash[65]= {0};
-          cry_obj.get_key_hash(text_key, key_hash);
+  cry_obj.get_key_hash(std::move(text_key), key_hash);
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
   cry_obj.poly->init((unsigned char *)key_hash);
   cry_obj.rd_file_encr(buf, outstr, input_length);
@@ -822,76 +827,73 @@ void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
 
 /**
  * For web, memory to memory decryption.
- * Takes hex string, outputs plain
+ * Takes hex string, outputs plain.
+ * Note: for mobile please hash the key in client code,
+ *          and use ck_dec(...).
  * */
 // EMSCRIPTEN_KEEPALIVE 
 void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_key){
-  // cout<<"[cc20_multi] decryption start."<<endl;
-  // string text_nonce ;
   Cc20  cry_obj;
-        cry_obj.conf.DE=1;
-        cry_obj.conf.DISPLAY_PROG=0;
+  cry_obj.conf.DE=1;
+  cry_obj.conf.DISPLAY_PROG=0;
   uint8_t key_hash[65]= {0};
-  cry_obj.get_key_hash(text_key, key_hash);
+  cry_obj.get_key_hash(std::move(text_key), key_hash);
   cry_obj.poly->init((unsigned char *)key_hash);
   Bytes input_vc;
   for(size_t i=0 ; i<NONCE_SIZE;i++)
     input_vc.push_back(buf[i]);
   string text_nonce = btos(input_vc);
-  if (text_nonce.size() != 0) {
+  if (!text_nonce.empty()) {
     text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
   }
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
   cry_obj.rd_file_encr(buf, outstr, input_length);
 }
 
+/**
+ * For mobile, memory to memory encryption.
+ * Doesn't calculate scrypt.
+ * Takes plain, outputs hex string
+ * */
+// EMSCRIPTEN_KEEPALIVE
+void PDM_BRIDGE_MOBILE::ck_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , const string& text_key){
+  // cout<<"[cc20_multi] encryption start."<<endl;
+  Bytes cur;
+  init_byte_rand_cc20(cur,NONCE_SIZE);
+  string text_nonce = btos(cur);
+  Cc20  cry_obj;
+  cry_obj.conf.DE=0;
+  cry_obj.conf.DISPLAY_PROG=0;
+//  uint8_t key_hash[65]= {0};
+//  cry_obj.get_key_hash(text_key, key_hash);
+  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)text_key.data());
+  cry_obj.poly->init((unsigned char *)text_key.data());
+  cry_obj.rd_file_encr(buf, outstr, input_length);
+}
 
-//void set_config(char*inp, c20::config * sts){
-//  string a = inp;
-//  for(unsigned int i=0;i<a.size();i++){
-//    if      (a[i] == 'S' ) sts->ENABLE_SHA3_OUTPUT = 1;
-//    else if (a[i] == 'H' ) sts->DISPLAY_PROG = 0;
-//    else if (a[i] == 'd' ) sts->poly1305_toggle = 0;
-//    else if (a[i] == 'E' ) sts->DE = 0;
-//    else if (a[i] == 'D' ) sts->DE = 1;
-//    else if (a[i] == 'h'){
-//      printf("Usage: %s\nOptions:\n-d\t%s\n-S\t%s\n-H\t%s\n-E\t%s\n-D\t%s\n-h\t%s\n%s\n",
-//        "c20 [OPTIONS] FILE_NAME",
-//        "Fast mode, disable poly1305 checking",
-//        "Enable sha3 output on plain text",
-//        "Hide progress bar",
-//        "Encrypt(default)",
-//        "Decrypt",
-//        "Help menu (current)",
-//        "Personal Data Manager Encryption Module\nWarning: This program overwrittes files with .pdm extension, make sure you are not overwritting unintended files by mistake! \nby Yi Yang, 2021");
-//      exit(0);
-//    }
-//    else if (a[i]!='-') {
-//      printf("Unrecognized option \"%c\", -h for help",a[i]);
-//    }
-//  }
-//}
-
-
-
-//c20::config rd_inp(unsigned int argc, char ** argv, string *infile){
-//  c20::config sts;
-//  for (unsigned int i = 1; i< argc;i++){
-//    if (argv[i][0] == '-'){
-//      set_config(argv[i], &sts);
-//    }
-//    else{
-//      if (infile->empty()){
-//        sts.arg_c++;
-//        *infile = argv[i];
-//      }
-//      else
-//        return sts;
-//    }
-//  }
-//
-//  return sts;
-//}
+/**
+ * For mobile, memory to memory decryption.
+ * Doesn't calculate scrypt.
+ * Takes hex string, outputs plain
+ * */
+// EMSCRIPTEN_KEEPALIVE
+void PDM_BRIDGE_MOBILE::ck_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , const string& text_key){
+  Cc20  cry_obj;
+  cry_obj.conf.DE=1;
+  cry_obj.conf.DISPLAY_PROG=0;
+//  uint8_t key_hash[65]= {0};
+//  cry_obj.get_key_hash(std::move(text_key), key_hash);
+  cry_obj.poly->init((unsigned char *)text_key.data());
+  Bytes input_vc;
+  for(size_t i=0 ; i<NONCE_SIZE;i++)
+    input_vc.push_back(buf[i]);
+  string text_nonce = btos(input_vc);
+  if (!text_nonce.empty()) {
+    text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
+  }
+  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)text_key.data());
+  cry_obj.rd_file_encr(buf, outstr, input_length);
+}
 
 Cc20::~Cc20() {
   if(poly !=NULL) delete poly;
@@ -899,21 +901,4 @@ Cc20::~Cc20() {
     delete arg_track[i];
   }
 }
-//
-//#ifdef HAS_MAIN
-//
-//int main(int argc, char ** argv) {
-//  string infile,oufile,nonce;
-//  c20::config configs = rd_inp(argc,argv,&infile);
-//  if (configs.arg_c!=2){
-//    cout<<"Must have 1 file input, -h for help."<<endl;
-//    return 0;
-//  }
-//  Bytes cur ;
-////  init_byte_rand_cc20(cur,XNONCE_SIZE); // xchacha20
-//  init_byte_rand_cc20(cur,NONCE_SIZE); // chacha20
-//  nonce="1";
-//  cmd_enc(infile,"",btos(cur), configs);
-//  return 0;
-//}
-//#endif
+

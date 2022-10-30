@@ -1,3 +1,4 @@
 tests/*
 c20*
 *.o
+build/*

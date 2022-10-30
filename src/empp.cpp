@@ -79,14 +79,40 @@ void use_vector_string(const std::vector<uint8_t> &vec) {
     }
 }
 
-
-string loader_check(const std::string key, const std::string input)
-{
+/**
+ * Assumes key is hex'ed scrypt.
+ * */
+string checker_in(const std::string& key, const std::string& input){
   string buf(input);    //= new vector<uint8_t>();
   string outstr(input.size() + (NONCE_SIZE+POLY_SIZE),0); // = new vector<uint8_t>();
-//  cout<<"entering cmd_enc((uint8_t *)((&buf)->data()), (size_t)input.size(), (uint8_t *)((&outstr)->data()), key)"<<endl;
+  PDM_BRIDGE_MOBILE::ck_enc((uint8_t *)((&buf)->data()),
+                            (size_t)input.size(),
+                            (uint8_t *)((&outstr)->data()),
+                            htos(key)
+                            );
+  return stoh( outstr);
+}
+
+/**
+ * Assumes key is hex'ed scrypt.
+ * */
+string checker_out(const std::string& key, const std::string& inputi){
+  string buf(htos(inputi));
+  string outstr((buf.size()) - (NONCE_SIZE+POLY_SIZE),0);
+  size_t inpsize = (buf.size()) ;
+  PDM_BRIDGE_MOBILE::ck_dec((uint8_t *)((&buf)->data()),
+                            inpsize,
+                            (uint8_t *)((&outstr)->data()),
+                            htos(key)
+                            );
+  return outstr;
+}
+
+string loader_check(const std::string& key, const std::string& input)
+{
+  string buf(input);
+  string outstr(input.size() + (NONCE_SIZE+POLY_SIZE),0);
   cmd_enc((uint8_t *)((&buf)->data()), (size_t)input.size(), (uint8_t *)((&outstr)->data()), key);
-//  cout<<"existing cmd_enc((uint8_t *)((&buf)->data()), (size_t)input.size(), (uint8_t *)((&outstr)->data()), key)"<<endl;
   return stoh( outstr);
 }
 
@@ -102,14 +128,12 @@ void loader_check_convert(const char* key,  const char* input, size_t input_n, c
   memcpy(outstr,(uint8_t *)((&none_tmp)->data()), none_tmp.size());
 }
 
-string loader_out(const std::string key, const std::string inputi)
+string loader_out(const std::string& key, const std::string& inputi)
 {
   string buf(htos(inputi));    //= new vector<uint8_t>();
   string outstr((buf.size()) - (NONCE_SIZE+POLY_SIZE),0);    //= new vector<uint8_t>();
   size_t inpsize = (buf.size()) ;
-//  cout<<"entering cmd_dec((uint8_t *)((&buf)->data()), inpsize, (uint8_t *)((&outstr)->data()), key)"<<endl;
   cmd_dec((uint8_t *)((&buf)->data()), inpsize, (uint8_t *)((&outstr)->data()), key);
-//  cout<<"existing cmd_dec((uint8_t *)((&buf)->data()), inpsize, (uint8_t *)((&outstr)->data()), key)"<<endl;
   return outstr;
 }
 

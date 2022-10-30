@@ -17,11 +17,11 @@ const char* pp_hash_c(char* user1, char* user2);
 C20_EXPORT
 void pp_hash_convert(const char* user1, const char* user2, char* outstr);
 void use_vector_string(const std::vector<uint8_t> &vec) ;
-std::string loader_check(std::string key, std::string input);
+std::string loader_check(const std::string& key, std::string& input);
 
 C20_EXPORT
 void loader_check_convert(const char* key,  const char* input, size_t input_n, char* outstr);
-std::string loader_out(std::string key, const std::string inputi);
+std::string loader_out(std::string& key, const std::string& inputi);
 C20_EXPORT
 void loader_out_convert(const char* key,  const char* inputi, size_t inputi_n, char* outstr);
 std::string gen_sec();
