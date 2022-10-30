@@ -2,3 +2,4 @@
 \.DS_*
 c20*
 build/*
+**/build/*
