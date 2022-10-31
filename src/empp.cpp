@@ -270,6 +270,32 @@ namespace web_test{
     }
     return accum;
   }
+  int test_scrypt (const string& a, const string& b, int accum=-1){
+    string c = scrypt(a);
+    string enc = checker_in(c, b);
+    string dec = checker_out(c, enc);
+    string decWrong = loader_out("12345",enc);
+    int ttl = 1000000;
+    if(accum==-1){
+      cout<<"Input key: \t"<<a<<endl;
+      cout<<"Scrypt key: \t"<<c<<endl;
+      cout<<"Input message: \t"<<b<<endl;
+      cout<<"Encrypted message: \t"<<enc<<endl;
+      cout<<"Decrypted message: \t"<<dec<<endl;
+      cout<<"\"12345\" Decrypted message: \t"<<decWrong<<endl;
+      return 1;
+    }
+    if (dec == b){
+      accum+=1;
+      cout<<accum/10000<< "% pass\r";
+    }
+    else {
+      cout<<"failure!!"<<endl;
+      cout<< "\tgot     : "<<dec<<endl;
+      cout<< "\texpected: "<<b<<endl;
+    }
+    return accum;
+  }
   /**
    * Runs the encryption and decryption for 1,000,000 times
    * and count the accuracy.

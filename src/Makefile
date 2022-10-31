@@ -93,6 +93,7 @@ web_linux:
 	g++  $(all_includes) $(srcs) $(all_defs) -fpermissive -std=c++17 desktop.cpp -Wall \
  -O3 -D LINUX  -D WEB_RELEASE -lpthread \
  -D WEB_RELEASE_LINUX_TEST -g -o ./tests/webc20
+# Should try this when prototyping
 web_linux_debug:
 	g++  $(all_includes) $(srcs) $(all_defs) -fpermissive -std=c++17 desktop.cpp -Wall \
  -D LINUX  -D WEB_RELEASE -lpthread -Wall -D DEEP_DEBUG -D PRINTING \

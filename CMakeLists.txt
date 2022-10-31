@@ -9,8 +9,9 @@ enable_language(OBJC)
 
 MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
 MESSAGE( STATUS "CMAKE_OBJC_FLAGS: " ${CMAKE_OBJC_FLAGS} )
+set (PDM_TEST_PLATFORM DESKTOP) # Adds an executable, unset to build for mobile
 
- set (PDM_BUILD_TYPE  MOBILE) # android
+set (PDM_BUILD_TYPE  MOBILE) # android
 #set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
 #set (PDM_BUILD_TYPE_MOBILE  ANDROID)# Uncomment to build for android
 

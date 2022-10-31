@@ -69,7 +69,8 @@ int main(int argc, char ** argv) {
   if(argc < 2){
     cout<<"Must have 1 input to start testing. \n \"1\" for curve test. \n "
           "\"2\" for encryption test. "
-          "\"3\" for scrypt test. \n "<<endl;
+          "\"3\" for scrypt test. \n "
+          "\"4\" for mobile release. \n "<<endl;
     return 0;
   }
   if(stoi(argv[1]) == 1){
@@ -95,6 +96,14 @@ int main(int argc, char ** argv) {
     cout<<"#1 out: \""<< out1<<"\"\n"<<endl;
     cout<<"#2: \""<< msg<<"\"\n"<<endl;
     cout<<"#2 out: \""<< out2<<"\"\n"<<endl;
+  }
+  else if (stoi(argv[1]) == 4){
+
+    cout<<"Encryption test for mobile release.\n"<<endl;
+
+    std::string pas = "1234";
+    std::string msg = "hello this is a message";
+    web_test::test_scrypt(pas, msg);
   }
   else {
    cout<<"Command not found, exiting."<<endl;
