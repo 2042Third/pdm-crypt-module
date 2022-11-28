@@ -8,7 +8,7 @@
 
 #define C20_EXPORT extern "C"
 #define cplusplus_main_compilation (__cplusplus & WEB_TEST)
-
+#include <vector>
 #include <iostream>
 void memclear(uint8_t* a, size_t b );
 std::string pp_hash(std::string user1, std::string user2);
