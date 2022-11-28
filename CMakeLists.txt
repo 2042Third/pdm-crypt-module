@@ -246,13 +246,16 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
 # DONE IOS
  elseif(${PDM_BUILD_TYPE} MATCHES DESKTOP)
    project(cc20)
+
    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
    if(${PDM_TEST_PLATFORM} MATCHES DESKTOP)
      add_executable(${PROJECT_NAME}  ${PDM_SOURCES} src/desktop.cpp)
+     target_compile_definitions(${PROJECT_NAME} PUBLIC WINDOWS LINUX  ${PDM_OPTIONS})
    else()
      add_library(${PROJECT_NAME} SHARED ${PDM_SOURCES})
+     target_compile_definitions(${PROJECT_NAME} PUBLIC WINDOWS LINUX ${PDM_OPTIONS})
    endif()
    target_compile_definitions(${PROJECT_NAME} ${PDM_OPTIONS})
    target_compile_options(${PROJECT_NAME}  PUBLIC ${PDM_COMPILER_FLAGS})
