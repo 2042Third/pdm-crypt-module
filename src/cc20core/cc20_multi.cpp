@@ -225,7 +225,7 @@ void Cc20::rd_file_encr(uint8_t* buf, string oufile_name, size_t outsize) {
 
 */
 
-void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
+void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_length) {
   size_t n = 0;
   const uint8_t * line;
   line = buf;
@@ -479,7 +479,7 @@ void Cc20::set_vals(uint8_t * nonce0, uint8_t * key0) {
  * Given H ChaCha20 is already setup
  *
  * */
-void Cc20::x_set_vals(uint8_t *nonce0, uint8_t *key0) {
+void Cc20::x_set_vals(uint8_t *nonce0, const uint8_t *key0) {
   h_set_vals(nonce0,key0); // This is really one of the only things needed to change, but oh well...
   this -> nonce = nonce0;
   copy(nonce,nonce+NONCE_SIZE,this -> nonce_orig );
@@ -515,7 +515,7 @@ void Cc20::x_set_vals(uint8_t *nonce0, uint8_t *key0) {
  * HChaCha20 initialize
  *  Nonce needs to be 16 bytes, comparing to 12 bytes in ChaCha20
  * */
-void Cc20::h_set_vals(uint8_t * nonce0, uint8_t * key0) {
+void Cc20::h_set_vals(uint8_t * nonce0, const uint8_t * key0) {
   this -> nonce = nonce0;
   std::copy(nonce, nonce + NONCE_SIZE, this -> nonce_orig );
   this -> count = 0;
@@ -853,7 +853,7 @@ void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
  * For client.
  * Used in desktop
  * */
-void PDM_BRIDGE_MOBILE::cmd_enc( uint8_t* buf, size_t input_length, uint8_t* outstr ,  uint8_t* _key){
+void PDM_BRIDGE_MOBILE::cmd_enc(const  uint8_t* buf, size_t input_length, uint8_t* outstr , const  uint8_t* _key){
   Bytes cur;
   init_byte_rand_cc20(cur,NONCE_SIZE);
   string text_nonce = btos(cur);
@@ -869,7 +869,7 @@ void PDM_BRIDGE_MOBILE::cmd_enc( uint8_t* buf, size_t input_length, uint8_t* out
  * For client.
  * Used in desktop
  * */
-void PDM_BRIDGE_MOBILE::cmd_dec( uint8_t* buf, size_t input_length, uint8_t* outstr ,  uint8_t* _key){
+void PDM_BRIDGE_MOBILE::cmd_dec(const  uint8_t* buf, size_t input_length, uint8_t* outstr , const  uint8_t* _key){
   Cc20  cry_obj;
   cry_obj.conf.DE=1;
   cry_obj.conf.DISPLAY_PROG=0;
