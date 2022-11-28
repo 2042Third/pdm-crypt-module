@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
-set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD 20)
 project(cc20-ios )
 
 enable_testing()
@@ -247,8 +247,8 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
  elseif(${PDM_BUILD_TYPE} MATCHES DESKTOP)
 #   project(cc20)
 
-   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c17")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 
    if(${PDM_TEST_PLATFORM} MATCHES DESKTOP)
      add_library(cc20 STATIC ${PDM_SOURCES})
