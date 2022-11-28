@@ -9,9 +9,10 @@ enable_language(OBJC)
 
 MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
 MESSAGE( STATUS "CMAKE_OBJC_FLAGS: " ${CMAKE_OBJC_FLAGS} )
-set (PDM_TEST_PLATFORM DESKTOP) # Adds an executable, unset to build for mobile
+#set (PDM_TEST_PLATFORM DESKTOP) # Adds an executable, unset to build for mobile
 
-set (PDM_BUILD_TYPE  MOBILE) # android
+set (PDM_BUILD_TYPE  DESKTOP) # desktop
+#set (PDM_BUILD_TYPE  MOBILE) # android
 #set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
 #set (PDM_BUILD_TYPE_MOBILE  ANDROID)# Uncomment to build for android
 
@@ -243,6 +244,22 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
     install (FILES ${HEADERS} DESTINATION include)
 
 # DONE IOS
+ elseif(${PDM_BUILD_TYPE} MATCHES DESKTOP)
+   project(cc20)
+   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+
+   if(${PDM_TEST_PLATFORM} MATCHES DESKTOP)
+     add_executable(${PROJECT_NAME}  ${PDM_SOURCES} src/desktop.cpp)
+   else()
+     add_library(${PROJECT_NAME} SHARED ${PDM_SOURCES})
+   endif()
+   target_compile_definitions(${PROJECT_NAME} ${PDM_OPTIONS})
+   target_compile_options(${PROJECT_NAME}  PUBLIC ${PDM_COMPILER_FLAGS})
+   target_include_directories(${PROJECT_NAME}
+       PUBLIC
+       ${PDM_INCLUDES}
+       )
  else() # DESKTOP
 
 #     LIBRARY COMPILE FINISH
@@ -277,7 +294,5 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
      add_subdirectory(src/cc20core)
      target_link_libraries(c20_multi c20_lib)
      target_link_libraries(cc20 c20_lib  c20_multi)
-     #install(TARGETS cc20 )
-
-
+     install(TARGETS cc20 )
  endif()
