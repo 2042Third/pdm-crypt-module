@@ -251,8 +251,10 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
    if(${PDM_TEST_PLATFORM} MATCHES DESKTOP)
-     add_executable(${PROJECT_NAME}  ${PDM_SOURCES} src/desktop.cpp)
-     target_compile_definitions(${PROJECT_NAME} PUBLIC WINDOWS LINUX  ${PDM_OPTIONS})
+     add_library(${PROJECT_NAME} SHARED ${PDM_SOURCES})
+     target_compile_definitions(${PROJECT_NAME} PUBLIC WINDOWS LINUX ${PDM_OPTIONS})
+     add_executable(c20  ${PDM_SOURCES} src/desktop.cpp)
+     target_link_libraries(c20 cc20)
    else()
      add_library(${PROJECT_NAME} SHARED ${PDM_SOURCES})
      target_compile_definitions(${PROJECT_NAME} PUBLIC WINDOWS LINUX ${PDM_OPTIONS})
@@ -262,6 +264,7 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
    target_include_directories(${PROJECT_NAME}
        PUBLIC
        ${PDM_INCLUDES}
+       .
        )
  else() # DESKTOP
 
