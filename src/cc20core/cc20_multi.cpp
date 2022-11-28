@@ -849,7 +849,41 @@ void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
   cry_obj.rd_file_encr(buf, outstr, input_length);
 }
+/**
+ * For client.
+ * Used in desktop
+ * */
+void PDM_BRIDGE_MOBILE::cmd_enc( uint8_t* buf, size_t input_length, uint8_t* outstr ,  uint8_t* _key){
+  Bytes cur;
+  init_byte_rand_cc20(cur,NONCE_SIZE);
+  string text_nonce = btos(cur);
+  Cc20  cry_obj;
+  cry_obj.conf.DE=0;
+  cry_obj.conf.DISPLAY_PROG=0;
+  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), _key);
+  cry_obj.poly->init((unsigned char *)_key);
+  cry_obj.rd_file_encr(buf, outstr, input_length);
+}
 
+/**
+ * For client.
+ * Used in desktop
+ * */
+void PDM_BRIDGE_MOBILE::cmd_dec( uint8_t* buf, size_t input_length, uint8_t* outstr ,  uint8_t* _key){
+  Cc20  cry_obj;
+  cry_obj.conf.DE=1;
+  cry_obj.conf.DISPLAY_PROG=0;
+  cry_obj.poly->init((unsigned char *)_key);
+  Bytes input_vc;
+  for(size_t i=0 ; i<NONCE_SIZE;i++)
+    input_vc.push_back(buf[i]);
+  string text_nonce = btos(input_vc);
+  if (!text_nonce.empty()) {
+    text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
+  }
+  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)_key);
+  cry_obj.rd_file_encr(buf, outstr, input_length);
+}
 /**
  * For mobile, memory to memory encryption.
  * Doesn't calculate scrypt.

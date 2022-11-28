@@ -72,6 +72,8 @@ namespace c20{
 namespace PDM_BRIDGE_MOBILE {
   void ck_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , const std::string& text_key);
   void ck_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , const std::string& text_key);
+  void cmd_enc( uint8_t* buf, size_t input_length, uint8_t* outstr ,  uint8_t* _key);
+  void cmd_dec( uint8_t* buf, size_t input_length, uint8_t* outstr ,  uint8_t* _key);
 }
 
 class Cc20{
