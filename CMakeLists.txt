@@ -245,26 +245,25 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
 
 # DONE IOS
  elseif(${PDM_BUILD_TYPE} MATCHES DESKTOP)
-   project(cc20)
+#   project(cc20)
 
    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
    if(${PDM_TEST_PLATFORM} MATCHES DESKTOP)
-     add_library(${PROJECT_NAME} SHARED ${PDM_SOURCES})
-     target_compile_definitions(${PROJECT_NAME} PUBLIC WINDOWS LINUX ${PDM_OPTIONS})
+     add_library(cc20 STATIC ${PDM_SOURCES})
+     target_compile_definitions(cc20 PUBLIC WINDOWS LINUX ${PDM_OPTIONS})
      add_executable(c20  ${PDM_SOURCES} src/desktop.cpp)
      target_link_libraries(c20 cc20)
    else()
-     add_library(${PROJECT_NAME} SHARED ${PDM_SOURCES})
-     target_compile_definitions(${PROJECT_NAME} PUBLIC WINDOWS LINUX ${PDM_OPTIONS})
+     add_library(cc20 STATIC ${PDM_SOURCES})
+     target_compile_definitions(cc20 PUBLIC WINDOWS LINUX ${PDM_OPTIONS})
    endif()
-   target_compile_definitions(${PROJECT_NAME} ${PDM_OPTIONS})
-   target_compile_options(${PROJECT_NAME}  PUBLIC ${PDM_COMPILER_FLAGS})
-   target_include_directories(${PROJECT_NAME}
+   target_compile_definitions(cc20 ${PDM_OPTIONS})
+   target_compile_options(cc20  PUBLIC ${PDM_COMPILER_FLAGS})
+   target_include_directories(cc20
        PUBLIC
        ${PDM_INCLUDES}
-       .
        )
  else() # DESKTOP
 
