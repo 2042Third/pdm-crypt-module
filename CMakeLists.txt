@@ -5,7 +5,7 @@ project(cc20-ios )
 enable_testing()
 
 enable_language(CXX)
-enable_language(OBJC)
+#enable_language(OBJC) # Yeah, don't ask for objective c compiler on windows....
 
 MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
 MESSAGE( STATUS "CMAKE_OBJC_FLAGS: " ${CMAKE_OBJC_FLAGS} )
