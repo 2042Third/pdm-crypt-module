@@ -47,7 +47,8 @@ namespace web_test{
     std::string c = scrypt(a);
     std::string enc = checker_in(c, b);
     std::string dec = checker_out(c, enc);
-    std::string decWrong = loader_out((std::string &) "12345", enc);
+    std::string pas2 = "12345";
+    std::string decWrong = loader_out(pas2, enc);
     int ttl = 1000000;
     if(accum==-1){
       std::cout<<"Input key: \t"<<a<<std::endl;
@@ -71,8 +72,9 @@ namespace web_test{
   }
   int test_enc_dec (const std::string& a, const std::string& b, int accum=-1){
     std::string c = scrypt(a);
-    std::string enc = checker_in(c, b);
-    std::string dec = checker_out(c, enc);
+    std::string b_copy = b;
+    std::string enc = loader_check(c, b_copy);
+    std::string dec = loader_out(c, enc);
     std::string pas2 = "12345";
     std::string decWrong = loader_out(pas2, enc);
     int ttl = 1000000;
@@ -214,22 +216,13 @@ int main(int argc, char ** argv) {
     web_test::curve_test();
   }
   else if (stoi(argv[1]) == 2){
-//    cout<<"Encryption test for web release.\n"<<endl;
-//
-//    std::string pas = "1234";
-//    std::string pas2 = "12345";
-//    std::string msg = "hello this is a message";
-//    std::string enc = loader_check(pas, msg);
-//    std::string dec = loader_out(pas, enc);
-//    std::string decWrong = loader_out(pas2, enc);
-//
-//
-//    cout<<"#1    : \""<< pas<<"\"\n"<<endl;
-//    cout<<"#1 out: \""<< dec<<"\"\n"<<endl;
-//    cout<<"#1 sec: \""<< enc<<"\"\n"<<endl;
-//    cout<<"#2    : \""<< pas2<<"\"\n"<<endl;
-//    cout<<"#2 out: \""<< decWrong<<"\"\n"<<endl;
+    cout<<"Encryption test for web release.\n"<<endl;
 
+    std::string pas = "1234";
+    std::string pas2 = "12345";
+    std::string msg = "hello this is a message";
+
+    web_test::test_enc_dec(pas,msg);
   }
   else if (stoi(argv[1]) == 3){
     cout<<"Scrypt Test.\n"<<endl;

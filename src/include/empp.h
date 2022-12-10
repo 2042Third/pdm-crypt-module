@@ -20,7 +20,7 @@ C20_EXPORT
 void pp_hash_convert(const char* user1, const char* user2, char* outstr);
 void use_vector_string(const std::vector<uint8_t> &vec) ;
 
-std::string loader_check(const std::string& key, std::string& input);
+std::string loader_check(const std::string& key,const std::string& input);
 std::string checker_in(const std::string& key, const std::string& input);
 std::string checker_out(const std::string& key, const std::string& inputi);
 std::string scrypt(std::string a);
