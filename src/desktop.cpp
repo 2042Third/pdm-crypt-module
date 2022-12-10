@@ -145,9 +145,9 @@ namespace web_test{
     return 1;
   }
 
-  void print_stats(const uint8_t* a,size_t size){
+  void print_stats(const uint8_t* a,size_t size,int binary=1){
     string ac ((const char*)a,0,size);
-    cout<< "Plain: "<<ac<<endl;
+    if(!binary)cout<< "Plain: "<<ac<<endl;
     cout<< " Hax : "<<stoh(ac)<<endl;
     cout<< "Hash : "<<get_hash(ac)<<endl;
   }
@@ -160,8 +160,8 @@ namespace web_test{
     key_buffer.reserve(cc20_utility::nonce_key_pair_size()+1); key_buffer.clear();
 
     for (auto i=0;i<cc20_utility::nonce_key_pair_size();i++){
-      input_buffer.data()[i] = ' ';
-      output_buffer.data()[i] = ' ';
+      input_buffer.data()[i] = '-';
+      output_buffer.data()[i] = '-';
       key_buffer.data()[i] = 0;
     }
     cc20_utility::gen_key_nonce_pair(key_buffer.data(),cc20_utility::nonce_key_pair_size());
@@ -178,24 +178,27 @@ namespace web_test{
     input_buffer.data()[6] = 'e';
     input_buffer.data()[7] = 'y';
 
-    cout<<"Before encrypt: "<<endl;
+    cout<<"\nBefore encrypt: "<<endl;
     cout<<"Input buffer "<<endl;
-    print_stats(input_buffer.data(),iosize);
+    print_stats(input_buffer.data(),iosize,0);
     cout<<"Output buffer "<<endl;
-    print_stats(output_buffer.data(),iosize);
+    print_stats(output_buffer.data(),iosize,0);
 
+    // Encrypt step
     cc20_utility::pure_crypt(input_buffer.data(),output_buffer.data(),iosize,key_buffer.data());
-    cout<<"After encrypt: "<<endl;
+    cout<<"\nAfter encrypt: "<<endl;
     cout<<"Input buffer "<<endl;
-    print_stats(input_buffer.data(),iosize);
+    print_stats(input_buffer.data(),iosize,0);
     cout<<"Output buffer "<<endl;
-    print_stats(output_buffer.data(),iosize);
+    print_stats(output_buffer.data(),iosize,0);
+
+    // Decrypt step
     cc20_utility::pure_crypt(output_buffer.data(),input_buffer.data(),iosize,key_buffer.data());
-    cout<<"After decrypt: "<<endl;
+    cout<<"\nAfter decrypt: "<<endl;
     cout<<"Output buffer "<<endl;
-    print_stats(output_buffer.data(),iosize);
+    print_stats(output_buffer.data(),iosize,0);
     cout<<"Input buffer "<<endl;
-    print_stats(input_buffer.data(),iosize);
+    print_stats(input_buffer.data(),iosize,0);
     return 1;
   }
 
