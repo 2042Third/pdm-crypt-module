@@ -849,8 +849,8 @@ void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
  * */
 void PDM_BRIDGE_MOBILE::cmd_enc(const  uint8_t* buf, size_t input_length, uint8_t* outstr , const  uint8_t* _key){
   Bytes cur;
-  init_byte_rand_cc20(cur,NONCE_SIZE);
-  string text_nonce = btos(cur);
+  cc20_dev::init_byte_rand_cc20(cur,NONCE_SIZE);
+  string text_nonce = cc20_dev::btos(cur);
   Cc20  cry_obj;
   cry_obj.conf.DE=0;
   cry_obj.conf.DISPLAY_PROG=0;
@@ -871,9 +871,9 @@ void PDM_BRIDGE_MOBILE::cmd_dec(const  uint8_t* buf, size_t input_length, uint8_
   Bytes input_vc;
   for(size_t i=0 ; i<NONCE_SIZE;i++)
     input_vc.push_back(buf[i]);
-  string text_nonce = btos(input_vc);
+  string text_nonce = cc20_dev::btos(input_vc);
   if (!text_nonce.empty()) {
-    text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
+    text_nonce = cc20_dev::pad_to_key((string) text_nonce, NONCE_SIZE);
   }
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)_key);
   cry_obj.rd_file_encr(buf, outstr, input_length);
