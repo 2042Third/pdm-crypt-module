@@ -40,6 +40,7 @@ author:     Yi Yang
  * xchacha20    => 24
  * */
 #define NONCE_SIZE 24
+#define CC20_KEY_SIZE 32
 #define XNONCE_SIZE 16
 
 #include <stdio.h>
@@ -64,12 +65,14 @@ namespace c20{
     int ENABLE_SHA3_OUTPUT = 0; 
     int DISPLAY_PROG =1;
     int final_line_written = 0; // Whether or not the fianl line is written
-    int DE=0; 
+    int DE=0;
+    int pure_xor=0;
     int arg_c=1;
   };
 }
 
 namespace PDM_BRIDGE_MOBILE {
+  void ck_crypt(uint8_t* buf, size_t input_length, uint8_t*outstr,  uint8_t*nonce, const uint8_t*key,size_t offset=0);
   void ck_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , const std::string& text_key);
   void ck_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , const std::string& text_key);
   void cmd_enc(const uint8_t* buf, size_t input_length, uint8_t* outstr , const uint8_t* _key);
@@ -103,8 +106,8 @@ public:
 
   void stream( uint8_t*plain,unsigned int len);
   void set_vals(uint8_t * nonce0, uint8_t*key0);
-  void h_set_vals(uint8_t * nonce0, const uint8_t * key0);
-  void x_set_vals(uint8_t *nonce0, const uint8_t *key0);
+  void h_set_vals( uint8_t * nonce0, const uint8_t * key0);
+  void x_set_vals( uint8_t *nonce0, const uint8_t *key0);
 
   void one_block (int thrd, uint64_t xcount);
 

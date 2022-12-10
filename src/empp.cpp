@@ -254,6 +254,14 @@ namespace cc20_utility {
       a[i]=(uint8_t) gen();
     }
   }
+  /**
+   * First NONCE_SIZE characters of key_nonce are the nonce, the rest of
+   * */
+  void pure_crypt(uint8_t*buf,uint8_t*outstr,size_t input_length,uint8_t*key_nonce){
+    PDM_BRIDGE_MOBILE::ck_crypt(buf,input_length,outstr,key_nonce,key_nonce+NONCE_SIZE);
+  }
+
+
 }
 
 namespace web_test{
@@ -263,7 +271,7 @@ namespace web_test{
    * @param b message to be encrypted
    * @param accum for r_test() only, default -1
    * */
-  int test (const string& a, const string& b, int accum=-1){
+  int test (const string& a, const string& b, int accum){
     string enc = loader_check(a, b);
     string dec = loader_out(a, enc);
     string decWrong = loader_out("12345",enc);

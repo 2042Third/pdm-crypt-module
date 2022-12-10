@@ -223,7 +223,7 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
   const uint8_t * line;
   line = buf;
   this->linew = (char *) outstr;
-  if(!conf.DE){
+  if(!conf.DE && !conf.pure_xor){
     copy(this->nonce_orig, this->nonce_orig+NONCE_SIZE,this->linew);
     this->linew =this->linew+NONCE_SIZE;
   }
@@ -508,7 +508,7 @@ void Cc20::x_set_vals(uint8_t *nonce0, const uint8_t *key0) {
  * HChaCha20 initialize
  *  Nonce needs to be 16 bytes, comparing to 12 bytes in ChaCha20
  * */
-void Cc20::h_set_vals(uint8_t * nonce0, const uint8_t * key0) {
+void Cc20::h_set_vals( uint8_t * nonce0, const uint8_t * key0) {
   this -> nonce = nonce0;
   std::copy(nonce, nonce + NONCE_SIZE, this -> nonce_orig );
   this -> count = 0;
@@ -919,6 +919,21 @@ void PDM_BRIDGE_MOBILE::ck_dec(uint8_t* buf, size_t input_length, uint8_t* outst
     text_nonce = cc20_dev::pad_to_key((string) text_nonce, NONCE_SIZE);
   }
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)text_key.data());
+  cry_obj.rd_file_encr(buf, outstr, input_length);
+}
+
+void PDM_BRIDGE_MOBILE::ck_crypt(uint8_t* buf,
+                                 size_t input_length,
+                                 uint8_t*outstr,
+                                 uint8_t*nonce,
+                                 const uint8_t*key,
+                                 size_t offset
+                                 ){
+  Cc20  cry_obj;
+  cry_obj.conf.poly1305_toggle = 0;
+  cry_obj.conf.pure_xor = 1;
+  cry_obj.conf.DE = 0;
+  cry_obj.x_set_vals(nonce, key);
   cry_obj.rd_file_encr(buf, outstr, input_length);
 }
 

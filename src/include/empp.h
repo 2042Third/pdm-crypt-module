@@ -33,9 +33,16 @@ std::string gen_shr(std::string a,  std::string c);
 std::string get_hash(std::string a);
 std::string get_hash_arr(const char* a, size_t asize);
 namespace cc20_utility {
+  static size_t nonce_key_pair_size () {return NONCE_SIZE+CC20_KEY_SIZE+1;}
   static void gen_byte_rand_cc20 (uint8_t * a, size_t n);
   static void gen_key_nonce_pair(uint8_t *a, size_t size);
+  void pure_crypt(uint8_t*buf,uint8_t*outstr,size_t input_length,uint8_t*key_nonce);
 }
-
+namespace web_test{
+  int test (const std::string& a, const std::string& b, int accum=-1);
+  int test_scrypt (const std::string& a, const std::string& b, int accum=-1);
+  int r_test(int count);
+  int curve_test ();
+}
 C20_EXPORT
 void get_hash_convert(const char* a, size_t a_n, char* outstr);
