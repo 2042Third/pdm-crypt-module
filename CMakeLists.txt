@@ -105,7 +105,7 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
          set(PDM_SOURCES "${PDM_SOURCES} ../java/com/pdmnotes/com_pdmnotes_PdmCrypt.c")
      endif()
 
-     add_library(cc20 SHARED)
+     add_library(cc20 )
      target_sources(cc20 PRIVATE  ${PDM_SOURCES})
      target_compile_definitions(cc20 ${PDM_OPTIONS})
      target_compile_options(cc20 PUBLIC ${PDM_COMPILER_FLAGS})
