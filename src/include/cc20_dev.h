@@ -40,7 +40,7 @@ namespace cc20_dev {
     return x << n | (x >> (-n & 31));
   }
 
-};
+}
 
 template <typename Iterator>
 struct hex_iterator_traits {
