@@ -8,7 +8,7 @@
 
 #define C20_EXPORT extern "C"
 #define cplusplus_main_compilation (__cplusplus & WEB_TEST)
-
+#include <vector>
 #include <iostream>
 void memclear(uint8_t* a, size_t b );
 std::string pp_hash(std::string user1, std::string user2);
@@ -17,8 +17,11 @@ const char* pp_hash_c(char* user1, char* user2);
 C20_EXPORT
 void pp_hash_convert(const char* user1, const char* user2, char* outstr);
 void use_vector_string(const std::vector<uint8_t> &vec) ;
-std::string loader_check(const std::string& key, std::string& input);
 
+std::string loader_check(const std::string& key, std::string& input);
+std::string checker_in(const std::string& key, const std::string& input);
+std::string checker_out(const std::string& key, const std::string& inputi);
+std::string scrypt(std::string a);
 C20_EXPORT
 void loader_check_convert(const char* key,  const char* input, size_t input_n, char* outstr);
 std::string loader_out(std::string& key, const std::string& inputi);

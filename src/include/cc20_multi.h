@@ -72,6 +72,8 @@ namespace c20{
 namespace PDM_BRIDGE_MOBILE {
   void ck_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , const std::string& text_key);
   void ck_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , const std::string& text_key);
+  void cmd_enc(const uint8_t* buf, size_t input_length, uint8_t* outstr , const uint8_t* _key);
+  void cmd_dec(const uint8_t* buf, size_t input_length, uint8_t* outstr , const uint8_t* _key);
 }
 
 class Cc20{
@@ -96,17 +98,17 @@ public:
   void encr(uint8_t*line,uint8_t*linew,unsigned long int fsize);
   void rd_file_encr(uint8_t* buf, std::string oufile_name, size_t outsize) ;
   void rd_file_encr(const std::string file_name, uint8_t* outstr) ;
-  void rd_file_encr (uint8_t * buf, uint8_t* outstr, size_t input_length);
+  void rd_file_encr (const uint8_t * buf, uint8_t* outstr, size_t input_length);
   void rd_file_encr (const std::string file_name, std::string oufile_name);
 
   void stream( uint8_t*plain,unsigned int len);
   void set_vals(uint8_t * nonce0, uint8_t*key0);
-  void h_set_vals(uint8_t * nonce0, uint8_t * key0);
-  void x_set_vals(uint8_t *nonce0, uint8_t *key0);
+  void h_set_vals(uint8_t * nonce0, const uint8_t * key0);
+  void x_set_vals(uint8_t *nonce0, const uint8_t *key0);
 
   void one_block (int thrd, uint64_t xcount);
 
-  void endicha(uint8_t *a, uint32_t *b);
+  static void endicha(uint8_t *a, uint32_t *b);
   void set_configurations (c20::config configs);
   void read_original_mac(unsigned char * m, uint8_t* input_file, size_t off);
   int check_file(std::string a);

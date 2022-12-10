@@ -3,9 +3,8 @@
 //
 #include "types.h"
 #include "cc20_multi.h"
-#include "empp.cpp"
+#include "empp.h"
 // KDF test
-#include "cc20_scrypt.h"
 
 #ifndef PDM_CC20_DEV_HPP
 #include "lib/stand_alone.cpp"

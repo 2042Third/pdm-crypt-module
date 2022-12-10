@@ -1,5 +1,0 @@
-/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/CMakeFiles/cc20.dir
-/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/CMakeFiles/RUN_TESTS.dir
-/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/CMakeFiles/install.dir
-/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/CMakeFiles/ALL_BUILD.dir
-/Users/mikeyang/Documents/pdm/pdm-crypt-module/build/CMakeFiles/ZERO_CHECK.dir
