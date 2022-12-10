@@ -931,6 +931,7 @@ void PDM_BRIDGE_MOBILE::ck_crypt(uint8_t* buf,
                                  ){
   Cc20  cry_obj;
   cry_obj.conf.poly1305_toggle = 0;
+  cry_obj.conf.DISPLAY_PROG=0;
   cry_obj.conf.pure_xor = 1;
   cry_obj.conf.DE = 0;
   cry_obj.x_set_vals(nonce, key);

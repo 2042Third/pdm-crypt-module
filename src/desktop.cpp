@@ -5,10 +5,7 @@
 #include "cc20_multi.h"
 #include "empp.h"
 // KDF test
-
-#ifndef PDM_CC20_DEV_HPP
-#include "lib/stand_alone.cpp"
-#endif // PDM_CC20_DEV_HPP
+#include <cstring>
 using namespace std;
 namespace web_test{
 //  /**
@@ -148,6 +145,60 @@ namespace web_test{
     return 1;
   }
 
+  void print_stats(const uint8_t* a,size_t size){
+    string ac ((const char*)a,0,size);
+    cout<< "Plain: "<<ac<<endl;
+    cout<< " Hax : "<<stoh(ac)<<endl;
+    cout<< "Hash : "<<get_hash(ac)<<endl;
+  }
+
+  int pure_crypt_test(){
+    size_t iosize = cc20_utility::nonce_key_pair_size();
+    vector<std::uint8_t> input_buffer,output_buffer, key_buffer;
+    input_buffer.reserve(cc20_utility::nonce_key_pair_size()+1);
+    output_buffer.reserve(cc20_utility::nonce_key_pair_size()+1);
+    key_buffer.reserve(cc20_utility::nonce_key_pair_size()+1); key_buffer.clear();
+
+    for (auto i=0;i<cc20_utility::nonce_key_pair_size();i++){
+      input_buffer.data()[i] = ' ';
+      output_buffer.data()[i] = ' ';
+      key_buffer.data()[i] = 0;
+    }
+    cc20_utility::gen_key_nonce_pair(key_buffer.data(),cc20_utility::nonce_key_pair_size());
+    printf("Randomly generated nonce & key pair \n");
+    print_stats(key_buffer.data(),cc20_utility::nonce_key_pair_size());
+    uint8_t nonce [NONCE_SIZE+1],key[CC20_KEY_SIZE+1];
+    memcpy(nonce,key_buffer.data(),NONCE_SIZE);
+    memcpy(key,key_buffer.data()+NONCE_SIZE,CC20_KEY_SIZE);
+    cout<<"Split nonce: "<<endl;
+    print_stats(key_buffer.data(),NONCE_SIZE);
+    print_stats(key_buffer.data()+NONCE_SIZE,CC20_KEY_SIZE);
+
+    input_buffer.data()[5] = 'h';
+    input_buffer.data()[6] = 'e';
+    input_buffer.data()[7] = 'y';
+
+    cout<<"Before encrypt: "<<endl;
+    cout<<"Input buffer "<<endl;
+    print_stats(input_buffer.data(),iosize);
+    cout<<"Output buffer "<<endl;
+    print_stats(output_buffer.data(),iosize);
+
+    cc20_utility::pure_crypt(input_buffer.data(),output_buffer.data(),iosize,key_buffer.data());
+    cout<<"After encrypt: "<<endl;
+    cout<<"Input buffer "<<endl;
+    print_stats(input_buffer.data(),iosize);
+    cout<<"Output buffer "<<endl;
+    print_stats(output_buffer.data(),iosize);
+    cc20_utility::pure_crypt(output_buffer.data(),input_buffer.data(),iosize,key_buffer.data());
+    cout<<"After decrypt: "<<endl;
+    cout<<"Output buffer "<<endl;
+    print_stats(output_buffer.data(),iosize);
+    cout<<"Input buffer "<<endl;
+    print_stats(input_buffer.data(),iosize);
+    return 1;
+  }
+
 
 } // namespace testing
 //#ifdef HAS_MAIN
@@ -206,9 +257,11 @@ int main(int argc, char ** argv) {
 #else // start linux web test
   if(argc < 2){
     cout<<"Must have 1 input to start testing. \n \"1\" for curve test. \n "
-          "\"2\" for encryption test. \n"
+          "\"2\" for encryption test. \n "
           "\"3\" for scrypt test. \n "
-          "\"4\" for mobile release. \n "<<endl;
+          "\"4\" for mobile release. \n "
+          "\"5\" for pure crypt test. \n "
+          <<endl;
     return 0;
   }
   if(stoi(argv[1]) == 1){
@@ -244,6 +297,10 @@ int main(int argc, char ** argv) {
     std::string pas = "1234";
     std::string msg = "hello this is a message";
     web_test::test_scrypt(pas, msg);
+  }
+  else if (stoi(argv[1])==5) {
+    cout<<"Pure xor Encryption test.\n"<<endl;
+    web_test::pure_crypt_test();
   }
   else {
    cout<<"Command not found, exiting."<<endl;
