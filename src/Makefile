@@ -47,7 +47,8 @@ srcs = lib/cc20_file.cpp \
 	lib/scrypt/src/sha256.c \
 	lib/ec.cpp \
     cc20core/cc20_multi.cpp\
-    ./cc20_dev.cpp
+    ./cc20_dev.cpp \
+    ./empp.cpp
 
 all_includes = -I./include \
 -I./lib \

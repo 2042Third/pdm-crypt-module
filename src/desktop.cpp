@@ -10,7 +10,144 @@
 #include "lib/stand_alone.cpp"
 #endif // PDM_CC20_DEV_HPP
 using namespace std;
+namespace web_test{
+//  /**
+//   * Basic encryption and decryption demo
+//   * @param a key for encryption
+//   * @param b message to be encrypted
+//   * @param accum for r_test() only, default -1
+//   * */
+//  int test ( const std::string& a, const std::string& b, int accum){
+//    std::string pas = "12345";
+//    std::string a_copy=a,b_copy=b;
+//    const std::string enc = loader_check(a_copy, b_copy);
+//    const std::string dec = loader_out(a_copy, enc);
+//    std::string decWrong = loader_out(pas, enc);
+//    int ttl = 1000000;
+//    if(accum==-1){
+//      std::cout<<"Input key: \t"<<a<<std::endl;
+//      std::cout<<"Input message: \t"<<b<<std::endl;
+//      std::cout<<"Encrypted message: \t"<<enc<<std::endl;
+//      std::cout<<"Decrypted message: \t"<<dec<<std::endl;
+//      std::cout<<"\"12345\" Decrypted message: \t"<<decWrong<<std::endl;
+//      return 1;
+//    }
+//    if (dec == b){
+//      accum+=1;
+//      std::cout<<accum/10000<< "% pass\r";
+//    }
+//    else {
+//      std::cout<<"failure!!"<<std::endl;
+//      std::cout<< "\tgot     : "<<dec<<std::endl;
+//      std::cout<< "\texpected: "<<b<<std::endl;
+//    }
+//    return accum;
+//  }
+  int test_scrypt (const std::string& a, const std::string& b, int accum=-1){
+    std::string c = scrypt(a);
+    std::string enc = checker_in(c, b);
+    std::string dec = checker_out(c, enc);
+    std::string decWrong = loader_out((std::string &) "12345", enc);
+    int ttl = 1000000;
+    if(accum==-1){
+      std::cout<<"Input key: \t"<<a<<std::endl;
+      std::cout<<"Scrypt key: \t"<<c<<std::endl;
+      std::cout<<"Input message: \t"<<b<<std::endl;
+      std::cout<<"Encrypted message: \t"<<enc<<std::endl;
+      std::cout<<"Decrypted message: \t"<<dec<<std::endl;
+      std::cout<<"\"12345\" Decrypted message: \t"<<decWrong<<std::endl;
+      return 1;
+    }
+    if (dec == b){
+      accum+=1;
+      std::cout<<accum/10000<< "% pass\r";
+    }
+    else {
+      std::cout<<"failure!!"<<std::endl;
+      std::cout<< "\tgot     : "<<dec<<std::endl;
+      std::cout<< "\texpected: "<<b<<std::endl;
+    }
+    return accum;
+  }
+  int test_enc_dec (const std::string& a, const std::string& b, int accum=-1){
+    std::string c = scrypt(a);
+    std::string enc = checker_in(c, b);
+    std::string dec = checker_out(c, enc);
+    std::string pas2 = "12345";
+    std::string decWrong = loader_out(pas2, enc);
+    int ttl = 1000000;
+    if(accum==-1){
+      std::cout<<"Input key: \t"<<a<<std::endl;
+      std::cout<<"Scrypt key: \t"<<c<<std::endl;
+      std::cout<<"Input message: \t"<<b<<std::endl;
+      std::cout<<"Encrypted message: \t"<<enc<<std::endl;
+      std::cout<<"Decrypted message: \t"<<dec<<std::endl;
+      std::cout<<"\"12345\" Decrypted message: \t"<<decWrong<<std::endl;
+      return 1;
+    }
+    if (dec == b){
+      accum+=1;
+      std::cout<<accum/10000<< "% pass\r";
+    }
+    else {
+      std::cout<<"failure!!"<<std::endl;
+      std::cout<< "\tgot     : "<<dec<<std::endl;
+      std::cout<< "\texpected: "<<b<<std::endl;
+    }
+    return accum;
+  }
+  /**
+   * Runs the encryption and decryption for 1,000,000 times
+   * and count the accuracy.
+   * *Not useful after the initial implementation.
+   * */
+  int r_test(int count){
+    std::string pas = "1234";
+    std::string tmp2 = "hello this is a message";
+    int accum =0;
+    for (unsigned int i=0 ; i< count;i++){
+//      accum = test(pas, tmp2, accum);
+    }
+    std::cout<<std::endl;
+    return 1;
+  }
+  /**
+   * Basic public key DH test
+   * */
+  int curve_test (){
+    size_t testsize=0;
+    uint8_t test[C20_ECC_SIZE];
+    std::string ttmp="3a57718b1da04cc0c52f626212e5c82a";
+    for(auto i:ttmp){
+      test[testsize]=i;
+      testsize++;
+    }
+    std::string tmpshr="";
+    for(int i=0;i<C20_ECC_SIZE;i++)
+      tmpshr.append(1,(char)test[i]);
+    // std::cout<<test<<std::endl;
+    // std::cout<<stoh(tmpshr)<<std::endl;
 
+    // Alice
+    std::string seca = gen_sec();
+    std::string puba = gen_pub(seca);
+
+    // Bob
+    std::string secb = gen_sec();
+    std::string pubb = gen_pub(secb);
+
+    //agreenent
+    std::string shra = gen_shr(seca,pubb);
+    std::string shrb = gen_shr(secb,puba);
+    printf("Alice secret and public: \"%s\", \"%s\"\n",seca.data(),puba.data());
+    printf("Bob   secret and public: \"%s\", \"%s\"\n",secb.data(),pubb.data());
+    printf("Alice shared: \"%s\"\n",shra.data());
+    printf("Bob   shared: \"%s\"\n",shrb.data());
+    return 1;
+  }
+
+
+} // namespace testing
 //#ifdef HAS_MAIN
 void set_config(char*inp, c20::config * sts){
   string a = inp;
@@ -77,11 +214,22 @@ int main(int argc, char ** argv) {
     web_test::curve_test();
   }
   else if (stoi(argv[1]) == 2){
-    cout<<"Encryption test for web release.\n"<<endl;
+//    cout<<"Encryption test for web release.\n"<<endl;
+//
+//    std::string pas = "1234";
+//    std::string pas2 = "12345";
+//    std::string msg = "hello this is a message";
+//    std::string enc = loader_check(pas, msg);
+//    std::string dec = loader_out(pas, enc);
+//    std::string decWrong = loader_out(pas2, enc);
+//
+//
+//    cout<<"#1    : \""<< pas<<"\"\n"<<endl;
+//    cout<<"#1 out: \""<< dec<<"\"\n"<<endl;
+//    cout<<"#1 sec: \""<< enc<<"\"\n"<<endl;
+//    cout<<"#2    : \""<< pas2<<"\"\n"<<endl;
+//    cout<<"#2 out: \""<< decWrong<<"\"\n"<<endl;
 
-    std::string pas = "1234";
-    std::string msg = "hello this is a message";
-    web_test::test(pas, msg);
   }
   else if (stoi(argv[1]) == 3){
     cout<<"Scrypt Test.\n"<<endl;

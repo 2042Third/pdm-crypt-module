@@ -243,11 +243,12 @@ void get_hash_convert(const char* a, size_t a_n, char* outstr){
 }
 
 namespace cc20_utility {
-  static void gen_key_nonce_pair(uint8_t *a,  size_t size){
+  size_t nonce_key_pair_size () {return NONCE_SIZE+CC20_KEY_SIZE+1;}
+  void gen_key_nonce_pair(uint8_t *a,  size_t size){
     gen_byte_rand_cc20(a,size);
   }
 
-  static void gen_byte_rand_cc20 (uint8_t* a,  size_t n){
+  void gen_byte_rand_cc20 (uint8_t* a,  size_t n){
     for (int i=0;i<n;i++) {
       std::random_device rd;   // non-deterministic generator
       std::mt19937 gen(rd());
@@ -264,115 +265,7 @@ namespace cc20_utility {
 
 }
 
-namespace web_test{
-  /**
-   * Basic encryption and decryption demo
-   * @param a key for encryption
-   * @param b message to be encrypted
-   * @param accum for r_test() only, default -1
-   * */
-  int test (const string& a, const string& b, int accum){
-    string enc = loader_check(a, b);
-    string dec = loader_out(a, enc);
-    string decWrong = loader_out("12345",enc);
-    int ttl = 1000000;
-    if(accum==-1){
-      cout<<"Input key: \t"<<a<<endl;
-      cout<<"Input message: \t"<<b<<endl;
-      cout<<"Encrypted message: \t"<<enc<<endl;
-      cout<<"Decrypted message: \t"<<dec<<endl;
-      cout<<"\"12345\" Decrypted message: \t"<<decWrong<<endl;
-      return 1;
-    }
-    if (dec == b){
-      accum+=1;
-      cout<<accum/10000<< "% pass\r";
-    }
-    else {
-      cout<<"failure!!"<<endl;
-      cout<< "\tgot     : "<<dec<<endl;
-      cout<< "\texpected: "<<b<<endl;
-    }
-    return accum;
-  }
-  int test_scrypt (const string& a, const string& b, int accum=-1){
-    string c = scrypt(a);
-    string enc = checker_in(c, b);
-    string dec = checker_out(c, enc);
-    string decWrong = loader_out("12345",enc);
-    int ttl = 1000000;
-    if(accum==-1){
-      cout<<"Input key: \t"<<a<<endl;
-      cout<<"Scrypt key: \t"<<c<<endl;
-      cout<<"Input message: \t"<<b<<endl;
-      cout<<"Encrypted message: \t"<<enc<<endl;
-      cout<<"Decrypted message: \t"<<dec<<endl;
-      cout<<"\"12345\" Decrypted message: \t"<<decWrong<<endl;
-      return 1;
-    }
-    if (dec == b){
-      accum+=1;
-      cout<<accum/10000<< "% pass\r";
-    }
-    else {
-      cout<<"failure!!"<<endl;
-      cout<< "\tgot     : "<<dec<<endl;
-      cout<< "\texpected: "<<b<<endl;
-    }
-    return accum;
-  }
-  /**
-   * Runs the encryption and decryption for 1,000,000 times
-   * and count the accuracy.
-   * *Not useful after the initial implementation.
-   * */
-  int r_test(int count){
-    char* pas = "1234";
-    char* tmp2 = "hello this is a message";
-    int accum =0;
-    for (unsigned int i=0 ; i< count;i++){
-      accum = test(pas, tmp2, accum);
-    }
-    cout<<endl;
-    return 1;
-  }
-  /**
-   * Basic public key DH test
-   * */
-  int curve_test (){
-     size_t testsize=0;
-     uint8_t test[C20_ECC_SIZE];
-     string ttmp="3a57718b1da04cc0c52f626212e5c82a";
-     for(auto i:ttmp){
-       test[testsize]=i;
-       testsize++;
-     }
-     string tmpshr="";
-     for(int i=0;i<C20_ECC_SIZE;i++)
-       tmpshr.append(1,(char)test[i]);
-     // cout<<test<<endl;
-     // cout<<stoh(tmpshr)<<endl;
 
-     // Alice
-     string seca = gen_sec();
-     string puba = gen_pub(seca);
-
-     // Bob
-     string secb = gen_sec();
-     string pubb = gen_pub(secb);
-
-     //agreenent
-     string shra = gen_shr(seca,pubb);
-     string shrb = gen_shr(secb,puba);
-     printf("Alice secret and public: \"%s\", \"%s\"\n",seca.data(),puba.data());
-     printf("Bob   secret and public: \"%s\", \"%s\"\n",secb.data(),pubb.data());
-     printf("Alice shared: \"%s\"\n",shra.data());
-     printf("Bob   shared: \"%s\"\n",shrb.data());
-     return 1;
-  }
-
-
-} // namespace testing
 
 #ifdef cplusplus_main_compilation
 
