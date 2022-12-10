@@ -154,7 +154,7 @@ namespace web_test{
 
   int pure_crypt_test(){
     size_t iosize = cc20_utility::nonce_key_pair_size();
-    vector<std::uint8_t> input_buffer,output_buffer, key_buffer;
+    std::string input_buffer,output_buffer, key_buffer;
     input_buffer.reserve(cc20_utility::nonce_key_pair_size()+1);
     output_buffer.reserve(cc20_utility::nonce_key_pair_size()+1);
     key_buffer.reserve(cc20_utility::nonce_key_pair_size()+1); key_buffer.clear();
@@ -164,15 +164,15 @@ namespace web_test{
       output_buffer.data()[i] = '-';
       key_buffer.data()[i] = 0;
     }
-    cc20_utility::gen_key_nonce_pair(key_buffer.data(),cc20_utility::nonce_key_pair_size());
+    cc20_utility::gen_key_nonce_pair((unsigned char*)key_buffer.data(),cc20_utility::nonce_key_pair_size());
     printf("Randomly generated nonce & key pair \n");
-    print_stats(key_buffer.data(),cc20_utility::nonce_key_pair_size());
+    print_stats((unsigned char*)key_buffer.data(),cc20_utility::nonce_key_pair_size());
     uint8_t nonce [NONCE_SIZE+1],key[CC20_KEY_SIZE+1];
     memcpy(nonce,key_buffer.data(),NONCE_SIZE);
     memcpy(key,key_buffer.data()+NONCE_SIZE,CC20_KEY_SIZE);
     cout<<"Split nonce: "<<endl;
-    print_stats(key_buffer.data(),NONCE_SIZE);
-    print_stats(key_buffer.data()+NONCE_SIZE,CC20_KEY_SIZE);
+    print_stats((unsigned char*)key_buffer.data(),NONCE_SIZE);
+    print_stats((unsigned char*)key_buffer.data()+NONCE_SIZE,CC20_KEY_SIZE);
 
     input_buffer.data()[5] = 'h';
     input_buffer.data()[6] = 'e';
@@ -180,25 +180,25 @@ namespace web_test{
 
     cout<<"\nBefore encrypt: "<<endl;
     cout<<"Input buffer "<<endl;
-    print_stats(input_buffer.data(),iosize,0);
+    print_stats((unsigned char*)input_buffer.data(),iosize,0);
     cout<<"Output buffer "<<endl;
-    print_stats(output_buffer.data(),iosize,0);
+    print_stats((unsigned char*)output_buffer.data(),iosize,0);
 
     // Encrypt step
-    cc20_utility::pure_crypt(input_buffer.data(),output_buffer.data(),iosize,key_buffer.data());
+    cc20_utility::pure_crypt((unsigned char*)input_buffer.data(),(unsigned char*)output_buffer.data(),iosize,(unsigned char*)key_buffer.data());
     cout<<"\nAfter encrypt: "<<endl;
     cout<<"Input buffer "<<endl;
-    print_stats(input_buffer.data(),iosize,0);
+    print_stats((unsigned char*)input_buffer.data(),iosize,0);
     cout<<"Output buffer "<<endl;
-    print_stats(output_buffer.data(),iosize,0);
+    print_stats((unsigned char*)output_buffer.data(),iosize,0);
 
     // Decrypt step
-    cc20_utility::pure_crypt(output_buffer.data(),input_buffer.data(),iosize,key_buffer.data());
+    cc20_utility::pure_crypt((unsigned char*)output_buffer.data(),(unsigned char*)input_buffer.data(),iosize,(unsigned char*)key_buffer.data());
     cout<<"\nAfter decrypt: "<<endl;
     cout<<"Output buffer "<<endl;
-    print_stats(output_buffer.data(),iosize,0);
+    print_stats((unsigned char*)output_buffer.data(),iosize,0);
     cout<<"Input buffer "<<endl;
-    print_stats(input_buffer.data(),iosize,0);
+    print_stats((unsigned char*)input_buffer.data(),iosize,0);
     return 1;
   }
 
