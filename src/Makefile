@@ -46,7 +46,8 @@ srcs = lib/cc20_file.cpp \
 	lib/scrypt/src/scrypt.c \
 	lib/scrypt/src/sha256.c \
 	lib/ec.cpp \
-	cc20core/cc20_multi.cpp
+    cc20core/cc20_multi.cpp\
+    ./cc20_dev.cpp
 
 all_includes = -I./include \
 -I./lib \
@@ -62,7 +63,7 @@ options = -g -lpthread -m64 -O3 -pthread
 
 
 windows:
-	g++ $(all_includes) $(srcs) $(options) $(all_defs) -fpermissive -std=c++17 desktop.cpp -Wall -o build/c20
+	clang++ $(all_includes) $(srcs) $(options) $(all_defs) -fpermissive -std=c++17 desktop.cpp -Wall -o build/c20
 linux:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) -Wall -g
 xwindows:
@@ -71,7 +72,7 @@ xwindows:
 windows_single:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -D SINGLETHREADING
 windows_debug:
-	g++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -g -DFOURCORE
+	clang++ $(boost) $(release_en1) $(srcs) $(inc) $(win32) -g -DFOURCORE
 release_en:
 	g++ $(hash) $(boost) $(release_en) $(inc)
 release_de:

@@ -9,20 +9,12 @@
 #include <string>
 #include <iterator>
 
-#define U32T8_S(p, v)    \
-  {                            \
-    (p)[0] = ((v) >> 0) & 0xff;  \
-    (p)[1] = ((v) >> 8) & 0xff;  \
-    (p)[2] = ((v) >> 16) & 0xff; \
-    (p)[3] = ((v) >> 24) & 0xff; \
-  }
 
-#define U8T32_S(p)                              \
-  (((uint32_t)((p)[0])) | ((uint32_t)((p)[1]) << 8) | \
-   ((uint32_t)((p)[2]) << 16) | ((uint32_t)((p)[3]) << 24))
 
 namespace cc20_dev {
-  template<typename NU>  void set_conc (NU* s1,NU* s2,unsigned int n) ;
+  template<typename NU> void set_conc (NU* s1,NU* s2,unsigned int n){
+    for(unsigned int i=0;i<n;i++)s1[i]+=s2[i];
+  }
   template<typename NU> void set_xor(NU* s1,NU* s2,unsigned int n,unsigned int off);
   Bytes stob (std::string &src);
   std::string btos (Bytes &src);
@@ -41,7 +33,17 @@ namespace cc20_dev {
   }
 
 }
+#define U32T8_S(p, v)    \
+  {                            \
+    (p)[0] = ((v) >> 0) & 0xff;  \
+    (p)[1] = ((v) >> 8) & 0xff;  \
+    (p)[2] = ((v) >> 16) & 0xff; \
+    (p)[3] = ((v) >> 24) & 0xff; \
+  }
 
+#define U8T32_S(p)                              \
+  (((uint32_t)((p)[0])) | ((uint32_t)((p)[1]) << 8) | \
+   ((uint32_t)((p)[2]) << 16) | ((uint32_t)((p)[3]) << 24))
 template <typename Iterator>
 struct hex_iterator_traits {
   typedef typename std::iterator_traits<Iterator>::value_type value_type;

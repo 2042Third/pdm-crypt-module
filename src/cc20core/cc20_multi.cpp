@@ -25,9 +25,7 @@ author:     Yi Yang
 #include <sstream>
 #include <string.h>
 #include "cc20_file.h"
-#ifndef PDM_CC20_DEV_HPP
-#include "cc20_dev.h"
-#endif // PDM_CC20_DEV_HPP
+#include <cc20_dev.h>
 #include "cc20_multi.h"
 #include "cc20_scrypt.h"
 //#include "xCc20.h"
@@ -110,6 +108,7 @@ void Cc20::one_block(int thrd, uint64_t xcount) {
 #else
   for (unsigned int i = 0; i < 10; i++) cc20_dev::tworounds(folow[thrd]); // 20 rounds
 #endif
+
   cc20_dev::set_conc(cy[thrd], folow[thrd], 16);
   endicha(this -> nex[thrd], cy[thrd]);
 }

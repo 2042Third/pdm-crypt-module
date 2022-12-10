@@ -5,12 +5,13 @@
 #include "cc20_dev.h"
 
 #include <random>
-namespace cc20_dev{
-template<typename NU>
-void set_conc(NU* s1,NU* s2,unsigned int n){
-  for(unsigned int i=0;i<n;i++)s1[i]+=s2[i];
-}
 
+//template<typename NU>
+//void cc20_dev::set_conc(NU* s1,NU* s2,unsigned int n){
+//  for(unsigned int i=0;i<n;i++)s1[i]+=s2[i];
+//}
+
+namespace cc20_dev{
 template<typename NU>
 void set_xor(NU* s1,NU* s2,unsigned int n,unsigned int off){
   for(unsigned int i=0;i<n;i++){

@@ -21,6 +21,7 @@ set (PDM_BUILD_TYPE  MOBILE) # android
 
 # Core source files
 set(PDM_SOURCES ${PDM_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cc20_dev.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_file.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/sha3.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cpp-mmf/memory_mapped_file.cpp
@@ -37,8 +38,6 @@ set(PDM_SOURCES ${PDM_SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/sha256.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ec.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_poly.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/cc20_dev.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_dev.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cc20core/cc20_multi.cpp
     )
 
@@ -103,10 +102,11 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
      if(${PDM_BUILD_TYPE_MOBILE} MATCHES ANDROID)
          set(PDM_INCLUDES ${PDM_INCLUDES} ../java/com/pdmnotes/)
          # Android bridge cpp file
-         set(PDM_SOURCES "${PDM_SOURCES} ../java/com/pdmnotes/com_pdmnotes_PdmCrypt.c" src/cc20_dev.cpp src/include/cc20_dev.h src/cc20_dev.cpp)
+         set(PDM_SOURCES "${PDM_SOURCES} ../java/com/pdmnotes/com_pdmnotes_PdmCrypt.c")
      endif()
 
-     add_library(cc20  ${PDM_SOURCES})
+     add_library(cc20 SHARED)
+     target_sources(cc20 PRIVATE  ${PDM_SOURCES})
      target_compile_definitions(cc20 ${PDM_OPTIONS})
      target_compile_options(cc20 PUBLIC ${PDM_COMPILER_FLAGS})
      target_include_directories(cc20
