@@ -9,7 +9,11 @@ enable_language(OBJC)
 
 MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
 MESSAGE( STATUS "CMAKE_OBJC_FLAGS: " ${CMAKE_OBJC_FLAGS} )
-set (PDM_TEST_PLATFORM DESKTOP) # Adds an executable, unset to build for mobile
+
+if (PDM_TEST_PLATFORM_DESKTOP)
+  MESSAGE( STATUS "Making PDM test platform for desktop." )
+  set (PDM_TEST_PLATFORM DESKTOP) # Adds an executable, unset to build for mobile
+endif()
 
 set (PDM_BUILD_TYPE  MOBILE) # android
 #set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
@@ -33,6 +37,8 @@ set(PDM_SOURCES ${PDM_SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/sha256.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ec.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_poly.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cc20_dev.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_dev.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cc20core/cc20_multi.cpp
     )
 
@@ -56,7 +62,7 @@ set(PDM_INCLUDE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/include/xCc20.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_diff.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_wrapper.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_dev.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_dev.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/include/empp.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna-8.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna-16.h
@@ -88,6 +94,8 @@ set(PDM_INCLUDE_FILES
 set(PDM_OPTIONS PUBLIC  LINUX ${PDM_OPTIONS})
 set(PDM_COMPILER_FLAGS -g -lpthread -O3)
  if(${PDM_BUILD_TYPE} MATCHES MOBILE)
+
+   MESSAGE( STATUS "Will run: MOBILE"  )
      project(cc20)
      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
@@ -95,13 +103,13 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
      if(${PDM_BUILD_TYPE_MOBILE} MATCHES ANDROID)
          set(PDM_INCLUDES ${PDM_INCLUDES} ../java/com/pdmnotes/)
          # Android bridge cpp file
-         set(PDM_SOURCES "${PDM_SOURCES} ../java/com/pdmnotes/com_pdmnotes_PdmCrypt.c" )
+         set(PDM_SOURCES "${PDM_SOURCES} ../java/com/pdmnotes/com_pdmnotes_PdmCrypt.c" src/cc20_dev.cpp src/include/cc20_dev.h src/cc20_dev.cpp)
      endif()
 
-     add_library(${PROJECT_NAME} SHARED ${PDM_SOURCES})
-     target_compile_definitions(${PROJECT_NAME} ${PDM_OPTIONS})
+     add_library(cc20  ${PDM_SOURCES})
+     target_compile_definitions(cc20 ${PDM_OPTIONS})
      target_compile_options(cc20 PUBLIC ${PDM_COMPILER_FLAGS})
-     target_include_directories(${PROJECT_NAME}
+     target_include_directories(cc20
          PUBLIC
          ${PDM_INCLUDES}
      )
@@ -246,6 +254,7 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
  else() # DESKTOP
 
 #     LIBRARY COMPILE FINISH
+MESSAGE( STATUS "Will run: DESKTOP"  )
 
      add_executable(cc20 src/desktop.cpp)
 

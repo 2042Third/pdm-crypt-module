@@ -19,6 +19,8 @@
 #include <string.h>
 #include <sstream>
 #include <stdlib.h>
+#include <random>
+
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #include <emscripten/bind.h>
@@ -239,6 +241,21 @@ void get_hash_convert(const char* a, size_t a_n, char* outstr){
     outstr[i] = b[i];
   }
 }
+
+namespace cc20_utility {
+  static void gen_key_nonce_pair(uint8_t *a,  size_t size){
+    gen_byte_rand_cc20(a,size);
+  }
+
+  static void gen_byte_rand_cc20 (uint8_t* a,  size_t n){
+    for (int i=0;i<n;i++) {
+      std::random_device rd;   // non-deterministic generator
+      std::mt19937 gen(rd());
+      a[i]=(uint8_t) gen();
+    }
+  }
+}
+
 namespace web_test{
   /**
    * Basic encryption and decryption demo

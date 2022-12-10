@@ -3,12 +3,14 @@ cc20_dev.hpp
 
 pdm/Personal Data Management system is a encrypted and multiplatform data searching, building, archiving tool.
 
+ - Refactored to static members in cc20_dev.h class (12/2022)
+
 author:     Yi Yang
             5/2021
 */
 
-#ifndef PDM_CC20_DEV_HPP
-#define PDM_CC20_DEV_HPP 
+#ifdef PDM_CC20_DEV_HPP
+//#define PDM_CC20_DEV_HPP
 
 // #include "pdm-service.hpp"
 #include <iostream>
@@ -283,14 +285,14 @@ void state_cpy(NT *a,NT*b,unsigned int n){
     for(unsigned int i=0; i<n;i++) a[i]=b[i];
 }
 template <typename T, typename OutputIterator>
-    OutputIterator encode_one ( T val, OutputIterator out, const char * hexDigits ) {
-        const std::size_t num_hex_digits =  2 * sizeof ( T );
-        char res [ num_hex_digits ];
-        char  *p = res + num_hex_digits;
-        for ( std::size_t i = 0; i < num_hex_digits; ++i, val >>= 4 )
-            *--p = hexDigits [ val & 0x0F ];
-        return std::copy ( res, res + num_hex_digits, out );
-        }
+OutputIterator encode_one ( T val, OutputIterator out, const char * hexDigits ) {
+    const std::size_t num_hex_digits =  2 * sizeof ( T );
+    char res [ num_hex_digits ];
+    char  *p = res + num_hex_digits;
+    for ( std::size_t i = 0; i < num_hex_digits; ++i, val >>= 4 )
+        *--p = hexDigits [ val & 0x0F ];
+    return std::copy ( res, res + num_hex_digits, out );
+}
 
 template <typename T>
 unsigned char hex_char_to_int ( T val ) {
@@ -300,7 +302,7 @@ unsigned char hex_char_to_int ( T val ) {
     else if ( c >= 'A' && c <= 'F' ) retval = c - 'A' + 10;
     else if ( c >= 'a' && c <= 'f' ) retval = c - 'a' + 10;
     return static_cast<char>(retval);
-    }
+}
 
 /**
  * Based on boost and sql functions that converts hex string to string

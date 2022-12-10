@@ -68,7 +68,7 @@ int main(int argc, char ** argv) {
 #else // start linux web test
   if(argc < 2){
     cout<<"Must have 1 input to start testing. \n \"1\" for curve test. \n "
-          "\"2\" for encryption test. "
+          "\"2\" for encryption test. \n"
           "\"3\" for scrypt test. \n "
           "\"4\" for mobile release. \n "<<endl;
     return 0;

@@ -26,7 +26,7 @@ author:     Yi Yang
 #include <string.h>
 #include "cc20_file.h"
 #ifndef PDM_CC20_DEV_HPP
-#include "cc20_dev.hpp"
+#include "cc20_dev.h"
 #endif // PDM_CC20_DEV_HPP
 #include "cc20_multi.h"
 #include "cc20_scrypt.h"
@@ -34,16 +34,10 @@ author:     Yi Yang
 
 #include <functional> // std::ref
 #include <utility>
+#include <fstream>
 
 using namespace std;
 
-// void enc_writing(string oufile_name);
-// void enc_writing_nw();
-// void multi_enc_pthrd(int thrd);
-// void multi_enc_pthrd_nw(int thrd);
-// void set_thread_arg(unsigned long int thrd, uint8_t* linew1, size_t n,  uint8_t * line, uint32_t count, Cc20 * ptr) ;
-// void set_thread_arg(unsigned long int thrd, uint8_t* np,unsigned long int tracker,unsigned long int n, unsigned long int tn,uint8_t* line,uint32_t count, Cc20 * ptr);
-       
 
 
 /**
@@ -107,16 +101,16 @@ template < typename NU >
 */
 
 void Cc20::one_block(int thrd, uint64_t xcount) {
-  cy[thrd][12] = upper(xcount);
-  cy[thrd][13] = lower(xcount);
+  cy[thrd][12] = cc20_dev::upper(xcount);
+  cy[thrd][13] = cc20_dev::lower(xcount);
   memcpy(folow[thrd], cy[thrd], sizeof(uint32_t) * 16);
 
 #ifdef ROUNDCOUNTTWLV
   for (unsigned int i = 0; i < 6; i++) tworounds(folow[thrd]); // 12 rounds
 #else
-  for (unsigned int i = 0; i < 10; i++) tworounds(folow[thrd]); // 20 rounds
+  for (unsigned int i = 0; i < 10; i++) cc20_dev::tworounds(folow[thrd]); // 20 rounds
 #endif
-  set_conc(cy[thrd], folow[thrd], 16);
+  cc20_dev::set_conc(cy[thrd], folow[thrd], 16);
   endicha(this -> nex[thrd], cy[thrd]);
 }
 
@@ -467,8 +461,8 @@ void Cc20::set_vals(uint8_t * nonce0, uint8_t * key0) {
     this -> cy[i][2] = 0x79622d32;
     this -> cy[i][3] = 0x6b206574;
 
-    expan(this -> cy[i], 13, this -> nonce, 3);
-    expan(this -> cy[i], 4, key0, 8);
+    cc20_dev::expan(this -> cy[i], 13, this -> nonce, 3);
+    cc20_dev::expan(this -> cy[i], 4, key0, 8);
     //algo change #2
     one_block((int)i, (int)1);
   }
@@ -500,8 +494,8 @@ void Cc20::x_set_vals(uint8_t *nonce0, uint8_t *key0) {
     this -> cy[i][2] = 0x79622d32;
     this -> cy[i][3] = 0x6b206574;
 
-    expan(this -> cy[i], 14, this -> nonce+16, 2); // * explained below
-    expan(this -> cy[i], 4, key0, 8);
+    cc20_dev::expan(this -> cy[i], 14, this -> nonce+16, 2); // * explained below
+    cc20_dev::expan(this -> cy[i], 4, key0, 8);
     cy[i][12]=0;
     cy[i][13]=1;  // originally nonce is only at index 13,14,15
                   // , now the nonce is generating the xchacha-subkey
@@ -524,8 +518,8 @@ void Cc20::h_set_vals(uint8_t * nonce0, uint8_t * key0) {
     this -> cy[i][1] = 0x3320646e;
     this -> cy[i][2] = 0x79622d32;
     this -> cy[i][3] = 0x6b206574;
-    expan(this -> cy[i], 12, this -> nonce, 4);
-    expan(this -> cy[i], 4, key0, 8);
+    cc20_dev::expan(this -> cy[i], 12, this -> nonce, 4);
+    cc20_dev::expan(this -> cy[i], 4, key0, 8);
     one_block((int)i, (int)1);
 
   }
@@ -676,8 +670,8 @@ void cmd_enc(string infile_name, string oufile_name, string text_nonce, c20::con
  * */
 void cmd_enc(string infile_name, string oufile_name, c20::config configs){
   Bytes cur;
-  init_byte_rand_cc20(cur,NONCE_SIZE);
-  string text_nonce = btos(cur);
+  cc20_dev::init_byte_rand_cc20(cur,NONCE_SIZE);
+  string text_nonce = cc20_dev::btos(cur);
   uint8_t key_hash[65]= {0};
   uint8_t inonce [NONCE_SIZE] = {0};
   Cc20 cry_obj;
@@ -728,8 +722,8 @@ void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key){
   Bytes nonce;
   string text_nonce;
   SHA3 key_hash;
-  key_hash.add(stob(text_key).data(),text_key.size());
-  key_hash.add(stob(text_key).data(),text_key.size());
+  key_hash.add(cc20_dev::stob(text_key).data(),text_key.size());
+  key_hash.add(cc20_dev::stob(text_key).data(),text_key.size());
   string infile_name_copy;
   if(cry_obj.conf.DE){
     uint8_t *line1[NONCE_SIZE]={0};
@@ -741,11 +735,11 @@ void cmd_enc(string infile_name, uint8_t* outstr, std::string text_key){
     fclose(infile);
   }
   else {
-    init_byte_rand_cc20(nonce,NONCE_SIZE);
-    text_nonce = btos(nonce);
+    cc20_dev::init_byte_rand_cc20(nonce,NONCE_SIZE);
+    text_nonce = cc20_dev::btos(nonce);
   }
   if (text_nonce.size() != 0) {
-    text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
+    text_nonce = cc20_dev::pad_to_key((string) text_nonce, NONCE_SIZE);
   }
 
 //  cry_obj.set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
@@ -774,8 +768,8 @@ void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outs
   Bytes nonce;
   string text_nonce;
   SHA3 key_hash;
-  key_hash.add(stob(text_key).data(),text_key.size());
-  key_hash.add(stob(text_key).data(),text_key.size());
+  key_hash.add(cc20_dev::stob(text_key).data(),text_key.size());
+  key_hash.add(cc20_dev::stob(text_key).data(),text_key.size());
   string infile_name_copy;
   uint8_t line1[NONCE_SIZE]={0};
   if(cry_obj.conf.DE){
@@ -784,11 +778,11 @@ void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outs
     text_nonce=(char*)line1;
   }
   else {
-    init_byte_rand_cc20(nonce,NONCE_SIZE);
-    text_nonce = btos(nonce);
+    cc20_dev::init_byte_rand_cc20(nonce,NONCE_SIZE);
+    text_nonce = cc20_dev::btos(nonce);
   }
   if (text_nonce.size() != 0) {
-    text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
+    text_nonce = cc20_dev::pad_to_key((string) text_nonce, NONCE_SIZE);
   }
 
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t *)key_hash.getHash().data());
@@ -813,8 +807,8 @@ void cmd_enc(uint8_t* buf, string oufile_name, std::string text_key, size_t outs
 void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_key){
   // cout<<"[cc20_multi] encryption start."<<endl;
   Bytes cur;
-  init_byte_rand_cc20(cur,NONCE_SIZE);
-  string text_nonce = btos(cur);
+  cc20_dev::init_byte_rand_cc20(cur,NONCE_SIZE);
+  string text_nonce = cc20_dev::btos(cur);
   Cc20  cry_obj;
   cry_obj.conf.DE=0;
   cry_obj.conf.DISPLAY_PROG=0;
@@ -842,9 +836,9 @@ void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
   Bytes input_vc;
   for(size_t i=0 ; i<NONCE_SIZE;i++)
     input_vc.push_back(buf[i]);
-  string text_nonce = btos(input_vc);
+  string text_nonce = cc20_dev::btos(input_vc);
   if (!text_nonce.empty()) {
-    text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
+    text_nonce = cc20_dev::pad_to_key((string) text_nonce, NONCE_SIZE);
   }
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
   cry_obj.rd_file_encr(buf, outstr, input_length);
@@ -859,8 +853,8 @@ void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , string text_ke
 void PDM_BRIDGE_MOBILE::ck_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , const string& text_key){
   // cout<<"[cc20_multi] encryption start."<<endl;
   Bytes cur;
-  init_byte_rand_cc20(cur,NONCE_SIZE);
-  string text_nonce = btos(cur);
+  cc20_dev::init_byte_rand_cc20(cur,NONCE_SIZE);
+  string text_nonce = cc20_dev::btos(cur);
   Cc20  cry_obj;
   cry_obj.conf.DE=0;
   cry_obj.conf.DISPLAY_PROG=0;
@@ -887,9 +881,9 @@ void PDM_BRIDGE_MOBILE::ck_dec(uint8_t* buf, size_t input_length, uint8_t* outst
   Bytes input_vc;
   for(size_t i=0 ; i<NONCE_SIZE;i++)
     input_vc.push_back(buf[i]);
-  string text_nonce = btos(input_vc);
+  string text_nonce = cc20_dev::btos(input_vc);
   if (!text_nonce.empty()) {
-    text_nonce = pad_to_key((string) text_nonce, NONCE_SIZE);
+    text_nonce = cc20_dev::pad_to_key((string) text_nonce, NONCE_SIZE);
   }
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)text_key.data());
   cry_obj.rd_file_encr(buf, outstr, input_length);
