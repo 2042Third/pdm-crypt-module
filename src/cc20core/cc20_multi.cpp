@@ -968,15 +968,18 @@ void PDM_BRIDGE_MOBILE::ck_crypt(uint8_t* buf,
 
 
 void cmd_enc_s(const uint8_t* buf, size_t input_length,
-             uint8_t* outstr , const uint8_t* _key){
+             uint8_t* outstr , const uint8_t* _key, size_t _key_size){
   Bytes cur;
   cc20_dev::init_byte_rand_cc20(cur,NONCE_SIZE);
   string text_nonce = cc20_dev::btos(cur);
   Cc20  cry_obj;
   cry_obj.conf.DE=0;
   cry_obj.conf.DISPLAY_PROG=0;
+
   uint8_t key_hash[65]= {0};
-  cry_obj.get_key_hash(_key, key_hash);
+  string text_key((const char*)_key,_key_size);
+  cry_obj.get_key_hash(text_key, key_hash);
+  text_key.erase(0,_key_size);
 
   cout<<"Encrypt "<<endl;
   cout<<"nonce "<<endl;
@@ -986,14 +989,18 @@ void cmd_enc_s(const uint8_t* buf, size_t input_length,
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
   cry_obj.poly->init((unsigned char *)key_hash);
   cry_obj.rd_file_encr(buf, outstr, input_length);
+  text_nonce.erase(0,text_nonce.size());
 }
 void cmd_dec_s(const uint8_t* buf, size_t input_length,
-             uint8_t* outstr , const uint8_t* _key){
+             uint8_t* outstr , const uint8_t* _key, size_t _key_size){
   Cc20  cry_obj;
   cry_obj.conf.DE=1;
   cry_obj.conf.DISPLAY_PROG=0;
   uint8_t key_hash[65]= {0};
-  cry_obj.get_key_hash(_key, key_hash);
+
+  string text_key((const char*)_key,_key_size);
+  cry_obj.get_key_hash(text_key, key_hash);
+  text_key.erase(0,_key_size);
   cry_obj.poly->init((unsigned char *)key_hash);
   Bytes input_vc;
   for(size_t i=0 ; i<NONCE_SIZE;i++){
@@ -1005,11 +1012,13 @@ void cmd_dec_s(const uint8_t* buf, size_t input_length,
   helper_print_stats((uint8_t*)text_nonce.data(),NONCE_SIZE);
   cout<<"key "<<endl;
   helper_print_stats((uint8_t*)key_hash,32);
+
   if (!text_nonce.empty()) {
     text_nonce = cc20_dev::pad_to_key((string) text_nonce, NONCE_SIZE);
   }
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
   cry_obj.rd_file_encr(buf, outstr, input_length);
+  text_nonce.erase(0,text_nonce.size());
 }
 
 void Cc20::end_cleanup() {

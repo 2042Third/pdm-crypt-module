@@ -25,7 +25,8 @@ namespace cc20_dev {
   void expan(uint32_t *ot, unsigned int off, const uint8_t *in, unsigned int n);
   void quarteround(uint32_t *x, uint32_t a, uint32_t b, uint32_t c, uint32_t d);
   void tworounds(uint32_t *state);
-
+  
+  
   inline uint32_t rotl32(uint32_t x, int n)
   {
     // http://blog.regehr.org/archives/1063
