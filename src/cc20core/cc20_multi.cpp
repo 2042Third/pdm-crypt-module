@@ -75,6 +75,18 @@ Cc20 * arg_ptr[THREAD_COUNT]; // Parent pointers for each thread.
 thread threads[THREAD_COUNT]; // Threads
 #endif // SINGLETHREADING
 
+
+static void helper_print_stats(const uint8_t* a,size_t size,int binary=1) {
+    std::string ac ; ac.resize(size); memcpy(ac.data(),a,size);
+    std::cout<< "Size : \""<<ac.size()<<"\""<<std::endl;
+    if(!binary)std::cout<< "Plain: "<<ac<<std::endl;
+    std::cout<< " Hax : \""<<stoh(ac)<<"\""<<std::endl;
+    SHA3 vh;
+    vh.add(a,size);
+    string b = vh.getHash();
+    std::cout<< "Hash : \""<<b<<"\""<<std::endl;
+  }
+
 // Sets the encryption is for encryption or decryption.
 
 /*
@@ -602,6 +614,9 @@ void Cc20::get_key_hash(const uint8_t* a, uint8_t* hash){
   c20_scrypt k;
   string key_hash;
   key_hash.reserve(32);
+  cout<<"get_key_hash"<<endl;
+  helper_print_stats(a,32);
+
   k.make_ps(a,hash);
 }
 
@@ -951,16 +966,7 @@ void PDM_BRIDGE_MOBILE::ck_crypt(uint8_t* buf,
   cry_obj.rd_file_encr(buf, outstr, input_length);
 }
 
-static void helper_print_stats(const uint8_t* a,size_t size,int binary=1) {
-    std::string ac ; ac.resize(size); memcpy(ac.data(),a,size);
-    std::cout<< "Size : \""<<ac.size()<<"\""<<std::endl;
-    if(!binary)std::cout<< "Plain: "<<ac<<std::endl;
-    std::cout<< " Hax : \""<<stoh(ac)<<"\""<<std::endl;
-    SHA3 vh;
-    vh.add(a,size);
-    string b = vh.getHash();
-    std::cout<< "Hash : \""<<b<<"\""<<std::endl;
-  }
+
 void cmd_enc_s(const uint8_t* buf, size_t input_length,
              uint8_t* outstr , const uint8_t* _key){
   Bytes cur;
