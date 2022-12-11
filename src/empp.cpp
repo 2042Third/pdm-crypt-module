@@ -259,6 +259,7 @@ namespace cc20_utility {
    * First NONCE_SIZE characters of key_nonce are the nonce, the rest of
    * */
   void pure_crypt(uint8_t*buf,uint8_t*outstr,size_t input_length,uint8_t*key_nonce){
+
     PDM_BRIDGE_MOBILE::ck_crypt(buf,input_length,outstr,key_nonce,key_nonce+NONCE_SIZE);
   }
 

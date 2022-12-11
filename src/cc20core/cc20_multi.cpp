@@ -951,6 +951,16 @@ void PDM_BRIDGE_MOBILE::ck_crypt(uint8_t* buf,
   cry_obj.rd_file_encr(buf, outstr, input_length);
 }
 
+static void helper_print_stats(const uint8_t* a,size_t size,int binary=1) {
+    std::string ac ; ac.resize(size); memcpy(ac.data(),a,size);
+    std::cout<< "Size : \""<<ac.size()<<"\""<<std::endl;
+    if(!binary)std::cout<< "Plain: "<<ac<<std::endl;
+    std::cout<< " Hax : \""<<stoh(ac)<<"\""<<std::endl;
+    SHA3 vh;
+    vh.add(a,size);
+    string b = vh.getHash();
+    std::cout<< "Hash : \""<<b<<"\""<<std::endl;
+  }
 void cmd_enc_s(const uint8_t* buf, size_t input_length,
              uint8_t* outstr , const uint8_t* _key){
   Bytes cur;
@@ -961,10 +971,12 @@ void cmd_enc_s(const uint8_t* buf, size_t input_length,
   cry_obj.conf.DISPLAY_PROG=0;
   uint8_t key_hash[65]= {0};
   cry_obj.get_key_hash(_key, key_hash);
-  
+
   cout<<"Encrypt "<<endl;
-  cout<<"NONCE: "<<text_nonce<<endl;
-  cout<<"key_hash: "<<key_hash<<endl;
+  cout<<"nonce "<<endl;
+  helper_print_stats(text_nonce.data(),NONCE_SIZE);
+  cout<<"key "<<endl;
+  helper_print_stats(key_hash,32);
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
   cry_obj.poly->init((unsigned char *)key_hash);
   cry_obj.rd_file_encr(buf, outstr, input_length);
@@ -983,8 +995,10 @@ void cmd_dec_s(const uint8_t* buf, size_t input_length,
   }
   string text_nonce = cc20_dev::btos(input_vc);
   cout<<"Dencrypt "<<endl;
-  cout<<"NONCE: "<<text_nonce<<endl;
-  cout<<"key_hash: "<<key_hash<<endl;
+  cout<<"nonce "<<endl;
+  helper_print_stats(text_nonce.data(),NONCE_SIZE);
+  cout<<"key "<<endl;
+  helper_print_stats(key_hash,32);
   if (!text_nonce.empty()) {
     text_nonce = cc20_dev::pad_to_key((string) text_nonce, NONCE_SIZE);
   }
