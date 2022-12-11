@@ -614,9 +614,6 @@ void Cc20::get_key_hash(const uint8_t* a, uint8_t* hash){
   c20_scrypt k;
   string key_hash;
   key_hash.reserve(32);
-  cout<<"get_key_hash"<<endl;
-  helper_print_stats(a,32);
-
   k.make_ps(a,hash);
 }
 
@@ -981,10 +978,6 @@ void cmd_enc_s(const uint8_t* buf, size_t input_length,
   cry_obj.get_key_hash(text_key, key_hash);
   text_key.erase(0,_key_size);
 
-  cout<<"Encrypt "<<endl;
-  cout<<"nonce "<<endl;
-  helper_print_stats((uint8_t*)text_nonce.data(),NONCE_SIZE);
-  cout<<"key "<<endl;
   helper_print_stats((uint8_t*)key_hash,32);
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
   cry_obj.poly->init((unsigned char *)key_hash);
@@ -1007,11 +1000,6 @@ void cmd_dec_s(const uint8_t* buf, size_t input_length,
     input_vc.push_back(buf[i]);
   }
   string text_nonce = cc20_dev::btos(input_vc);
-  cout<<"Dencrypt "<<endl;
-  cout<<"nonce "<<endl;
-  helper_print_stats((uint8_t*)text_nonce.data(),NONCE_SIZE);
-  cout<<"key "<<endl;
-  helper_print_stats((uint8_t*)key_hash,32);
 
   if (!text_nonce.empty()) {
     text_nonce = cc20_dev::pad_to_key((string) text_nonce, NONCE_SIZE);
