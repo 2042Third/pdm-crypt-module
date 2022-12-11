@@ -951,7 +951,7 @@ void PDM_BRIDGE_MOBILE::ck_crypt(uint8_t* buf,
   cry_obj.rd_file_encr(buf, outstr, input_length);
 }
 
-void cmd_enc(const uint8_t* buf, size_t input_length,
+void cmd_enc_s(const uint8_t* buf, size_t input_length,
              uint8_t* outstr , const uint8_t* _key){
   Bytes cur;
   cc20_dev::init_byte_rand_cc20(cur,NONCE_SIZE);
@@ -965,7 +965,7 @@ void cmd_enc(const uint8_t* buf, size_t input_length,
   cry_obj.poly->init((unsigned char *)key_hash);
   cry_obj.rd_file_encr(buf, outstr, input_length);
 }
-void cmd_dec(const uint8_t* buf, size_t input_length,
+void cmd_dec_s(const uint8_t* buf, size_t input_length,
              uint8_t* outstr , const uint8_t* _key){
   Cc20  cry_obj;
   cry_obj.conf.DE=1;
