@@ -146,7 +146,7 @@ namespace web_test{
   }
 
   void print_stats(const uint8_t* a,size_t size,int binary=1){
-    string ac ((const char*)a,0,size);
+    string ac ((const char*)a,size);
     if(!binary)cout<< "Plain: "<<ac<<endl;
     cout<< " Hax : "<<stoh(ac)<<endl;
     cout<< "Hash : "<<get_hash(ac)<<endl;
@@ -154,51 +154,49 @@ namespace web_test{
 
   int pure_crypt_test(){
     const size_t iosize = cc20_utility::nonce_key_pair_size();
-    std::string input_buffer,output_buffer, key_buffer;
-    input_buffer.resize(iosize+1);
-    output_buffer.resize(iosize+1);
-    key_buffer.resize(iosize+1);
+    uint8_t input_buffer[iosize+1],output_buffer[iosize+1], key_buffer[iosize+1];
+
 
     for (auto i=0;i<cc20_utility::nonce_key_pair_size();i++){
-      input_buffer.data()[i] = '-';
-      output_buffer.data()[i] = '-';
-      key_buffer.data()[i] = 0;
+      input_buffer[i] = '-';
+      output_buffer[i] = '-';
+      key_buffer[i] = 0;
     }
-    cc20_utility::gen_key_nonce_pair((unsigned char*)key_buffer.data(),iosize);
+    cc20_utility::gen_key_nonce_pair((unsigned char*)key_buffer,iosize);
     printf("Randomly generated nonce & key pair \n");
-    print_stats((unsigned char*)key_buffer.data(),iosize);
+    print_stats((unsigned char*)key_buffer,iosize);
     uint8_t nonce [NONCE_SIZE+1],key[CC20_KEY_SIZE+1];
-    memcpy(nonce,key_buffer.data(),NONCE_SIZE);
-    memcpy(key,key_buffer.data()+NONCE_SIZE,CC20_KEY_SIZE);
+    memcpy(nonce,key_buffer,NONCE_SIZE);
+    memcpy(key,key_buffer+NONCE_SIZE,CC20_KEY_SIZE);
     cout<<"Split nonce: "<<endl;
-    print_stats((unsigned char*)key_buffer.data(),NONCE_SIZE);
-    print_stats((unsigned char*)key_buffer.data()+NONCE_SIZE,CC20_KEY_SIZE);
+    print_stats((unsigned char*)key_buffer,NONCE_SIZE);
+    print_stats((unsigned char*)key_buffer+NONCE_SIZE,CC20_KEY_SIZE);
 
-    input_buffer.data()[5] = 'h';
-    input_buffer.data()[6] = 'e';
-    input_buffer.data()[7] = 'y';
+    input_buffer[5] = 'h';
+    input_buffer[6] = 'e';
+    input_buffer[7] = 'y';
 
     cout<<"\nBefore encrypt: "<<endl;
     cout<<"Input buffer "<<endl;
-    print_stats((unsigned char*)input_buffer.data(),iosize,0);
+    print_stats((unsigned char*)input_buffer,iosize,0);
     cout<<"Output buffer "<<endl;
-    print_stats((unsigned char*)output_buffer.data(),iosize,0);
+    print_stats((unsigned char*)output_buffer,iosize,0);
 
     // Encrypt step
-    cc20_utility::pure_crypt((unsigned char*)input_buffer.data(),(unsigned char*)output_buffer.data(),iosize,(unsigned char*)key_buffer.data());
+    cc20_utility::pure_crypt((unsigned char*)input_buffer,(unsigned char*)output_buffer,iosize,(unsigned char*)key_buffer);
     cout<<"\nAfter encrypt: "<<endl;
     cout<<"Input buffer "<<endl;
-    print_stats((unsigned char*)input_buffer.data(),iosize,0);
+    print_stats((unsigned char*)input_buffer,iosize,0);
     cout<<"Output buffer "<<endl;
-    print_stats((unsigned char*)output_buffer.data(),iosize,0);
+    print_stats((unsigned char*)output_buffer,iosize,0);
 
     // Decrypt step
-    cc20_utility::pure_crypt((unsigned char*)output_buffer.data(),(unsigned char*)input_buffer.data(),iosize,(unsigned char*)key_buffer.data());
+    cc20_utility::pure_crypt((unsigned char*)output_buffer,(unsigned char*)input_buffer,iosize,(unsigned char*)key_buffer);
     cout<<"\nAfter decrypt: "<<endl;
     cout<<"Output buffer "<<endl;
-    print_stats((unsigned char*)output_buffer.data(),iosize,0);
+    print_stats((unsigned char*)output_buffer,iosize,0);
     cout<<"Input buffer "<<endl;
-    print_stats((unsigned char*)input_buffer.data(),iosize,0);
+    print_stats((unsigned char*)input_buffer,iosize,0);
     return 1;
   }
 

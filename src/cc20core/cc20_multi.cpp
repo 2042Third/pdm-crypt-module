@@ -1002,7 +1002,6 @@ void Cc20::end_cleanup() {
   // nonce cleanup
   crand.reset();
   for (auto i=0;i<NONCE_SIZE;i++){
-    nonce[i] = crand.nextByte();
     nonce_orig[i] = crand.nextByte();
   }
   // buffer cleanup
