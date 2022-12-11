@@ -28,6 +28,7 @@ author:     Yi Yang
 #include <cc20_dev.h>
 #include "cc20_multi.h"
 #include "cc20_scrypt.h"
+#include "crypto_rand.hpp"
 //#include "xCc20.h"
 
 #include <functional> // std::ref
@@ -340,6 +341,8 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
   else {
     cout << "Password incorrect, decryption failed and no files written..."<<endl;
   }
+  end_cleanup();
+
 #ifndef SINGLETHREADING
   if(conf.DISPLAY_PROG){
     if (progress.joinable())
@@ -938,10 +941,41 @@ void PDM_BRIDGE_MOBILE::ck_crypt(uint8_t* buf,
   cry_obj.rd_file_encr(buf, outstr, input_length);
 }
 
+void Cc20::end_cleanup() {
+  crypto_rand crand;
+  // cy[][] cleanup
+  for (auto&i:cy){
+    for (auto&f:i) {
+      f = crand.nextInt();
+    }
+  }
+  crand.reset();
+  // folow[][] cleanup
+  for (auto&i:folow){
+    for (auto&f:i) {
+      f = crand.nextInt();
+    }
+  }
+  // nonce cleanup
+  crand.reset();
+  for (auto i=0;i<NONCE_SIZE;i++){
+    nonce[i] = crand.nextByte();
+    nonce_orig[i] = crand.nextByte();
+  }
+  // buffer cleanup
+  crand.reset();
+  for (auto & i : nex){
+    for (auto f=0;f<64;f++) {
+      i[f] = crand.nextByte();
+    }
+  }
+
+}
+
 Cc20::~Cc20() {
-  if(poly !=NULL) delete poly;
-  for (unsigned int i=0 ; i< THREAD_COUNT;i++){
-    delete arg_track[i];
+  delete poly;
+  for (auto & i : arg_track){
+    delete i;
   }
 }
 

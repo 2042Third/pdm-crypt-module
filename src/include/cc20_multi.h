@@ -124,6 +124,8 @@ public:
   int is_dec(){return conf.DE;}
   Cc20();
   ~Cc20();
+  void end_cleanup();
+  void clean_worker();
 
   cc20_poly* poly;// should be in private
   SHA3 hashing; 

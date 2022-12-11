@@ -122,7 +122,7 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
     set(PDM_SOURCES 
         ${PDM_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/src/emppIOS.mm
-    )
+        src/lib/crypto_rand.hpp)
 
 
     # Checks sanity

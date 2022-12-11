@@ -153,20 +153,20 @@ namespace web_test{
   }
 
   int pure_crypt_test(){
-    size_t iosize = cc20_utility::nonce_key_pair_size();
+    const size_t iosize = cc20_utility::nonce_key_pair_size();
     std::string input_buffer,output_buffer, key_buffer;
-    input_buffer.reserve(cc20_utility::nonce_key_pair_size()+1);
-    output_buffer.reserve(cc20_utility::nonce_key_pair_size()+1);
-    key_buffer.reserve(cc20_utility::nonce_key_pair_size()+1); key_buffer.clear();
+    input_buffer.resize(iosize+1);
+    output_buffer.resize(iosize+1);
+    key_buffer.resize(iosize+1);
 
     for (auto i=0;i<cc20_utility::nonce_key_pair_size();i++){
       input_buffer.data()[i] = '-';
       output_buffer.data()[i] = '-';
       key_buffer.data()[i] = 0;
     }
-    cc20_utility::gen_key_nonce_pair((unsigned char*)key_buffer.data(),cc20_utility::nonce_key_pair_size());
+    cc20_utility::gen_key_nonce_pair((unsigned char*)key_buffer.data(),iosize);
     printf("Randomly generated nonce & key pair \n");
-    print_stats((unsigned char*)key_buffer.data(),cc20_utility::nonce_key_pair_size());
+    print_stats((unsigned char*)key_buffer.data(),iosize);
     uint8_t nonce [NONCE_SIZE+1],key[CC20_KEY_SIZE+1];
     memcpy(nonce,key_buffer.data(),NONCE_SIZE);
     memcpy(key,key_buffer.data()+NONCE_SIZE,CC20_KEY_SIZE);

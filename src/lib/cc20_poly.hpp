@@ -24,6 +24,10 @@ public:
     poly1305_auth(mac, m, bytes, key);
   }
 
+  void cleanup(){
+
+  }
+
 private:
   poly1305_context ctx;
 
