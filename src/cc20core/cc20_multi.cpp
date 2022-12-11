@@ -974,9 +974,9 @@ void cmd_enc_s(const uint8_t* buf, size_t input_length,
 
   cout<<"Encrypt "<<endl;
   cout<<"nonce "<<endl;
-  helper_print_stats(text_nonce.data(),NONCE_SIZE);
+  helper_print_stats((uint8_t*)text_nonce.data(),NONCE_SIZE);
   cout<<"key "<<endl;
-  helper_print_stats(key_hash,32);
+  helper_print_stats((uint8_t*)key_hash,32);
   cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
   cry_obj.poly->init((unsigned char *)key_hash);
   cry_obj.rd_file_encr(buf, outstr, input_length);
@@ -996,9 +996,9 @@ void cmd_dec_s(const uint8_t* buf, size_t input_length,
   string text_nonce = cc20_dev::btos(input_vc);
   cout<<"Dencrypt "<<endl;
   cout<<"nonce "<<endl;
-  helper_print_stats(text_nonce.data(),NONCE_SIZE);
+  helper_print_stats((uint8_t*)text_nonce.data(),NONCE_SIZE);
   cout<<"key "<<endl;
-  helper_print_stats(key_hash,32);
+  helper_print_stats((uint8_t*)key_hash,32);
   if (!text_nonce.empty()) {
     text_nonce = cc20_dev::pad_to_key((string) text_nonce, NONCE_SIZE);
   }
