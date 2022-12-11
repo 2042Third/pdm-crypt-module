@@ -179,7 +179,7 @@ public:
     return cy[ctr%16];
   }
 
-  void write_rand_bytes (uint8_t* a, size_t size) {
+  void write_rand_bytes (uint8_t* a, size_t size)  {
     for (size_t i=0;i<size;i++)
       a[i] = nextByte();
   }

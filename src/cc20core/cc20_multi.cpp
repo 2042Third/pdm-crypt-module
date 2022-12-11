@@ -594,6 +594,16 @@ void Cc20::get_key_hash(string a, uint8_t* hash){
   key_hash.reserve(32);
   k.make_ps((const uint8_t *)a.data(),hash);
 }
+/**
+ * Helper of cc20.
+ * Yeah, it makes the key.
+ * */
+void Cc20::get_key_hash(const uint8_t* a, uint8_t* hash){
+  c20_scrypt k;
+  string key_hash;
+  key_hash.reserve(32);
+  k.make_ps(a,hash);
+}
 
 char* Cc20::get_inp_nonce(string infile_name, uint8_t* line1){
   FILE * infile = fopen(infile_name.data(), "rb");
@@ -938,6 +948,39 @@ void PDM_BRIDGE_MOBILE::ck_crypt(uint8_t* buf,
   cry_obj.conf.pure_xor = 1;
   cry_obj.conf.DE = 0;
   cry_obj.x_set_vals(nonce, key);
+  cry_obj.rd_file_encr(buf, outstr, input_length);
+}
+
+void cmd_enc(const uint8_t* buf, size_t input_length,
+             uint8_t* outstr , const uint8_t* _key){
+  Bytes cur;
+  cc20_dev::init_byte_rand_cc20(cur,NONCE_SIZE);
+  string text_nonce = cc20_dev::btos(cur);
+  Cc20  cry_obj;
+  cry_obj.conf.DE=0;
+  cry_obj.conf.DISPLAY_PROG=0;
+  uint8_t key_hash[65]= {0};
+  cry_obj.get_key_hash(_key, key_hash);
+  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
+  cry_obj.poly->init((unsigned char *)key_hash);
+  cry_obj.rd_file_encr(buf, outstr, input_length);
+}
+void cmd_dec(const uint8_t* buf, size_t input_length,
+             uint8_t* outstr , const uint8_t* _key){
+  Cc20  cry_obj;
+  cry_obj.conf.DE=1;
+  cry_obj.conf.DISPLAY_PROG=0;
+  uint8_t key_hash[65]= {0};
+  cry_obj.get_key_hash(_key, key_hash);
+  cry_obj.poly->init((unsigned char *)key_hash);
+  Bytes input_vc;
+  for(size_t i=0 ; i<NONCE_SIZE;i++)
+    input_vc.push_back(buf[i]);
+  string text_nonce = cc20_dev::btos(input_vc);
+  if (!text_nonce.empty()) {
+    text_nonce = cc20_dev::pad_to_key((string) text_nonce, NONCE_SIZE);
+  }
+  cry_obj.x_set_vals((uint8_t*)text_nonce.data(), (uint8_t*)key_hash);
   cry_obj.rd_file_encr(buf, outstr, input_length);
 }
 

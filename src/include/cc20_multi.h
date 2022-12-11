@@ -121,6 +121,7 @@ public:
   char* get_inp_nonce (std::string infile_name, uint8_t* line1);
   void get_time_diff(std::chrono::time_point<std::chrono::high_resolution_clock> start);
   uint8_t nex[THREAD_COUNT][65];
+  void get_key_hash(const uint8_t* a, uint8_t* hash);
   int is_dec(){return conf.DE;}
   Cc20();
   ~Cc20();
@@ -159,8 +160,9 @@ void cmd_enc(std::string infile_name, std::string oufile_name, std::string text_
 void cmd_enc(std::string infile_name, uint8_t* outstr, std::string text_key);
 void cmd_enc(std::string infile_name, std::string oufile_name, c20::config configs);
 void display_progress(size_t n);
-void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , std::string text_key);
 void cmd_enc(std::string infile_name, std::string oufile_name, std::string text_nonce, c20::config configs);
+void cmd_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , std::string text_key);
 void cmd_dec(uint8_t* buf, size_t input_length, uint8_t* outstr , std::string text_key);
-
+void cmd_enc(const uint8_t* buf, size_t input_length, uint8_t* outstr , const uint8_t* _key);
+void cmd_dec(const uint8_t* buf, size_t input_length, uint8_t* outstr , const uint8_t* _key);
 #endif
