@@ -38,6 +38,7 @@ set(PDM_SOURCES ${PDM_SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/sha256.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ec.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_poly.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/crypto_rand.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cc20core/cc20_multi.cpp
     )
 
@@ -63,6 +64,7 @@ set(PDM_INCLUDE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_wrapper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_dev.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/include/empp.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/crypto_rand.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna-8.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna-16.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna.h
