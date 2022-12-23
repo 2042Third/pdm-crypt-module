@@ -40,6 +40,7 @@ set(PDM_SOURCES ${PDM_SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_poly.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/crypto_rand.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cc20core/cc20_multi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/misc/base64.cpp
     )
 
 # includes
@@ -90,6 +91,7 @@ set(PDM_INCLUDE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/bigint.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/avrnacl.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_scrypt.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/misc/base64.h
     )
 
 set(PDM_OPTIONS PUBLIC  LINUX ${PDM_OPTIONS})
@@ -176,14 +178,10 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
     check_type_size(time_t SIZEOF_TIME_T)
 
     # Source files
-    set(SOURCES
-      ${PDM_SOURCES}
-    )
+    set(SOURCES ${PDM_SOURCES})
 
     # Headers
-    set(HEADERS
-      ${PDM_INCLUDE_FILES}
-    )
+    set(HEADERS ${PDM_INCLUDE_FILES})
 
     # Library
     if(BUILD_SHARED)
