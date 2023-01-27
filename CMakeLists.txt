@@ -41,6 +41,7 @@ set(PDM_SOURCES ${PDM_SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/crypto_rand.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cc20core/cc20_multi.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/misc/base64.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/misc/md5.cpp
     )
 
 # includes
@@ -75,6 +76,7 @@ set(PDM_INCLUDE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/nonwasm/endian.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cpp-mmf/memory_mapped_file.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/sha3.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/misc/md5.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/wasm/endian.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_poly.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ec.h
