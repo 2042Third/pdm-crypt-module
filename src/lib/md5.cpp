@@ -6,9 +6,27 @@
 
 #include "md5.h"
 
+// big endian architectures need #define __BYTE_ORDER __BIG_ENDIAN
+#ifdef _MSC_VER
+#define WINDOWS
+#endif //_MSC_VER
+
+#ifndef WINDOWS
 #ifndef _MSC_VER
-#include <endian.h>
+#ifdef __APPLE__
+#include <machine/endian.h>
+#else
+#ifdef WEB_RELEASE
+#include "wasm/endian.h"
+#else
+#include "nonwasm/endian.h"
 #endif
+#endif // MAC_OS
+#endif // _MSC_VER
+#endif // WINDOWS
+
+#include <iostream>
+
 
 
 /// same as reset()
