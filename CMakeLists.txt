@@ -102,11 +102,11 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
      project(cc20)
      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
-     set(PDM_OPTIONS ${PDM_OPTIONS} ANDROID)
      if(${PDM_BUILD_TYPE_MOBILE} MATCHES ANDROID)
-         set(PDM_INCLUDES ${PDM_INCLUDES} ../java/com/pdmnotes/)
-         # Android bridge cpp file
-         set(PDM_SOURCES "${PDM_SOURCES} ../java/com/pdmnotes/com_pdmnotes_PdmCrypt.c")
+       set(PDM_OPTIONS ${PDM_OPTIONS} ANDROID)
+       set(PDM_INCLUDES ${PDM_INCLUDES} ../java/com/pdmnotes/)
+       # Android bridge cpp file
+       set(PDM_SOURCES "${PDM_SOURCES} ../java/com/pdmnotes/com_pdmnotes_PdmCrypt.c")
      endif()
 
      add_library(cc20 )
