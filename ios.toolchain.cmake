@@ -260,7 +260,7 @@ if(NOT DEFINED DEPLOYMENT_TARGET)
     set(DEPLOYMENT_TARGET "11.0")
   elseif(PLATFORM STREQUAL "MAC_CATALYST" OR PLATFORM STREQUAL "MAC_CATALYST_ARM64")
     # Unless specified, SDK version 13.0 is used by default as minimum target version (mac catalyst minimum requirement).
-    set(DEPLOYMENT_TARGET "13.1")
+    set(DEPLOYMENT_TARGET "13.3")
   else()
     # Unless specified, SDK version 11.0 is used by default as minimum target version (iOS, tvOS).
     set(DEPLOYMENT_TARGET "11.0")
