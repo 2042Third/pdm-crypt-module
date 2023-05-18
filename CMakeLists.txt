@@ -102,7 +102,7 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
 
    MESSAGE( STATUS "Will run: MOBILE"  )
      project(cc20)
-     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+#     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
      if(${PDM_BUILD_TYPE_MOBILE} MATCHES ANDROID)
        set(PDM_OPTIONS ${PDM_OPTIONS} ANDROID)
