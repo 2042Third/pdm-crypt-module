@@ -2,21 +2,21 @@ cmake_minimum_required(VERSION 3.18)
 set (CMAKE_CXX_STANDARD 17)
 project(cc20-ios )
 
-enable_testing()
+#enable_testing()
 
 enable_language(CXX)
-#enable_language(OBJC)
+enable_language(OBJC)
 
 MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
 MESSAGE( STATUS "CMAKE_OBJC_FLAGS: " ${CMAKE_OBJC_FLAGS} )
 
 #if (PDM_TEST_PLATFORM_DESKTOP)
 #  MESSAGE( STATUS "Making PDM test platform for desktop." )
-  set (PDM_TEST_PLATFORM DESKTOP) # Adds an executable, unset to build for mobile
+#  set (PDM_TEST_PLATFORM DESKTOP) # Adds an executable, unset to build for mobile
 #endif()
 
-set (PDM_BUILD_TYPE  MOBILE) # android
-#set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
+#set (PDM_BUILD_TYPE  MOBILE) # android or ios
+set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
 #set (PDM_BUILD_TYPE_MOBILE  ANDROID)# Uncomment to build for android
 
 # Core source files
@@ -98,7 +98,9 @@ set(PDM_INCLUDE_FILES
 
 set(PDM_OPTIONS PUBLIC  LINUX ${PDM_OPTIONS})
 set(PDM_COMPILER_FLAGS -g -lpthread -O3)
- if(${PDM_BUILD_TYPE} MATCHES MOBILE)
+
+set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
+ if(${PDM_BUILD_TYPE} STREQUAL MOBILE)
 
    MESSAGE( STATUS "Will run: MOBILE"  )
      project(cc20)
@@ -119,8 +121,12 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
          PUBLIC
          ${PDM_INCLUDES}
      )
- elseif(${PDM_BUILD_TYPE} MATCHES MOBILE_IOS)
-    set(PDM_INCLUDE_FILES 
+ elseif(${PDM_BUILD_TYPE} STREQUAL MOBILE_IOS)
+#     set(XCODE_VERSION 14.3.1)
+#     set(SDK_VERSION 13.0)
+    MESSAGE( STATUS "Will run: MOBILE_IOS"  )
+
+    set(PDM_INCLUDE_FILES
         ${PDM_INCLUDE_FILES}
         ${CMAKE_CURRENT_SOURCE_DIR}/src/empp.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/emppIOS.h
@@ -163,12 +169,12 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
 
     # set(CMAKE_INSTALL_PREFIX ./libs)
     # Hook up XCTest for the supported plaforms (all but WatchOS)
-    if(NOT PLATFORM MATCHES ".*WATCHOS.*")
-      # Use the standard find_package, broken between 3.14.0 and 3.14.4 at least for XCtest...
-      find_package(XCTest)
-      # Fallback: Try to find XCtest as host package via toochain macro (should always work)
-      find_host_package(XCTest REQUIRED)
-    endif()
+#    if(NOT PLATFORM MATCHES ".*WATCHOS.*")
+#      # Use the standard find_package, broken between 3.14.0 and 3.14.4 at least for XCtest...
+#      find_package(XCTest)
+#      # Fallback: Try to find XCtest as host package via toochain macro (should always work)
+#      find_host_package(XCTest REQUIRED)
+#    endif()
 
     # Includes
     include_directories(${PDM_INCLUDES})
@@ -189,7 +195,7 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
     if(BUILD_SHARED)
       add_library (cc20 SHARED ${SOURCES} ${HEADERS})
       target_link_libraries(cc20 ${FOUNDATION_LIBRARY})
-      target_compile_definitions(cc20 PUBLIC IS_BUILDING_SHARED )
+      target_compile_definitions(cc20 PUBLIC IS_BUILDING_SHARED ANDROID )
       message(STATUS "Building shared version...")
     else()
       add_library (cc20 STATIC ${SOURCES} ${HEADERS})
@@ -202,8 +208,10 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
     endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
     set(PDM_OPTIONS ${PDM_OPTIONS} ANDROID)
-    target_compile_definitions(cc20 ${PDM_OPTIONS})
-    target_compile_options(cc20 PUBLIC ${PDM_COMPILER_FLAGS})
+
+#    list(APPEND PDM_OPTIONS ANDROID)
+    target_compile_definitions(cc20 PUBLIC ${PDM_OPTIONS})
+    target_compile_options(cc20 PUBLIC ${PDM_COMPILER_FLAGS} -DANDROID)
     target_include_directories(cc20
         PUBLIC
         ${PDM_INCLUDES}
@@ -224,7 +232,7 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3)
     endif()
 
     # Debug symbols set in XCode project
-    set_xcode_property(cc20 GCC_GENERATE_DEBUGGING_SYMBOLS YES "All")
+#    set_xcode_property(cc20 GCC_GENERATE_DEBUGGING_SYMBOLS YES "All")
 
     # Installation
     if(PLATFORM MATCHES "MAC.*")

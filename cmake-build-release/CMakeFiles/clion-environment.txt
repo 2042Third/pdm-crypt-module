@@ -1,0 +1,3 @@
+ToolSet: 1.0 (local)Options: 
+
+Options:-DPDM_BUILD_TYPE=MOBILE_IOS
