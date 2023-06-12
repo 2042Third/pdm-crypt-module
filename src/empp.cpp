@@ -111,8 +111,11 @@ string checker_out(const std::string& key, const std::string& inputi){
   return outstr;
 }
 
-string loader_check(const std::string& key, const std::string& input)
+std::string loader_check(const std::string& key, const std::string& input)
 {
+  if (key.empty() || input.empty()) {
+    throw std::invalid_argument("Key or input is empty");
+  }
   string buf(input);
   string outstr(input.size() + (NONCE_SIZE+POLY_SIZE),0);
   cmd_enc((uint8_t *)((&buf)->data()), (size_t)input.size(), (uint8_t *)((&outstr)->data()), key);
@@ -131,8 +134,11 @@ void loader_check_convert(const char* key,  const char* input, size_t input_n, c
   memcpy(outstr,(uint8_t *)((&none_tmp)->data()), none_tmp.size());
 }
 
-string loader_out(const std::string& key, const std::string& inputi)
+std::string loader_out(const std::string& key, const std::string& inputi)
 {
+  if (key.empty() || inputi.empty()) {
+    throw std::invalid_argument("Key or input is empty");
+  }
   string buf(htos(inputi));    //= new vector<uint8_t>();
   string outstr((buf.size()) - (NONCE_SIZE+POLY_SIZE),0);    //= new vector<uint8_t>();
   size_t inpsize = (buf.size()) ;

@@ -1,3 +1,3 @@
 #!/bin/bash
 cd build
-cmake --install . --config Debug 
+cmake --install . --config Release
