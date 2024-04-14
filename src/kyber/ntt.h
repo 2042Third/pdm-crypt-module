@@ -7,7 +7,10 @@
 
 
 class ntt {
+public:
 
+private:
+  int q = 3329;
 };
 
 
