@@ -68,7 +68,7 @@ windows:
 linux:
 	g++ $(boost) $(release_en1) $(srcs) $(inc) -Wall -g
 linux_debug:
-	g++ $(boost) $(release_en1) $(srcs) $(inc) -Wall -g -DWEB_RELEASE_LINUX_TEST -o build/c20  -std=c++17 desktop.cpp -Wall
+	clang++ $(all_includes) $(srcs) $(options) $(all_defs) -Wall -g -DWEB_RELEASE_LINUX_TEST -o build/c20  -std=c++17 desktop.cpp -Wall
 xwindows:
 	g++ $(boost) $(xrelease_en) $(srcs) $(inc) $(win32) -Wall
 
