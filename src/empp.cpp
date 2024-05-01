@@ -250,7 +250,11 @@ void get_hash_convert(const char* a, size_t a_n, char* outstr){
 }
 
 namespace cc20_utility {
-  size_t nonce_key_pair_size () {return NONCE_SIZE+CC20_KEY_SIZE;}
+
+  size_t nonce_key_pair_size () {
+    return NONCE_SIZE+CC20_KEY_SIZE;
+  }
+
   void gen_key_nonce_pair(uint8_t *a,  size_t size){
     gen_byte_rand_cc20(a,size);
   }

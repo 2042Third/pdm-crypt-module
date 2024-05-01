@@ -152,16 +152,30 @@ namespace web_test{
     cout<< "Hash : "<<get_hash(ac)<<endl;
   }
 
-  int pure_crypt_test(){
+  int mem_side_channel_test() {
     const size_t iosize = cc20_utility::nonce_key_pair_size();
     uint8_t input_buffer[iosize+1],output_buffer[iosize+1], key_buffer[iosize+1];
-
 
     for (auto i=0;i<cc20_utility::nonce_key_pair_size();i++){
       input_buffer[i] = '-';
       output_buffer[i] = '-';
       key_buffer[i] = 0;
     }
+
+    cc20_utility::gen_key_nonce_pair((unsigned char*)key_buffer,iosize);
+    return 1;
+  }
+
+  int pure_crypt_test(){
+    const size_t iosize = cc20_utility::nonce_key_pair_size();
+    uint8_t input_buffer[iosize+1],output_buffer[iosize+1], key_buffer[iosize+1];
+
+    for (auto i=0;i<cc20_utility::nonce_key_pair_size();i++){
+      input_buffer[i] = '-';
+      output_buffer[i] = '-';
+      key_buffer[i] = 0;
+    }
+
     cc20_utility::gen_key_nonce_pair((unsigned char*)key_buffer,iosize);
     printf("Randomly generated nonce & key pair \n");
     print_stats((unsigned char*)key_buffer,iosize);
@@ -262,6 +276,8 @@ int main(int argc, char ** argv) {
           "\"3\" for scrypt test. \n "
           "\"4\" for mobile release. \n "
           "\"5\" for pure crypt test. \n "
+          "\"6\" for Memory Side-Channel runtime. \n "
+          "Exiting."
           <<endl;
     return 0;
   }
@@ -302,6 +318,10 @@ int main(int argc, char ** argv) {
   else if (stoi(argv[1])==5) {
     cout<<"Pure xor Encryption test.\n"<<endl;
     web_test::pure_crypt_test();
+  }
+  else if (stoi(argv[1])==6) {
+    cout<<"Memory Side-Channel Runtime.\n"<<endl;
+    web_test::mem_side_channel_test();
   }
   else {
    cout<<"Command not found, exiting."<<endl;
