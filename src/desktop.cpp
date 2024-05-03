@@ -177,7 +177,7 @@ namespace web_test{
 
 
     // Encrypt step
-    int rep = 10;
+    int rep = 100;
     uint64_t start = assembly::get_timestamp_counter();
     cc20_utility::x_times_crypt((unsigned char*)input_buffer,(unsigned char*)output_buffer,iosize
                                 ,(unsigned char*)key_buffer, rep);
