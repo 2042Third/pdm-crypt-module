@@ -48,7 +48,8 @@ srcs = lib/cc20_file.cpp \
 	lib/ec.cpp \
     cc20core/cc20_multi.cpp\
     ./cc20_dev.cpp \
-    ./empp.cpp
+    ./empp.cpp \
+    ./low-level/assembly.cpp
 
 all_includes = -I./include \
 -I./lib \
