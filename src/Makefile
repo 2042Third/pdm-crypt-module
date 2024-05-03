@@ -68,8 +68,20 @@ windows:
 	clang++ $(all_includes) $(srcs) $(options) $(all_defs) -fpermissive -std=c++17 desktop.cpp -Wall -o build/c20
 linux_debug:
 	clang++ $(all_includes) $(srcs) $(options) $(all_defs) -Wall -g -DWEB_RELEASE_LINUX_TEST -o build/c20  -std=c++17 desktop.cpp -Wall
+
+# Used in May 2024
 linux:
 	clang++ $(all_includes) $(srcs) $(options) $(all_defs) -Wall -g -o build/cc20  -std=c++17 desktop.cpp -Wall
+
+# Used in May 2024
+linux_no_opt_debug:
+	clang++ $(all_includes) $(srcs) $(all_defs) -Wall -g -lpthread -m64 -O0 -pthread -o build/cc20  -std=c++17 desktop.cpp -Wall
+
+# Used in May 2024
+linux_no_opt:
+	clang++ $(all_includes) $(srcs) $(all_defs) -lpthread -m64 -O0 -pthread -o build/cc20  -std=c++17 desktop.cpp
+
+
 xwindows:
 	g++ $(boost) $(xrelease_en) $(srcs) $(inc) $(win32) -Wall
 
