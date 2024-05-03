@@ -1,4 +1,3 @@
 #!/bin/bash
 
-make en
-mv c20 tests/
+make linux_debug
