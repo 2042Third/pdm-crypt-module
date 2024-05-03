@@ -85,7 +85,9 @@ set(PDM_HEADERS
 
 add_library(cc20 ""
     src/kyber/ntt.cpp
-    src/kyber/ntt.h)
+    src/kyber/ntt.h
+    src/low-level/assembly.cpp
+    src/include/assembly.h)
 
 target_sources(cc20 PRIVATE ${PDM_SOURCES})
 target_include_directories(cc20 PUBLIC ${PDM_INCLUDES})
