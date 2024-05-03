@@ -39,6 +39,7 @@ namespace cc20_utility {
   void gen_byte_rand_cc20 (uint8_t * a, size_t n);
   void gen_key_nonce_pair(uint8_t *a, size_t size);
   void pure_crypt(uint8_t*buf,uint8_t*outstr,size_t input_length,uint8_t*key_nonce);
+  void x_times_crypt(uint8_t*buf,uint8_t*outstr,size_t input_length,uint8_t*key_nonce, size_t x=1);
 }
 
 C20_EXPORT

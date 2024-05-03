@@ -177,11 +177,12 @@ namespace web_test{
 
 
     // Encrypt step
+    int rep = 10;
     uint64_t start = assembly::get_timestamp_counter();
-    cc20_utility::pure_crypt((unsigned char*)input_buffer,(unsigned char*)output_buffer,iosize,(unsigned char*)key_buffer);
+    cc20_utility::x_times_crypt((unsigned char*)input_buffer,(unsigned char*)output_buffer,iosize
+                                ,(unsigned char*)key_buffer, rep);
     uint64_t end = assembly::get_timestamp_counter();
-    cout<<"Encryption #1 (cycles): "<<end-start<<endl;
-
+    printf ("Encryption %d times with total %lld cycles.\n",rep,end-start);
 
     return 1;
   }

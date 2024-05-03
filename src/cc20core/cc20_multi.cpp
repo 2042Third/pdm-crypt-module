@@ -953,7 +953,7 @@ void PDM_BRIDGE_MOBILE::ck_crypt(uint8_t* buf,
                                  uint8_t*nonce,
                                  const uint8_t*key,
                                  size_t offset
-                                 ){
+){
   Cc20  cry_obj;
   cry_obj.conf.poly1305_toggle = 0;
   cry_obj.conf.DISPLAY_PROG=0;
@@ -961,6 +961,25 @@ void PDM_BRIDGE_MOBILE::ck_crypt(uint8_t* buf,
   cry_obj.conf.DE = 0;
   cry_obj.x_set_vals(nonce, key);
   cry_obj.rd_file_encr(buf, outstr, input_length);
+}
+
+void PDM_MEM_SIDE_CHANNEL::crypt_x_times(uint8_t* buf,
+                                 size_t input_length,
+                                 uint8_t*outstr,
+                                 uint8_t*nonce,
+                                 const uint8_t*key,
+                                 size_t offset,
+                                 size_t x
+){
+  Cc20  cry_obj;
+  cry_obj.conf.poly1305_toggle = 0;
+  cry_obj.conf.DISPLAY_PROG=0;
+  cry_obj.conf.pure_xor = 1;
+  cry_obj.conf.DE = 0;
+  cry_obj.x_set_vals(nonce, key);
+  for (int i=0;i<x;i++){
+    cry_obj.rd_file_encr(buf, outstr, input_length);
+  }
 }
 
 

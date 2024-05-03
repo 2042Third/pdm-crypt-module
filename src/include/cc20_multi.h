@@ -79,6 +79,12 @@ namespace PDM_BRIDGE_MOBILE {
   void cmd_dec(const uint8_t* buf, size_t input_length, uint8_t* outstr , const uint8_t* _key);
 }
 
+namespace PDM_MEM_SIDE_CHANNEL {
+  void crypt_x_times(uint8_t* buf, size_t input_length, uint8_t*outstr,  uint8_t*nonce
+                     , const uint8_t*key,size_t offset=0, size_t x=1);
+
+}
+
 class Cc20{
 
 public:

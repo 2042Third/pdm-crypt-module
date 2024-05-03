@@ -274,6 +274,14 @@ namespace cc20_utility {
     PDM_BRIDGE_MOBILE::ck_crypt(buf,input_length,outstr,key_nonce,key_nonce+NONCE_SIZE);
   }
 
+  /**
+   * Calls a testing function that encrypts the input string x times.
+   *
+   * */
+  void x_times_crypt(uint8_t*buf,uint8_t*outstr,size_t input_length,uint8_t*key_nonce, size_t x){
+    PDM_MEM_SIDE_CHANNEL::crypt_x_times(buf,input_length,outstr,key_nonce,key_nonce+NONCE_SIZE,x);
+  }
+
 
 }
 
