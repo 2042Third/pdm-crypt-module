@@ -153,7 +153,7 @@ namespace web_test{
     cout<< "Hash : "<<get_hash(ac)<<endl;
   }
 
-  int mem_side_channel_test() {
+  int mem_side_channel_test(int rep = 100) {
     const size_t iosize = cc20_utility::nonce_key_pair_size();
     uint8_t input_buffer[iosize+1],output_buffer[iosize+1], key_buffer[iosize+1];
 
@@ -177,7 +177,7 @@ namespace web_test{
 
 
     // Encrypt step
-    int rep = 100;
+
     uint64_t start = assembly::get_timestamp_counter();
     cc20_utility::x_times_crypt((unsigned char*)input_buffer,(unsigned char*)output_buffer,iosize
                                 ,(unsigned char*)key_buffer, rep);
@@ -342,7 +342,22 @@ int main(int argc, char ** argv) {
   }
   else if (stoi(argv[1])==6) {
     cout<<"Memory Side-Channel Runtime.\n"<<endl;
-    web_test::mem_side_channel_test();
+    int num_reps = 10;
+    if (2 < argc) {
+      char *endptr;
+      long value = strtol(argv[2], &endptr, 10);
+      if (*endptr == '\0' && value > 0) {
+        num_reps = (int)value;
+        web_test::mem_side_channel_test(num_reps);
+      } else {
+        printf( "Invalid value for -n option. Using default value of %d.\n", num_reps);
+        web_test::mem_side_channel_test(num_reps);
+      }
+    } else {
+      fprintf(stderr, "Missing value for -n option. Using default value of %d.\n", num_reps);
+      return 0;
+    }
+
   }
   else {
    cout<<"Command not found, exiting."<<endl;
