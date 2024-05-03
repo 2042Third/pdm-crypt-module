@@ -163,13 +163,8 @@ namespace web_test{
       key_buffer[i] = 0;
     }
 
-    cc20_utility::gen_key_nonce_pair((unsigned char*)key_buffer,iosize);
     printf("Randomly generated nonce & key pair \n");
     print_stats((unsigned char*)key_buffer,iosize);
-    uint8_t nonce [NONCE_SIZE+1],key[CC20_KEY_SIZE+1];
-
-    memcpy(nonce,key_buffer,NONCE_SIZE);
-    memcpy(key,key_buffer+NONCE_SIZE,CC20_KEY_SIZE);
 
     input_buffer[5] = 'h';
     input_buffer[6] = 'e';
@@ -179,8 +174,16 @@ namespace web_test{
     // Encrypt step
 
     uint64_t start = assembly::get_timestamp_counter();
-    cc20_utility::x_times_crypt((unsigned char*)input_buffer,(unsigned char*)output_buffer,iosize
-                                ,(unsigned char*)key_buffer, rep);
+    for (int i=0;i<rep;i++) {
+      cc20_utility::gen_key_nonce_pair((unsigned char*)key_buffer,iosize);
+      uint8_t nonce [NONCE_SIZE+1],key[CC20_KEY_SIZE+1];
+
+      memcpy(nonce,key_buffer,NONCE_SIZE);
+      memcpy(key,key_buffer+NONCE_SIZE,CC20_KEY_SIZE);
+      cc20_utility::x_times_crypt((unsigned char*)input_buffer,(unsigned char*)output_buffer,iosize
+        ,(unsigned char*)key_buffer, 1);
+
+    }
     uint64_t end = assembly::get_timestamp_counter();
     printf ("Encryption %7d times with total %10lld cycles.\n",rep,end-start);
 
