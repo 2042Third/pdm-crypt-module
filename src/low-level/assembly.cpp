@@ -10,7 +10,7 @@
 #include <x86intrin.h>
 #endif
 
-std::uint64_t get_timestamp_counter() {
+std::uint64_t assembly::get_timestamp_counter() {
 #ifdef __x86_64__
   std::uint32_t lo, hi;
     asm volatile(
