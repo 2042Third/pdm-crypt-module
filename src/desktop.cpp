@@ -4,6 +4,7 @@
 #include "types.h"
 #include "cc20_multi.h"
 #include "empp.h"
+#include "assembly.h"
 // KDF test
 #include <cstring>
 using namespace std;
@@ -163,6 +164,25 @@ namespace web_test{
     }
 
     cc20_utility::gen_key_nonce_pair((unsigned char*)key_buffer,iosize);
+    printf("Randomly generated nonce & key pair \n");
+    print_stats((unsigned char*)key_buffer,iosize);
+    uint8_t nonce [NONCE_SIZE+1],key[CC20_KEY_SIZE+1];
+
+    memcpy(nonce,key_buffer,NONCE_SIZE);
+    memcpy(key,key_buffer+NONCE_SIZE,CC20_KEY_SIZE);
+
+    input_buffer[5] = 'h';
+    input_buffer[6] = 'e';
+    input_buffer[7] = 'y';
+
+
+    // Encrypt step
+    uint64_t start = assembly::get_timestamp_counter();
+    cc20_utility::pure_crypt((unsigned char*)input_buffer,(unsigned char*)output_buffer,iosize,(unsigned char*)key_buffer);
+    uint64_t end = assembly::get_timestamp_counter();
+    cout<<"Encryption #1 (cycles): "<<end-start<<endl;
+
+
     return 1;
   }
 
