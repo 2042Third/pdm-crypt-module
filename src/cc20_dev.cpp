@@ -46,7 +46,7 @@ void init_byte_rand_cc20 (Bytes & a, int n){
 
 std::string pad_to_key (const std::string& text_key, const int len){
 #ifdef VERBOSE
-  cout<<"pad to key length: "<<text_key.size()<<endl;
+  std::cout<<"pad to key length: "<<text_key.size()<<std::endl;
 #endif
   std::string key;
   key = std::string((len - text_key.size()), '0');
