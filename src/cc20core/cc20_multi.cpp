@@ -14,6 +14,7 @@ author:     Yi Yang
 #include <fcntl.h>
 #ifndef SINGLETHREADING
 #include <thread>
+#include <pthread.h>
 #endif //SINGLETHREADING
 #include <iomanip>
 #include <numeric>
@@ -240,6 +241,7 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
   arg_ptr[np % THREAD_COUNT] = this;
   arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew, n
                                     , (uint8_t*)line, count, this);
+  if (conf.core_id != -1) arg_track[np % THREAD_COUNT]->set_core(conf.core_id);
 #ifndef SINGLETHREADING
   threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
 #else
@@ -264,6 +266,7 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
         arg_ptr[np % THREAD_COUNT] = this;
         arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew+tn
                                           ,  n, (uint8_t*)line + tn, count + 1, this);
+        if (conf.core_id != -1) arg_track[np % THREAD_COUNT]->set_core(conf.core_id);
         threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
         tracker = 0;
         np++;
@@ -283,6 +286,7 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
       arg_ptr[np % THREAD_COUNT] = this;
       arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew+tn,  n
                                         ,  (uint8_t*)line + tn, count + 1, this);
+      if (conf.core_id != -1) arg_track[np % THREAD_COUNT]->set_core(conf.core_id);
       threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
 #else
       arg_track[0]->set(0,(uint8_t*)this->linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
@@ -376,12 +380,6 @@ void Cc20::display_progress(size_t n,size_t *progress_bar, int THREAD_COUNT) {
 
 */
 void Cc20::worker::set(int thread_number, uint8_t* linew0, size_t num_need, uint8_t * xline, uint64_t xcount, Cc20* _ptr) {
-  // arg_track[thread_number].thread_number = thread_number;
-  // arg_track[thread_number].linew = linew1;
-  // arg_track[thread_number].num_need = num_need;
-  // arg_track[thread_number].xline = xline;
-  // arg_track[thread_number].xcount = xcount;
-
   this->thrd = thread_number;
   this->linew1 = linew0;
   this->n = num_need;
@@ -390,6 +388,9 @@ void Cc20::worker::set(int thread_number, uint8_t* linew0, size_t num_need, uint
   ptr = _ptr;
 }
 
+void Cc20::worker::set_core(int _coreId) {
+  coreId = _coreId;
+}
 
 // auto thread_func = [](int &i) {
 //     return i+42;
@@ -397,6 +398,17 @@ void Cc20::worker::set(int thread_number, uint8_t* linew0, size_t num_need, uint
 
 void Cc20::worker::multi_enc_pthrd() {
   size_t tracker = 0; // Used
+
+  // If it is in linux check if you can set core id
+#ifdef __linux__
+  if (coreId!=-1) {
+    // Set the affinity of the thread to the specified core
+    cpu_set_t cpuSet;
+    CPU_ZERO(&cpuSet);
+    CPU_SET(coreId, &cpuSet);
+    pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuSet);
+  }
+#endif // __linux__
 
 
 #ifdef VERBOSE
@@ -585,6 +597,7 @@ void Cc20::set_configurations(c20::config configs){
   conf.DISPLAY_PROG = configs.DISPLAY_PROG;
   conf.final_line_written = configs.final_line_written;
   conf.DE = configs.DE;
+  conf.core_id = configs.core_id;
 }
 int Cc20::check_file (string a){
 #ifdef ANDROID

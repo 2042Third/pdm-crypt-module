@@ -5,6 +5,8 @@
 #include "cc20_multi.h"
 #include "empp.h"
 #include "assembly.h"
+#include <cstdlib>
+#include <unistd.h>
 // KDF test
 #include <cstring>
 using namespace std;
@@ -241,6 +243,10 @@ namespace web_test{
 
 } // namespace testing
 //#ifdef HAS_MAIN
+
+void set_num_arg_config (char*inp, char* num, c20::config * sts){
+
+}
 void set_config(char*inp, c20::config * sts){
   string a = inp;
   for(unsigned int i=0;i<a.size();i++){
@@ -266,24 +272,67 @@ void set_config(char*inp, c20::config * sts){
     }
   }
 }
+
+void print_help() {
+  std::cout << "Usage: c20 [OPTIONS] FILE_NAME" << std::endl;
+  std::cout << "Options:" << std::endl;
+  std::cout << "-d\tFast mode, disable poly1305 checking" << std::endl;
+  std::cout << "-S\tEnable sha3 output on plain text" << std::endl;
+  std::cout << "-H\tHide progress bar" << std::endl;
+  std::cout << "-E\tEncrypt (default)" << std::endl;
+  std::cout << "-D\tDecrypt" << std::endl;
+  std::cout << "-c\tSet the core ID for thread affinity" << std::endl;
+  std::cout << "-h\tHelp menu (current)" << std::endl;
+  std::cout << "Personal Data Manager Encryption Module" << std::endl;
+  std::cout << "Warning: This program overwrites files with .pdm extension, make sure you are not overwriting unintended files by mistake!" << std::endl;
+  std::cout << "by Yi Yang, 2024" << std::endl;
+}
+
 c20::config rd_inp(unsigned int argc, char ** argv, string *infile){
-  c20::config sts;
-  for (unsigned int i = 1; i< argc;i++){
-    if (argv[i][0] == '-'){
-      set_config(argv[i], &sts);
-    }
-    else{
-      if (infile->empty()){
-        sts.arg_c++;
-        *infile = argv[i];
-      }
-      else
-        return sts;
+  c20::config config;
+  int opt;
+
+  while ((opt = getopt(argc, argv, "dSHEDc:h")) != -1) {
+    switch (opt) {
+      case 'd':
+        config.poly1305_toggle = false;
+        break;
+      case 'S':
+        config.ENABLE_SHA3_OUTPUT = true;
+        break;
+      case 'H':
+        config.DISPLAY_PROG = false;
+        break;
+      case 'E':
+        config.DE = false;
+        break;
+      case 'D':
+        config.DE = true;
+        break;
+      case 'c':
+        try {
+          config.core_id = std::stoi(optarg);
+        } catch (const std::exception& e) {
+          std::cerr << "Invalid core ID. Ignoring." << std::endl;
+        }
+        break;
+      case 'h':
+        print_help();
+        exit(0);
+      default:
+        std::cerr << "Unrecognized option: " << static_cast<char>(opt) << ". Use -h for help." << std::endl;
+        exit(1);
     }
   }
 
-  return sts;
+  if (optind < argc) {
+    infile->assign(argv[optind]);
+    config.arg_c++;
+  }
+
+  return config;
 }
+
 int main(int argc, char ** argv) {
 #ifndef WEB_RELEASE_LINUX_TEST
   string infile,oufile,nonce;

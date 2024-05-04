@@ -65,6 +65,7 @@ namespace c20{
     int DE=0;
     int pure_xor=0;
     int arg_c=1;
+    int core_id=-1;
   };
 }
 
@@ -150,7 +151,9 @@ public:
  * Should contain all things a thread needs, including the encryption
  * */
   struct worker {
-    void set(int thread_number, uint8_t* linew0, size_t num_need, uint8_t * xline, uint64_t xcount, Cc20* _ptr);
+    void set(int thread_number, uint8_t* linew0, size_t num_need,
+             uint8_t * xline, uint64_t xcount, Cc20* _ptr);
+    void set_core(int _coreId);
 //  void x_set(int thrd, uint8_t* linew0, size_t n,  uint8_t * line, Cc20 * ptr);
     void multi_enc_pthrd();
 //  void x_multi_enc_pthrd();
@@ -160,6 +163,7 @@ public:
     uint64_t count;
     size_t n;
     Cc20 * ptr;
+    int coreId;
   };
   void start_seq();
   void encr(uint8_t*line,uint8_t*linew,unsigned long int fsize);
