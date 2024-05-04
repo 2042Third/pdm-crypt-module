@@ -282,6 +282,7 @@ void print_help() {
   std::cout << "-E\tEncrypt (default)" << std::endl;
   std::cout << "-D\tDecrypt" << std::endl;
   std::cout << "-c\tSet the core ID for thread affinity" << std::endl;
+  std::cout << "-j\tSet the number of cores to use. Default 4 cores." << std::endl;
   std::cout << "-h\tHelp menu (current)" << std::endl;
   std::cout << "Personal Data Manager Encryption Module" << std::endl;
   std::cout << "Warning: This program overwrites files with .pdm extension, make sure you are not overwriting unintended files by mistake!" << std::endl;
