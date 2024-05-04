@@ -241,7 +241,7 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
   arg_ptr[np % THREAD_COUNT] = this;
   arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew, n
                                     , (uint8_t*)line, count, this);
-  if (conf.core_id != -1) arg_track[np % THREAD_COUNT]->set_core(conf.core_id);
+  arg_track[np % THREAD_COUNT]->set_core(conf.core_id);
 #ifndef SINGLETHREADING
   threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
 #else
@@ -266,7 +266,7 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
         arg_ptr[np % THREAD_COUNT] = this;
         arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew+tn
                                           ,  n, (uint8_t*)line + tn, count + 1, this);
-        if (conf.core_id != -1) arg_track[np % THREAD_COUNT]->set_core(conf.core_id);
+        arg_track[np % THREAD_COUNT]->set_core(conf.core_id);
         threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
         tracker = 0;
         np++;
@@ -286,7 +286,7 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
       arg_ptr[np % THREAD_COUNT] = this;
       arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew+tn,  n
                                         ,  (uint8_t*)line + tn, count + 1, this);
-      if (conf.core_id != -1) arg_track[np % THREAD_COUNT]->set_core(conf.core_id);
+      arg_track[np % THREAD_COUNT]->set_core(conf.core_id);
       threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
 #else
       arg_track[0]->set(0,(uint8_t*)this->linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
