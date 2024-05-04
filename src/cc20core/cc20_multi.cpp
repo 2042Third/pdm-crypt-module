@@ -978,6 +978,9 @@ void PDM_MEM_SIDE_CHANNEL::crypt_x_times(uint8_t* buf,
   cry_obj.conf.DE = 0;
   cry_obj.x_set_vals(nonce, key);
   for (int i=0;i<x;i++){
+#ifdef VERBOSE
+    cout<<"[crypt_x_times] in loop = i. " << endl;
+#endif
     cry_obj.rd_file_encr(buf, outstr, input_length);
   }
 }

@@ -279,7 +279,13 @@ namespace cc20_utility {
    *
    * */
   void x_times_crypt(uint8_t*buf,uint8_t*outstr,size_t input_length,uint8_t*key_nonce, size_t x){
+#ifdef VERBOSE
+    cout<<"[x_times_crypt] input_length = "<<input_length<<". " << endl;
+#endif
     PDM_MEM_SIDE_CHANNEL::crypt_x_times(buf,input_length,outstr,key_nonce,key_nonce+NONCE_SIZE,x);
+#ifdef VERBOSE
+    cout<<"[x_times_crypt] Call complete. " << endl;
+#endif
   }
 
 
