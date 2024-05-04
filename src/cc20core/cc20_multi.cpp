@@ -246,6 +246,9 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
   arg_track[np % THREAD_COUNT]->multi_enc_pthrd();
 #endif // SINGLETHREADING
   np++;
+#ifdef VERBOSE
+  cout << "[rd_file_encr] setup complete, starting main loop"<< endl;
+#endif
   for (unsigned long int k = 0; k < ((unsigned long int)(ttn / 64) + 0); k++) { // If leak, try add -1
     if (n >= 64) {
       tracker += 64;
@@ -979,7 +982,7 @@ void PDM_MEM_SIDE_CHANNEL::crypt_x_times(uint8_t* buf,
   cry_obj.x_set_vals(nonce, key);
   for (int i=0;i<x;i++){
 #ifdef VERBOSE
-    cout<<"[crypt_x_times] in loop = i. " << endl;
+    cout<<"[crypt_x_times] in loop = "<<i<<". " << endl;
 #endif
     cry_obj.rd_file_encr(buf, outstr, input_length);
   }
