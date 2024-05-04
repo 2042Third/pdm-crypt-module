@@ -717,7 +717,7 @@ void cmd_enc(string infile_name, string oufile_name, c20::config configs){
   string text_nonce = cc20_dev::btos(cur);
   uint8_t key_hash[65]= {0};
   uint8_t inonce [NONCE_SIZE] = {0};
-  Cc20 cry_obj;
+  Cc20 cry_obj (configs.core_count);
 #ifndef WEB_RELEASE
   if (!cry_obj.check_file(infile_name))
     return;

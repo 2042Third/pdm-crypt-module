@@ -316,6 +316,17 @@ c20::config rd_inp(unsigned int argc, char ** argv, string *infile){
           std::cerr << "Invalid core ID. Ignoring." << std::endl;
         }
         break;
+      case 'j':
+        try {
+          config.core_count = std::stoi(optarg);
+          if (config.core_count < 1) {
+            config.core_count = 4;
+            throw std::invalid_argument("Invalid core count");
+          }
+        } catch (const std::exception& e) {
+          std::cerr << "Invalid core count. Default 4 cores." << std::endl;
+        }
+        break;
       case 'h':
         print_help();
         exit(0);

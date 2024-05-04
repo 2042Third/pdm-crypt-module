@@ -66,6 +66,7 @@ namespace c20{
     int pure_xor=0;
     int arg_c=1;
     int core_id=-1;
+    int core_count = 4;
   };
 }
 
