@@ -81,6 +81,10 @@ linux_no_opt_debug:
 linux_no_opt:
 	clang++ $(all_includes) $(srcs) $(all_defs) -lpthread -m64 -O0 -pthread -o build/cc20  -std=c++17 desktop.cpp
 
+# Used in May 2024
+linux_opt:
+	clang++ $(all_includes) $(srcs) $(all_defs) -lpthread -m64 -O3 -pthread -o build/cc20  -std=c++17 desktop.cpp
+
 
 xwindows:
 	g++ $(boost) $(xrelease_en) $(srcs) $(inc) $(win32) -Wall
