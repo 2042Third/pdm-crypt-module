@@ -8,7 +8,6 @@ author:     Yi Yang
 */
 #ifndef _cc20_multi_
 #define _cc20_multi_
-#define THREAD_COUNT 8
 #ifdef WEB_RELEASE
 #undef HAS_MAIN
 #endif//WEB_RELEASE
@@ -18,11 +17,9 @@ author:     Yi Yang
 #endif//DESKTOP_RELEASE
 
 #ifndef SINGLETHREADING
-#define THREAD_COUNT 8
+#include <thread>
 #elif FOURCORE
-#define THREAD_COUNT 4 
 #else
-#define THREAD_COUNT 1 
 #endif
 
 #define BLOCK_SIZE  4608000
@@ -71,6 +68,8 @@ namespace c20{
   };
 }
 
+class Cc20;
+
 namespace PDM_BRIDGE_MOBILE {
   void ck_crypt(uint8_t* buf, size_t input_length, uint8_t*outstr,  uint8_t*nonce, const uint8_t*key,size_t offset=0);
   void ck_enc(uint8_t* buf, size_t input_length, uint8_t* outstr , const std::string& text_key);
@@ -88,12 +87,70 @@ namespace PDM_MEM_SIDE_CHANNEL {
 class Cc20{
 
 public:
+
+
+  /**
+   * ########### From defines at the top of this file
+   * */
+#ifndef SINGLETHREADING
+#include <thread>
+  int THREAD_COUNT = 4;
+#elif FOURCORE
+  int THREAD_COUNT = 4;
+#else
+  int THREAD_COUNT = 4;
+#endif
+
+
+  /**
+   * ########### End defines at the top of this file
+   * */
+
+  /**
+   * ########### From defines at the top of the cpp file
+   * */
+
+/**
+ * Moved "BLOCK_SIZE" to header file
+ * Moved "THREAD_COUNT" to header file and made it definied at compile-time.
+ * */
+// const int PER_THREAD_BACK_LOG = 0; // This is not enabled.
+
+
+// Statically allocates, and uses BLOCK_SIZE*THREAD_COUNT of memory.
+// char thread_track[THREAD_COUNT][BLOCK_SIZE] = {{0}};
+
+
+/**
+ * Need to change this into an object
+ * */
+  std::vector<long int> writing_track; // Tells the writer thread how much to read; should only be different on the last block.
+
+  std::vector<size_t> progress_bar;
+
+//  std::vector<std::vector<unsigned long int>> arg_track;
+/* Passes arguments into threads.
+                                       arg_track[THREAD_COUNT][0] ---> Thread number
+                                       arg_track[THREAD_COUNT][1] ---> NOT USED
+                                       arg_track[THREAD_COUNT][2] ---> NOT USED
+                                       arg_track[THREAD_COUNT][3] ---> Remaining plain size
+                                       arg_track[THREAD_COUNT][4] ---> NOT USED*/
+
+
+#ifndef SINGLETHREADING
+  std::vector<std::thread> threads; // Threads
+#endif // SINGLETHREADING
+
+  /**
+   * ########### End defines at the top of the cpp file
+   * */
+
 /**
  *  -- replaces cc20_parts
  * Should contain all things a thread needs, including the encryption
  * */
   struct worker {
-    void set(int thread_number, uint8_t* linew0, size_t num_need, uint8_t * xline, uint64_t xcount, Cc20 * ptr);
+    void set(int thread_number, uint8_t* linew0, size_t num_need, uint8_t * xline, uint64_t xcount, Cc20* _ptr);
 //  void x_set(int thrd, uint8_t* linew0, size_t n,  uint8_t * line, Cc20 * ptr);
     void multi_enc_pthrd();
 //  void x_multi_enc_pthrd();
@@ -102,6 +159,7 @@ public:
     uint8_t* linew1;
     uint64_t count;
     size_t n;
+    Cc20 * ptr;
   };
   void start_seq();
   void encr(uint8_t*line,uint8_t*linew,unsigned long int fsize);
@@ -126,17 +184,21 @@ public:
   void get_key_hash(std::string a, uint8_t* hash);
   char* get_inp_nonce (std::string infile_name, uint8_t* line1);
   void get_time_diff(std::chrono::time_point<std::chrono::high_resolution_clock> start);
-  uint8_t nex[THREAD_COUNT][65];
   void get_key_hash(const uint8_t* a, uint8_t* hash);
   int is_dec(){return conf.DE;}
-  Cc20();
+  explicit Cc20(int _thread_count_ = 8 );
   ~Cc20();
   void end_cleanup();
   void clean_worker();
+  static void display_progress(size_t n,size_t* progress_bar, int THREAD_COUNT);
+
 
   cc20_poly* poly;// should be in private
-  SHA3 hashing; 
-  worker* arg_track[THREAD_COUNT];
+  SHA3 hashing;
+  std::vector<Cc20*> arg_ptr; // Parent pointers for each thread.
+
+  std::vector<std::vector<uint8_t>> nex; // uint8_t nex[THREAD_COUNT][65];
+  std::vector<worker*> arg_track; // worker* arg_track[THREAD_COUNT];
   c20::config conf;
 protected:
   // A copy of a state.
@@ -150,15 +212,15 @@ protected:
   const unsigned long b4 =  0B01101011001001000110010101110100 ;
   int FILE_WRITTEN =0;
   uint64_t count;
-  uint32_t cy[THREAD_COUNT][17];
-  uint32_t folow[THREAD_COUNT][17];
+  std::vector<std::vector<uint32_t>> cy; // uint32_t cy[THREAD_COUNT][17];
+  std::vector<std::vector<uint32_t>> folow; // uint32_t folow[THREAD_COUNT][17];
   char *linew;
   uint8_t * nonce;
   uint8_t nonce_orig[NONCE_SIZE]={0};
   unsigned char orig_mac[16]={0};
 
-
 };
+
 std::string htos (std::string a);
 std::string stoh (std::string a);
 void cmd_enc(uint8_t* buf, std::string oufile_name, std::string text_key, size_t outsize);

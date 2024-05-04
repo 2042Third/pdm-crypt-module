@@ -23,7 +23,7 @@ author:     Yi Yang
 #endif
 #include <unistd.h>
 #include <sstream>
-#include <string.h>
+#include <cstring>
 #include "cc20_file.h"
 #include <cc20_dev.h>
 #include "cc20_multi.h"
@@ -39,41 +39,6 @@ using namespace std;
 
 
 
-/**
- * Moved "BLOCK_SIZE" to header file
- * Moved "THREAD_COUNT" to header file and made it definied at compile-time.
- * */
-// const int PER_THREAD_BACK_LOG = 0; // This is not enabled.
-
-
-// Statically allocates, and uses BLOCK_SIZE*THREAD_COUNT of memory. 
-// char thread_track[THREAD_COUNT][BLOCK_SIZE] = {{0}};
-
-
-/**
- * Need to change this into an object
- * */
-long int writing_track[THREAD_COUNT]; // Tells the writer thread how much to read; should only be different on the last block.
-
-size_t progress_bar[THREAD_COUNT];
-
-
-
-// unsigned long int arg_track[THREAD_COUNT][6];
-/* Passes arguments into threads.
-                                       arg_track[THREAD_COUNT][0] ---> Thread number
-                                       arg_track[THREAD_COUNT][1] ---> NOT USED
-                                       arg_track[THREAD_COUNT][2] ---> NOT USED
-                                       arg_track[THREAD_COUNT][3] ---> Remaining plain size
-                                       arg_track[THREAD_COUNT][4] ---> NOT USED*/
-
-
-
-Cc20 * arg_ptr[THREAD_COUNT]; // Parent pointers for each thread.
-
-#ifndef SINGLETHREADING
-thread threads[THREAD_COUNT]; // Threads
-#endif // SINGLETHREADING
 
 
 static void helper_print_stats(const uint8_t* a,size_t size,int binary=1) {
@@ -114,16 +79,16 @@ template < typename NU >
 void Cc20::one_block(int thrd, uint64_t xcount) {
   cy[thrd][12] = cc20_dev::upper(xcount);
   cy[thrd][13] = cc20_dev::lower(xcount);
-  memcpy(folow[thrd], cy[thrd], sizeof(uint32_t) * 16);
+  copy(cy[thrd].begin(), cy[thrd].end(), folow[thrd].begin()); // memcpy(folow[thrd], cy[thrd], sizeof(uint32_t) * 16);
 
 #ifdef ROUNDCOUNTTWLV
-  for (unsigned int i = 0; i < 6; i++) tworounds(folow[thrd]); // 12 rounds
+  for (unsigned int i = 0; i < 6; i++) tworounds(&folow[thrd][0]); // 12 rounds
 #else
-  for (unsigned int i = 0; i < 10; i++) cc20_dev::tworounds(folow[thrd]); // 20 rounds
+  for (unsigned int i = 0; i < 10; i++) cc20_dev::tworounds(&folow[thrd][0]); // 20 rounds
 #endif
 
-  cc20_dev::set_conc(cy[thrd], folow[thrd], 16);
-  endicha(this -> nex[thrd], cy[thrd]);
+  cc20_dev::set_conc(&cy[thrd][0], &folow[thrd][0] , 16);
+  endicha( &nex[thrd][0], &cy[thrd][0]);
 }
 
 /**
@@ -267,11 +232,14 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
     for (unsigned int i=0; i<THREAD_COUNT;i++){
       progress_bar[i] = 0;
     }
-    progress = thread(display_progress,ttn);
+    progress = thread(display_progress,ttn, progress_bar.data(), THREAD_COUNT);
   }
 #endif// SINGLETHREADING
   // cout << "Size: "<<ttn << endl;
-  arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew, n, (uint8_t*)line, count, this);
+
+  arg_ptr[np % THREAD_COUNT] = this;
+  arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew, n
+                                    , (uint8_t*)line, count, this);
 #ifndef SINGLETHREADING
   threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
 #else
@@ -290,7 +258,9 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
 #ifdef VERBOSE
         cout << "[main] " <<np % THREAD_COUNT<< " regular being dispatched"<< endl;
 #endif
-        arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew+tn,  n, (uint8_t*)line + tn, count + 1, this);
+        arg_ptr[np % THREAD_COUNT] = this;
+        arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew+tn
+                                          ,  n, (uint8_t*)line + tn, count + 1, this);
         threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
         tracker = 0;
         np++;
@@ -307,7 +277,9 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
       if (threads[np % THREAD_COUNT].joinable() && conf.final_line_written != 1) {
         threads[np % THREAD_COUNT].join();
       }
-      arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
+      arg_ptr[np % THREAD_COUNT] = this;
+      arg_track[np % THREAD_COUNT]->set(np % THREAD_COUNT,(uint8_t*)this->linew+tn,  n
+                                        ,  (uint8_t*)line + tn, count + 1, this);
       threads[np % THREAD_COUNT] = thread( &Cc20::worker::multi_enc_pthrd,arg_track[np % THREAD_COUNT]) ;
 #else
       arg_track[0]->set(0,(uint8_t*)this->linew+tn,  n,  (uint8_t*)line + tn, count + 1, this);
@@ -367,7 +339,7 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
  * Displays progress
  * -- move to namespace
  * */
-void display_progress(size_t n) {
+void Cc20::display_progress(size_t n,size_t *progress_bar, int THREAD_COUNT) {
   unsigned int current=0;
   size_t acum=0;
   unsigned int res =50;
@@ -400,7 +372,7 @@ void display_progress(size_t n) {
     Sets arguments in arg_track for threads.
 
 */
-void Cc20::worker::set(int thread_number, uint8_t* linew0, size_t num_need, uint8_t * xline, uint64_t xcount, Cc20 * ptr) {
+void Cc20::worker::set(int thread_number, uint8_t* linew0, size_t num_need, uint8_t * xline, uint64_t xcount, Cc20* _ptr) {
   // arg_track[thread_number].thread_number = thread_number;
   // arg_track[thread_number].linew = linew1;
   // arg_track[thread_number].num_need = num_need;
@@ -412,7 +384,7 @@ void Cc20::worker::set(int thread_number, uint8_t* linew0, size_t num_need, uint
   this->n = num_need;
   this->line = xline;
   this->count = xcount * BLOCK_SIZE;
-  arg_ptr[thread_number] = ptr;
+  ptr = _ptr;
 }
 
 
@@ -422,7 +394,7 @@ void Cc20::worker::set(int thread_number, uint8_t* linew0, size_t num_need, uint
 
 void Cc20::worker::multi_enc_pthrd() {
   size_t tracker = 0; // Used
-  Cc20 * ptr = arg_ptr[thrd];
+
 
 #ifdef VERBOSE
   cout<<"[calc] "<<thrd<<" locks, starting write " << endl;
@@ -436,7 +408,7 @@ void Cc20::worker::multi_enc_pthrd() {
       }
       tracker += 64;
       if (tracker >= (BLOCK_SIZE)) { // Notifies the writing tread when data can be read
-        writing_track[thrd] = tracker;
+        ptr->writing_track[thrd] = tracker;
         tracker = 0;
       }
     } else {
@@ -444,12 +416,12 @@ void Cc20::worker::multi_enc_pthrd() {
         linew1[i+tracker] = (char)(line[i + tracker] ^ ptr -> nex[thrd][i]);
       }
       tracker += n;
-      writing_track[thrd] = tracker; // Notifies the writing tread when data can be read
+      ptr->writing_track[thrd] = tracker; // Notifies the writing tread when data can be read
       break;
     }
     count += 1;
     n -= 64;
-    if(ptr->conf.DISPLAY_PROG)progress_bar[thrd]+=64;
+    if(ptr->conf.DISPLAY_PROG)ptr->progress_bar[thrd]+=64;
   }
 #ifdef VERBOSE
   cout<<"[calc] "<<thrd<<" unlocks " << endl;
@@ -475,8 +447,8 @@ void Cc20::set_vals(uint8_t * nonce0, uint8_t * key0) {
     this -> cy[i][2] = 0x79622d32;
     this -> cy[i][3] = 0x6b206574;
 
-    cc20_dev::expan(this -> cy[i], 13, this -> nonce, 3);
-    cc20_dev::expan(this -> cy[i], 4, key0, 8);
+    cc20_dev::expan(&this -> cy[i][0], 13, this -> nonce, 3);
+    cc20_dev::expan(&this -> cy[i][0], 4, key0, 8);
     //algo change #2
     one_block((int)i, (int)1);
   }
@@ -508,8 +480,8 @@ void Cc20::x_set_vals(uint8_t *nonce0, const uint8_t *key0) {
     this -> cy[i][2] = 0x79622d32;
     this -> cy[i][3] = 0x6b206574;
 
-    cc20_dev::expan(this -> cy[i], 14, this -> nonce+16, 2); // * explained below
-    cc20_dev::expan(this -> cy[i], 4, key0, 8);
+    cc20_dev::expan(&this -> cy[i][0], 14, this -> nonce+16, 2); // * explained below
+    cc20_dev::expan(&this -> cy[i][0], 4, key0, 8);
     cy[i][12]=0;
     cy[i][13]=1;  // originally nonce is only at index 13,14,15
                   // , now the nonce is generating the xchacha-subkey
@@ -532,8 +504,8 @@ void Cc20::h_set_vals( uint8_t * nonce0, const uint8_t * key0) {
     this -> cy[i][1] = 0x3320646e;
     this -> cy[i][2] = 0x79622d32;
     this -> cy[i][3] = 0x6b206574;
-    cc20_dev::expan(this -> cy[i], 12, this -> nonce, 4);
-    cc20_dev::expan(this -> cy[i], 4, key0, 8);
+    cc20_dev::expan(&this -> cy[i][0], 12, this -> nonce, 4);
+    cc20_dev::expan(&this -> cy[i][0], 4, key0, 8);
     one_block((int)i, (int)1);
 
   }
@@ -564,16 +536,39 @@ void Cc20::read_original_mac(unsigned char * m, uint8_t* input_file, size_t off)
 /**
  * Constructor
  * */
-Cc20::Cc20(){
+Cc20::Cc20(int _thread_count_): THREAD_COUNT(_thread_count_){
+  writing_track.resize(THREAD_COUNT);
+  progress_bar.resize(THREAD_COUNT);
+  arg_ptr.resize(THREAD_COUNT);
+
+
+  cy.resize(THREAD_COUNT, std::vector<uint32_t>(17));
+
+  folow.resize(THREAD_COUNT, std::vector<uint32_t>(17));
+
+  nex.resize(THREAD_COUNT, std::vector<uint8_t>(65));
+
+  arg_track.resize(THREAD_COUNT);
+
   poly = new cc20_poly();
+
   for (unsigned int i=0 ; i< THREAD_COUNT; i++){
-    arg_track[i]=new worker();
+    arg_track[i] = new worker();
     for (unsigned int f = 0; f< POLY_SIZE+1;f++){
       folow[i][f] = {0};
       cy[i][f] = {0};
     }
-  } 
+  }
+
 }
+
+Cc20::~Cc20() {
+  delete poly;
+  for (auto & i : arg_track){
+    delete i;
+  }
+}
+
 
 void Cc20::set_configurations(c20::config configs){
   conf.poly1305_toggle = configs.poly1305_toggle;
@@ -1058,10 +1053,4 @@ void Cc20::end_cleanup() {
 
 }
 
-Cc20::~Cc20() {
-  delete poly;
-  for (auto & i : arg_track){
-    delete i;
-  }
-}
 
