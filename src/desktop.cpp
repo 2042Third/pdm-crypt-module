@@ -253,7 +253,7 @@ void print_help() {
   std::cout << "-E\tEncrypt (default)" << std::endl;
   std::cout << "-D\tDecrypt" << std::endl;
   std::cout << "-c\tSet the core ID for thread affinity" << std::endl;
-  std::cout << "-j\tSet the number of cores to use. Default 4 cores." << std::endl;
+  std::cout << "-j\tSet the number of cores to use. Default 8 cores." << std::endl;
   std::cout << "-h\tHelp menu (current)" << std::endl;
   std::cout << "Personal Data Manager Encryption Module" << std::endl;
   std::cout << "Warning: This program overwrites files with .pdm extension, make sure you are not overwriting unintended files by mistake!" << std::endl;
@@ -292,11 +292,11 @@ c20::config rd_inp(unsigned int argc, char ** argv, string *infile){
         try {
           config.core_count = std::stoi(optarg);
           if (config.core_count < 1) {
-            config.core_count = 4;
+            config.core_count = 8;
             throw std::invalid_argument("Invalid core count");
           }
         } catch (const std::exception& e) {
-          std::cerr << "Invalid core count. Default 4 cores." << std::endl;
+          std::cerr << "Invalid core count. Default 8 cores." << std::endl;
         }
         break;
       case 'h':
