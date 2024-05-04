@@ -543,6 +543,7 @@ Cc20::Cc20(int _thread_count_): THREAD_COUNT(_thread_count_){
 #ifdef VERBOSE
   cout<<"[Cc20 Constructor] _thread_count_ = "<<_thread_count_<<" . " << endl;
 #endif
+  threads.resize(THREAD_COUNT);
   writing_track.resize(THREAD_COUNT);
   progress_bar.resize(THREAD_COUNT);
   arg_ptr.resize(THREAD_COUNT);

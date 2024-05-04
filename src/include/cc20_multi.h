@@ -126,7 +126,7 @@ public:
  * */
   std::vector<long int> writing_track; // Tells the writer thread how much to read; should only be different on the last block.
 
-  std::vector<size_t> progress_bar;
+  std::vector<size_t> progress_bar; //size_t progress_bar[THREAD_COUNT];
 
 //  std::vector<std::vector<unsigned long int>> arg_track;
 /* Passes arguments into threads.
@@ -138,7 +138,7 @@ public:
 
 
 #ifndef SINGLETHREADING
-  std::vector<std::thread> threads; // Threads
+  std::vector<std::thread> threads; // std::thread threads[THREAD_COUNT];
 #endif // SINGLETHREADING
 
   /**
