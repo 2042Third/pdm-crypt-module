@@ -537,6 +537,9 @@ void Cc20::read_original_mac(unsigned char * m, uint8_t* input_file, size_t off)
  * Constructor
  * */
 Cc20::Cc20(int _thread_count_): THREAD_COUNT(_thread_count_){
+#ifdef VERBOSE
+  cout<<"[Cc20 Constructor] _thread_count_ = "<<_thread_count_<<" . " << endl;
+#endif
   writing_track.resize(THREAD_COUNT);
   progress_bar.resize(THREAD_COUNT);
   arg_ptr.resize(THREAD_COUNT);
@@ -559,7 +562,9 @@ Cc20::Cc20(int _thread_count_): THREAD_COUNT(_thread_count_){
       cy[i][f] = {0};
     }
   }
-
+#ifdef VERBOSE
+  cout<<"[Cc20 Constructor] Exites. " << endl;
+#endif
 }
 
 Cc20::~Cc20() {
