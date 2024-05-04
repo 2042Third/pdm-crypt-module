@@ -3,7 +3,9 @@
 //
 
 #include "cc20_dev.h"
-
+#ifdef VERBOSE
+#include <iostream>
+#endif
 #include <random>
 
 //template<typename NU>
