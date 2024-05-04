@@ -244,35 +244,6 @@ namespace web_test{
 } // namespace testing
 //#ifdef HAS_MAIN
 
-void set_num_arg_config (char*inp, char* num, c20::config * sts){
-
-}
-void set_config(char*inp, c20::config * sts){
-  string a = inp;
-  for(unsigned int i=0;i<a.size();i++){
-    if      (a[i] == 'S' ) sts->ENABLE_SHA3_OUTPUT = 1;
-    else if (a[i] == 'H' ) sts->DISPLAY_PROG = 0;
-    else if (a[i] == 'd' ) sts->poly1305_toggle = 0;
-    else if (a[i] == 'E' ) sts->DE = 0;
-    else if (a[i] == 'D' ) sts->DE = 1;
-    else if (a[i] == 'h'){
-      printf("Usage: %s\nOptions:\n-d\t%s\n-S\t%s\n-H\t%s\n-E\t%s\n-D\t%s\n-h\t%s\n%s\n",
-             "c20 [OPTIONS] FILE_NAME",
-             "Fast mode, disable poly1305 checking",
-             "Enable sha3 output on plain text",
-             "Hide progress bar",
-             "Encrypt(default)",
-             "Decrypt",
-             "Help menu (current)",
-             "Personal Data Manager Encryption Module\nWarning: This program overwrittes files with .pdm extension, make sure you are not overwritting unintended files by mistake! \nby Yi Yang, 2021");
-      exit(0);
-    }
-    else if (a[i]!='-') {
-      printf("Unrecognized option \"%c\", -h for help",a[i]);
-    }
-  }
-}
-
 void print_help() {
   std::cout << "Usage: c20 [OPTIONS] FILE_NAME" << std::endl;
   std::cout << "Options:" << std::endl;
@@ -293,7 +264,7 @@ c20::config rd_inp(unsigned int argc, char ** argv, string *infile){
   c20::config config;
   int opt;
 
-  while ((opt = getopt(argc, argv, "dSHEDc:h")) != -1) {
+  while ((opt = getopt(argc, argv, "dSHEDc:j:h")) != -1) {
     switch (opt) {
       case 'd':
         config.poly1305_toggle = false;
