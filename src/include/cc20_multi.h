@@ -194,7 +194,7 @@ public:
   ~Cc20();
   void end_cleanup();
   void clean_worker();
-  static void display_progress(size_t n,size_t* progress_bar, int THREAD_COUNT);
+  static void display_progress(size_t n, const size_t* progress_bar, int THREAD_COUNT);
 
 
   cc20_poly* poly;// should be in private

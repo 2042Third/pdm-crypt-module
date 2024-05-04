@@ -346,33 +346,35 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
  * Displays progress
  * -- move to namespace
  * */
-void Cc20::display_progress(size_t n,size_t *progress_bar, int THREAD_COUNT) {
-  unsigned int current=0;
-  size_t acum=0;
-  unsigned int res =50;
-  double num =0;
-  string line, spaces;
-  char progress_buffer[100];
-  while(current<res ){
-    acum=0;
-    sprintf(progress_buffer,"[%s%s]%.1f%%\0",line.data(), spaces.data(), ((num*100)-100));
-    cout << progress_buffer << "\r";
-    num = (float)accumulate(progress_bar,progress_bar+THREAD_COUNT,acum)/n;
-    if((num) *res>=current || n<1000){
-      current++;
+void Cc20::display_progress(size_t n, const size_t* progress_bar, int THREAD_COUNT) {
+  const unsigned int bar_width = 50;
+  const unsigned int update_interval = 100000; // 100ms
+
+  size_t total_progress = 0;
+  double progress_percentage = 0.0;
+  std::string progress_line(bar_width, ' ');
+
+  auto last_update_time = std::chrono::steady_clock::now();
+
+  while (progress_percentage < 100.0) {
+    total_progress = std::accumulate(progress_bar, progress_bar + THREAD_COUNT, 0);
+    progress_percentage = (static_cast<double>(total_progress) / n) * 100.0;
+
+    auto current_time = std::chrono::steady_clock::now();
+    auto elapsed_time = std::chrono::duration_cast<std::chrono::microseconds>(current_time - last_update_time);
+
+    if (elapsed_time.count() >= update_interval || progress_percentage >= 100.0) {
+      int filled_width = static_cast<int>(progress_percentage * bar_width / 100.0);
+      std::fill_n(progress_line.begin(), filled_width, '-');
+
+      std::cout << "\r[" << progress_line << "] " << std::fixed << std::setprecision(1)
+                << progress_percentage << "%" << std::flush;
+
+      last_update_time = current_time;
     }
-    line="";
-    spaces="";
-    num+=1;
-    for(unsigned i =0 ; i<res;i++){
-      if (i<=current)
-        line+="-";
-      else
-        spaces+=" ";
-    }
-    usleep(10000);
   }
-  printf("[%s%s]%.1f%% \n",line.data(), spaces.data(), ((100.0)));
+
+  std::cout << std::endl;
 }
 
 /*
