@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -ne 2 ]; then
-    echo "Usage: $0 <command> <num_iterations>"
+    echo "Usage: $0 <num_iterations>"
     exit 1
 fi
 
