@@ -36,6 +36,10 @@ author:     Yi Yang
 #include <utility>
 #include <fstream>
 
+#ifdef __APPLE__
+#include <mach/thread_act.h>
+#endif // __apple__
+
 using namespace std;
 
 
@@ -278,7 +282,10 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
 #endif// SINGLETHREADING
       }
     }
-    else {
+    else if (n>0) {
+#ifdef VERBOSE
+      cout << "[main] " <<np % THREAD_COUNT<< " end thread being dispatched"<< endl;
+#endif
 #ifndef SINGLETHREADING
       if (threads[np % THREAD_COUNT].joinable() && conf.final_line_written != 1) {
         threads[np % THREAD_COUNT].join();
@@ -332,6 +339,7 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
   else {
     cout << "Password incorrect, decryption failed and no files written..."<<endl;
   }
+
   end_cleanup();
 
 #ifndef SINGLETHREADING
@@ -351,15 +359,20 @@ void Cc20::display_progress(size_t n, const size_t* progress_bar, int THREAD_COU
   const unsigned int update_interval = 100000; // 100ms
 
   size_t total_progress = 0;
+  size_t last_size = 0;
+  int count = 0;
   double progress_percentage = 0.0;
   std::string progress_line(bar_width, ' ');
 
   auto last_update_time = std::chrono::steady_clock::now();
 
-  while (progress_percentage < 100.0) {
-    total_progress = std::accumulate(progress_bar, progress_bar + THREAD_COUNT, 0);
-    progress_percentage = (static_cast<double>(total_progress) / n) * 100.0;
+  do {
+    total_progress = 0;
+    for (int i = 0; i < THREAD_COUNT; ++i) {
+      total_progress += progress_bar[i];
+    }
 
+    progress_percentage = (static_cast<double>(total_progress) / n) * 100.0;
     auto current_time = std::chrono::steady_clock::now();
     auto elapsed_time = std::chrono::duration_cast<std::chrono::microseconds>(current_time - last_update_time);
 
@@ -370,9 +383,27 @@ void Cc20::display_progress(size_t n, const size_t* progress_bar, int THREAD_COU
       std::cout << "\r[" << progress_line << "] " << std::fixed << std::setprecision(1)
                 << progress_percentage << "%" << std::flush;
 
+      if (progress_percentage >= 100.0) {
+        std::cout << std::endl;
+        return;
+      }
+
       last_update_time = current_time;
+      last_size = total_progress;
+      if (last_size == total_progress) {
+        count++;
+      } else {
+        count = 0;
+      }
+
+      if (count >= 10) {
+        std::cout << std::endl;
+        return;
+      }
     }
-  }
+
+    std::this_thread::sleep_for(std::chrono::microseconds(1000)); // Sleep for 1ms
+  } while (total_progress+10 < n);
 
   std::cout << std::endl;
 }
@@ -410,8 +441,23 @@ void Cc20::worker::multi_enc_pthrd() {
     CPU_SET(coreId, &cpuSet);
     pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuSet);
   }
-#endif // __linux__
+#elif defined(_WIN64)
+  if (coreId!=-1) {
+    // Set the affinity of the thread to the specified core
+    SetThreadAffinityMask(GetCurrentThread(), 1 << coreId);
+  }
+#elif defined(__APPLE__)
 
+
+#endif // __linux__
+  if (coreId!=-1) {
+    // Set the affinity of the thread to the specified core
+    thread_affinity_policy_data_t policy = { (int)coreId };
+    thread_policy_set(pthread_mach_thread_np(pthread_self()),
+                      THREAD_AFFINITY_POLICY,
+                      (thread_policy_t)&policy,
+                      THREAD_AFFINITY_POLICY_COUNT);
+  }
 
 #ifdef VERBOSE
   cout<<"[calc] "<<thrd<<" locks, starting write " << endl;
