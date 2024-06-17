@@ -452,6 +452,7 @@ void Cc20::worker::multi_enc_pthrd() {
 
 
 #endif // __linux__
+#ifndef SINGLETHREADING
   if (coreId!=-1) {
     // Set the affinity of the thread to the specified core
     thread_affinity_policy_data_t policy = { (int)coreId };
@@ -460,7 +461,7 @@ void Cc20::worker::multi_enc_pthrd() {
                       (thread_policy_t)&policy,
                       THREAD_AFFINITY_POLICY_COUNT);
   }
-
+#endif // SINGLETHREADING
 #ifdef VERBOSE
   cout<<"[calc] "<<thrd<<" locks, starting write " << endl;
 #endif
