@@ -7,15 +7,15 @@ C_DEFINES = -DHAS_MAIN -DLINUX -DWEB_RELEASE_LINUX_TEST -DWINDOWS
 
 C_INCLUDES = -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/include -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib/wasm -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib/cpp-mmf -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib/poly1305-donna-master -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib/ecc -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib/scrypt/include -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib/scrypt
 
-C_FLAGSarm64 = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.4.sdk -fcolor-diagnostics -g -lpthread -m64 -O3
+C_FLAGSarm64 = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk -fcolor-diagnostics -g -lpthread -m64 -O3
 
-C_FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.4.sdk -fcolor-diagnostics -g -lpthread -m64 -O3
+C_FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk -fcolor-diagnostics -g -lpthread -m64 -O3
 
 CXX_DEFINES = -DHAS_MAIN -DLINUX -DWEB_RELEASE_LINUX_TEST -DWINDOWS
 
 CXX_INCLUDES = -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/include -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib/wasm -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib/cpp-mmf -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib/poly1305-donna-master -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib/ecc -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib/scrypt/include -I/Users/mikeyang/CLionProjects/pdm-crypt-module/src/lib/scrypt
 
-CXX_FLAGSarm64 = -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.4.sdk -fcolor-diagnostics -g -lpthread -m64 -O3
+CXX_FLAGSarm64 = -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk -fcolor-diagnostics -g -lpthread -m64 -O3
 
-CXX_FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.4.sdk -fcolor-diagnostics -g -lpthread -m64 -O3
+CXX_FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk -fcolor-diagnostics -g -lpthread -m64 -O3
 

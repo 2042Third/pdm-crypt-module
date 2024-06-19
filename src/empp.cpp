@@ -15,6 +15,7 @@
 #include "empp.h"
 #include "sha3.h"
 #include "cc20_scrypt.h"
+#include "cc20_dev.h"
 #include <iostream>
 #include <string.h>
 #include <sstream>
@@ -249,6 +250,71 @@ void get_hash_convert(const char* a, size_t a_n, char* outstr){
   }
 }
 
+std::vector<Cc20*> contextHandles; // WASM runtime memory
+
+int create_context(const std::string& a) {
+  Cc20* cry_obj = new Cc20();
+  cry_obj->conf.DE = 1;
+  cry_obj->conf.DISPLAY_PROG = 0;
+  uint8_t key_hash[65] = {0};
+
+  cry_obj->get_key_hash(std::move(a), key_hash);
+  cry_obj->poly->init((unsigned char*)key_hash);
+  for (int i=0;i<CC20_KEY_SIZE;i++){
+    cry_obj->key_orig[i] = key_hash[i];
+  }
+
+  contextHandles.push_back(cry_obj);
+
+  return contextHandles.size() - 1;
+}
+
+void destroy_context(int handle) {
+  if (handle >= 0 && handle < contextHandles.size()) {
+    delete contextHandles[handle];
+    contextHandles[handle] = nullptr;
+  }
+}
+
+std::string encrypt(int handle, const std::string& input) {
+  Cc20* cry_obj = contextHandles[handle];
+  cry_obj->conf.DE=0;
+  cry_obj->conf.DISPLAY_PROG=0;
+  uint8_t key_hash[65] = {0};
+  cry_obj->get_key_hash(cry_obj->key_orig, key_hash);
+  cry_obj->poly->init((unsigned char*)key_hash);
+  Bytes cur;
+  cc20_dev::init_byte_rand_cc20(cur,NONCE_SIZE);
+//  string buf(input);
+  string text_nonce = cc20_dev::btos(cur);
+  cry_obj->x_set_vals((uint8_t *)text_nonce.data(), cry_obj->key_orig);
+  string outstr(input.size() + (NONCE_SIZE+POLY_SIZE),0);
+  cry_obj->rd_file_encr((uint8_t *)((&input)->data()), (uint8_t *)((&outstr)->data()), (size_t)input.size());
+  return stoh( outstr);
+}
+
+std::string decrypt(int handle, const std::string& input) {
+  Cc20* cry_obj = contextHandles[handle];
+  cry_obj->conf.DE=1;
+  cry_obj->conf.DISPLAY_PROG=0;
+  uint8_t key_hash[65] = {0};
+  cry_obj->get_key_hash(cry_obj->key_orig, key_hash);
+  cry_obj->poly->init((unsigned char*)key_hash);
+  string buf(htos(input));
+  string outstr((buf.size()) - (NONCE_SIZE+POLY_SIZE),0);
+  size_t inpsize = (buf.size()) ;
+  Bytes input_vc;
+  for(size_t i=0 ; i<NONCE_SIZE;i++)
+    input_vc.push_back(buf[i]);
+  string text_nonce = cc20_dev::btos(input_vc);
+  if (!text_nonce.empty()) {
+    text_nonce = cc20_dev::pad_to_key((string) text_nonce, NONCE_SIZE);
+  }
+  cry_obj->x_set_vals((uint8_t *)text_nonce.data(), cry_obj->key_orig);
+  cry_obj->rd_file_encr((uint8_t *)((&buf)->data()), (uint8_t *)((&outstr)->data()), inpsize);
+  return outstr;
+}
+
 namespace cc20_utility {
 
   size_t nonce_key_pair_size () {
@@ -313,6 +379,10 @@ EMSCRIPTEN_BINDINGS(raw_pointers) {
   emscripten::function("gen_sec",&gen_sec);
   emscripten::function("gen_pub",&gen_pub);
   emscripten::function("gen_shr",&gen_shr);
+  emscripten::function("create_context",&create_context);
+  emscripten::function("destroy_context",&destroy_context);
+  emscripten::function("encrypt",&encrypt);
+  emscripten::function("decrypt",&decrypt);
 }
 #endif
 

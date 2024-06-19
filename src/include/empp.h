@@ -44,4 +44,11 @@ namespace cc20_utility {
 
 C20_EXPORT
 void get_hash_convert(const char* a, size_t a_n, char* outstr);
+
+// Jun 18 2024, add runtime context to nuxt 3
+ int create_context (const std::string& a) ;
+ void destroy_context(int handle);
+ std::string encrypt(int handle, const std::string& input);
+ std::string decrypt(int handle, const std::string& input);
+
 #endif // EMPP_HEADER_FILE

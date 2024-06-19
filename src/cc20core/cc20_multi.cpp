@@ -82,6 +82,7 @@ template < typename NU >
 */
 
 void Cc20::one_block(int thrd, uint64_t xcount) {
+//  std::cout<<"thrd = "<<thrd<<std::endl;
   cy[thrd][12] = cc20_dev::upper(xcount);
   cy[thrd][13] = cc20_dev::lower(xcount);
   copy(cy[thrd].begin(), cy[thrd].end(), folow[thrd].begin()); // memcpy(folow[thrd], cy[thrd], sizeof(uint32_t) * 16);
@@ -212,6 +213,7 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
   }
   n = input_length;
   size_t ttn = input_length;
+
   size_t tn = 0;
   if(conf.DE && conf.poly1305_toggle){ // when decrypting
     n-=POLY_SIZE;
@@ -255,7 +257,7 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
 #ifdef VERBOSE
   cout << "[rd_file_encr] setup complete, starting main loop"<< endl;
 #endif
-  for (unsigned long int k = 0; k < ((unsigned long int)(ttn / 64) + 0); k++) { // If leak, try add -1
+  for ( size_t k = 0; k < ttn / 64; k++) { // If leak, try add -1
     if (n >= 64) {
       tracker += 64;
       if (tn % (BLOCK_SIZE) == 0 && (k != 0)) {

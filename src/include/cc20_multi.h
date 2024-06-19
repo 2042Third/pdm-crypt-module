@@ -205,6 +205,7 @@ public:
   std::vector<std::vector<uint8_t>> nex; // uint8_t nex[THREAD_COUNT][65];
   std::vector<worker*> arg_track; // worker* arg_track[THREAD_COUNT];
   c20::config conf;
+  uint8_t key_orig[CC20_KEY_SIZE]={0}; // Only used in wasm.
 protected:
   // A copy of a state.
   // Tracks all the input

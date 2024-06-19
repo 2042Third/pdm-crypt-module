@@ -394,6 +394,16 @@ int main(int argc, char ** argv) {
     }
 
   }
+  else if (stoi(argv[1])==7) {
+    cout<<"WASM Runtime Memory Test\n"<<endl;
+    int handle = create_context("test");
+    cout<<"Handle created: "<< handle<<endl;
+    string input = "hello this is a message";
+    string enc = encrypt(handle, input);
+    cout<<"Encrypted: "<<enc<<endl;
+    string dec = decrypt(handle, enc);
+    cout<<"Decrypted: "<<dec<<endl;
+  }
   else {
    cout<<"Command not found, exiting."<<endl;
   }
