@@ -269,23 +269,42 @@ int create_context(const std::string& a) {
   return contextHandles.size() - 1;
 }
 
+
+void create_context_at_non_hash(int _handle, const std::string& a) {
+  Cc20* cry_obj = new Cc20();
+  cry_obj->conf.DE = 1;
+  cry_obj->conf.DISPLAY_PROG = 0;
+
+  for (int i=0;i<CC20_KEY_SIZE;i++){
+    cry_obj->key_orig[i] = a.data()[i];
+  }
+  if (_handle >= 0 && _handle < contextHandles.size()) {
+    contextHandles.insert(contextHandles.begin() + _handle, cry_obj);
+  }
+  contextHandles.push_back(cry_obj);
+}
+
 void destroy_context(int handle) {
   if (handle >= 0 && handle < contextHandles.size()) {
     delete contextHandles[handle];
     contextHandles[handle] = nullptr;
   }
+
+  if (handle >= 0 && handle < contextHandles.size()) {
+    contextHandles.erase(contextHandles.begin() + handle);
+  }
 }
 
 std::string encrypt(int handle, const std::string& input) {
+  std::string t (reinterpret_cast<const char*>(contextHandles[handle]->key_orig), CC20_KEY_SIZE);
+  destroy_context(handle);
+  create_context_at_non_hash(handle, t);
+  Bytes cur;
+  cc20_dev::init_byte_rand_cc20(cur,NONCE_SIZE);
   Cc20* cry_obj = contextHandles[handle];
   cry_obj->conf.DE=0;
   cry_obj->conf.DISPLAY_PROG=0;
-  uint8_t key_hash[65] = {0};
-  cry_obj->get_key_hash(cry_obj->key_orig, key_hash);
-  cry_obj->poly->init((unsigned char*)key_hash);
-  Bytes cur;
-  cc20_dev::init_byte_rand_cc20(cur,NONCE_SIZE);
-//  string buf(input);
+  cry_obj->poly->init((unsigned char*)(cry_obj->key_orig));
   string text_nonce = cc20_dev::btos(cur);
   cry_obj->x_set_vals((uint8_t *)text_nonce.data(), cry_obj->key_orig);
   string outstr(input.size() + (NONCE_SIZE+POLY_SIZE),0);
@@ -294,12 +313,14 @@ std::string encrypt(int handle, const std::string& input) {
 }
 
 std::string decrypt(int handle, const std::string& input) {
+  std::string t (reinterpret_cast<const char*>(contextHandles[handle]->key_orig), CC20_KEY_SIZE);
+  destroy_context(handle);
+  create_context_at_non_hash(handle, t);
   Cc20* cry_obj = contextHandles[handle];
   cry_obj->conf.DE=1;
   cry_obj->conf.DISPLAY_PROG=0;
-  uint8_t key_hash[65] = {0};
-  cry_obj->get_key_hash(cry_obj->key_orig, key_hash);
-  cry_obj->poly->init((unsigned char*)key_hash);
+  cry_obj->reset_poly();
+  cry_obj->poly->init((unsigned char*)(cry_obj->key_orig));
   string buf(htos(input));
   string outstr((buf.size()) - (NONCE_SIZE+POLY_SIZE),0);
   size_t inpsize = (buf.size()) ;

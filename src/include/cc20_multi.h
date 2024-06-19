@@ -193,6 +193,7 @@ public:
   int is_dec(){return conf.DE;}
   explicit Cc20(int _thread_count_ = 8 );
   ~Cc20();
+  void reset_poly();
   void end_cleanup();
   void clean_worker();
   static void display_progress(size_t n, const size_t* progress_bar, int THREAD_COUNT);

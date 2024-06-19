@@ -400,9 +400,17 @@ int main(int argc, char ** argv) {
     cout<<"Handle created: "<< handle<<endl;
     string input = "hello this is a message";
     string enc = encrypt(handle, input);
-    cout<<"Encrypted: "<<enc<<endl;
+    cout<<"Encrypted: \""<<enc<<"\""<<endl;
+
     string dec = decrypt(handle, enc);
-    cout<<"Decrypted: "<<dec<<endl;
+    cout<<"Decrypted: \""<<dec<<"\""<<endl;
+
+    string lc =  loader_check ("test",input) ;
+    string dlc = decrypt(handle, lc);
+    cout<<"Decrypt Loader check: \""<<dlc<<"\""<<endl;
+
+    string lo = loader_out("test",enc);
+    cout<< "Decrypt by loader out: \""<<lo<<"\""<<endl;
   }
   else {
    cout<<"Command not found, exiting."<<endl;

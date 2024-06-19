@@ -336,12 +336,12 @@ void Cc20::rd_file_encr(const uint8_t * buf, uint8_t* outstr,  size_t input_leng
 
     if(!conf.DE && conf.poly1305_toggle)
       copy(mac,mac+POLY_SIZE,linew+ttn);
+
     FILE_WRITTEN=1;
   }
   else {
     cout << "Password incorrect, decryption failed and no files written..."<<endl;
   }
-
   end_cleanup();
 
 #ifndef SINGLETHREADING
@@ -654,6 +654,13 @@ void Cc20::set_configurations(c20::config configs){
   conf.DE = configs.DE;
   conf.core_id = configs.core_id;
 }
+
+
+void Cc20::reset_poly() {
+  delete poly;
+  poly = new cc20_poly();
+}
+
 int Cc20::check_file (string a){
 #ifdef ANDROID
   return 0;
