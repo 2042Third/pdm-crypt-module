@@ -3,5 +3,3 @@
 c20*
 build/*
 **/build/*
-/cmake-build-release/
-/cmake-build-debug/
