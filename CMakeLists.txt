@@ -1,152 +1,302 @@
 cmake_minimum_required(VERSION 3.18)
-project(cc20)
+set (CMAKE_CXX_STANDARD 17)
+project(cc20-ios )
 
-set(CMAKE_CXX_STANDARD 17)
+#enable_testing()
 
-option(WEB_RELEASE_LINUX_TEST "Build desktop debug version" ON)
+enable_language(CXX)
+enable_language(OBJC)
 
-option(BUILD_SHARED "Build shared library" OFF)
-option(BUILD_DESKTOP "Build desktop version" ON)
-option(BUILD_IOS "Build iOS version" OFF)
-option(BUILD_ANDROID "Build Android version" OFF)
+MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
+MESSAGE( STATUS "CMAKE_OBJC_FLAGS: " ${CMAKE_OBJC_FLAGS} )
 
-set(PDM_SOURCES
-    src/cc20_dev.cpp
-    src/lib/cc20_file.cpp
-    src/lib/sha3.cpp
-    src/lib/cpp-mmf/memory_mapped_file.cpp
-    src/lib/poly1305-donna-master/poly1305-donna.cpp
-    src/lib/ecc/ecdh_curve25519.c
-    src/lib/ecc/curve25519.c
-    src/lib/ecc/fe25519.c
-    src/lib/ecc/bigint.c
-    src/lib/scrypt/src/hmac.c
-    src/lib/scrypt/src/pbkdf2.c
-    src/lib/scrypt/src/salsa20.c
-    src/lib/scrypt/src/scrypt.c
-    src/empp.cpp
-    src/lib/scrypt/src/sha256.c
-    src/lib/ec.cpp
-    src/cc20core/cc20_multi.cpp
-    src/lib/misc/base64.cpp
-    src/lib/misc/md5.cpp
-)
+#if (PDM_TEST_PLATFORM_DESKTOP)
+#  MESSAGE( STATUS "Making PDM test platform for desktop." )
+#  set (PDM_TEST_PLATFORM DESKTOP) # Adds an executable, unset to build for mobile
+#endif()
 
-set(PDM_INCLUDES
-    src/include
-    src/lib
-    src/lib/wasm
-    src/lib/cpp-mmf
-    src/lib/poly1305-donna-master
-    src/lib/ecc
-    src/lib/scrypt/include
-    src/lib/scrypt
-)
+#set (PDM_BUILD_TYPE  MOBILE) # android or ios
+set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
+#set (PDM_BUILD_TYPE_MOBILE  ANDROID)# Uncomment to build for android
 
-set(PDM_HEADERS
-    src/include/cc20_parts.h
-    src/include/types.h
-    src/include/cc20_multi.h
-    src/include/pdm-service.hpp
-    src/include/xCc20.h
-    src/include/cc20_diff.h
-    src/include/cc20_wrapper.h
-    src/include/cc20_dev.h
-    src/include/empp.h
-    src/lib/crypto_rand.hpp
-    src/lib/poly1305-donna-master/poly1305-donna-8.h
-    src/lib/poly1305-donna-master/poly1305-donna-16.h
-    src/lib/poly1305-donna-master/poly1305-donna.h
-    src/lib/poly1305-donna-master/poly1305-donna-64.h
-    src/lib/poly1305-donna-master/poly1305-donna-32.h
-    src/lib/cc20_file.h
-    src/lib/nonwasm/endian.h
-    src/lib/cpp-mmf/memory_mapped_file.hpp
-    src/lib/sha3.h
-    src/lib/misc/md5.h
-    src/lib/wasm/endian.h
-    src/lib/cc20_poly.hpp
-    src/lib/ec.h
-    src/lib/scrypt/test/test.h
-    src/lib/scrypt/include/scrypt.h
-    src/lib/scrypt/src/scrypt.h
-    src/lib/scrypt/src/sha256.h
-    src/lib/scrypt/src/pbkdf2.h
-    src/lib/scrypt/src/salsa20.h
-    src/lib/scrypt/src/common.h
-    src/lib/scrypt/src/hmac.h
-    src/lib/ecc/fe25519.h
-    src/lib/ecc/ecdh_curve25519.h
-    src/lib/ecc/bigint.h
-    src/lib/ecc/avrnacl.h
-    src/lib/cc20_scrypt.h
-    src/lib/misc/base64.h
-)
+# Core source files
+set(PDM_SOURCES ${PDM_SOURCES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cc20_dev.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_file.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/sha3.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cpp-mmf/memory_mapped_file.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/ecdh_curve25519.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/curve25519.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/fe25519.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/bigint.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/hmac.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/pbkdf2.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/salsa20.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/scrypt.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/empp.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/sha256.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ec.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_poly.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/crypto_rand.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cc20core/cc20_multi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/misc/base64.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/misc/md5.cpp
+    )
 
-add_library(cc20 ""
-    src/kyber/ntt.cpp
-    src/kyber/ntt.h)
+# includes
+set(PDM_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/wasm
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cpp-mmf
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt
+    )
 
-target_sources(cc20 PRIVATE ${PDM_SOURCES})
-target_include_directories(cc20 PUBLIC ${PDM_INCLUDES})
+# Header files
+set(PDM_INCLUDE_FILES 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_parts.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/types.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_multi.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/pdm-service.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/xCc20.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_diff.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_wrapper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/cc20_dev.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/include/empp.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/crypto_rand.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna-8.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna-16.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna-64.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/poly1305-donna-master/poly1305-donna-32.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_file.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/nonwasm/endian.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cpp-mmf/memory_mapped_file.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/sha3.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/misc/md5.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/wasm/endian.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_poly.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ec.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/test/test.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/include/scrypt.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/scrypt.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/sha256.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/pbkdf2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/salsa20.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/common.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/scrypt/src/hmac.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/fe25519.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/ecdh_curve25519.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/bigint.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/ecc/avrnacl.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/cc20_scrypt.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/misc/base64.h
+    )
 
-if(BUILD_SHARED)
-  target_compile_definitions(cc20 PUBLIC IS_BUILDING_SHARED)
-  set_target_properties(cc20 PROPERTIES POSITION_INDEPENDENT_CODE ON)
-endif()
+set(PDM_OPTIONS PUBLIC  LINUX ${PDM_OPTIONS})
+set(PDM_COMPILER_FLAGS -g -lpthread -O3)
 
-if(BUILD_DESKTOP)
+set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
+ if(${PDM_BUILD_TYPE} STREQUAL MOBILE)
 
-  target_sources(cc20 PRIVATE src/desktop.cpp)
-  target_compile_definitions(cc20 PUBLIC WINDOWS LINUX HAS_MAIN)
-  if(WEB_RELEASE_LINUX_TEST)
-    target_compile_definitions(cc20 PUBLIC WEB_RELEASE_LINUX_TEST)
-  endif()
-  target_compile_options(cc20 PUBLIC -g -lpthread -m64 -O3)
+   MESSAGE( STATUS "Will run: MOBILE"  )
+     project(cc20)
+#     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+     if(${PDM_BUILD_TYPE_MOBILE} MATCHES ANDROID)
+       set(PDM_OPTIONS ${PDM_OPTIONS} ANDROID)
+       set(PDM_INCLUDES ${PDM_INCLUDES} ../java/com/pdmnotes/)
+       # Android bridge cpp file
+       set(PDM_SOURCES "${PDM_SOURCES} ../java/com/pdmnotes/com_pdmnotes_PdmCrypt.c")
+     endif()
 
-  option(BUILD_FOURCORE "Build with 4 cores" OFF)
-  option(BUILD_SINGLETHREADED "Build single-threaded" OFF)
+     add_library(cc20 )
+     target_sources(cc20 PRIVATE  ${PDM_SOURCES})
+     target_compile_definitions(cc20 ${PDM_OPTIONS})
+     target_compile_options(cc20 PUBLIC ${PDM_COMPILER_FLAGS})
+     target_include_directories(cc20
+         PUBLIC
+         ${PDM_INCLUDES}
+     )
+ elseif(${PDM_BUILD_TYPE} STREQUAL MOBILE_IOS)
+#     set(XCODE_VERSION 14.3.1)
+#     set(SDK_VERSION 13.0)
+    MESSAGE( STATUS "Will run: MOBILE_IOS"  )
 
-  if(BUILD_FOURCORE)
-    target_compile_definitions(cc20 PUBLIC FOURCORE)
-  elseif(BUILD_SINGLETHREADED)
-    target_compile_definitions(cc20 PUBLIC SINGLETHREADING)
-  endif()
+    set(PDM_INCLUDE_FILES
+        ${PDM_INCLUDE_FILES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/empp.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/emppIOS.h
+    )
+    set(PDM_SOURCES 
+        ${PDM_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/emppIOS.mm
+        src/lib/crypto_rand.hpp)
 
 
-  add_executable(cc20_desktop src/desktop.cpp)
-  target_link_libraries(cc20_desktop cc20)
+    # Checks sanity
+    include(CheckCXXSymbolExists)
+    check_cxx_symbol_exists(kqueue sys/event.h HAVE_KQUEUE)
+    if(NOT HAVE_KQUEUE)
+      message(STATUS "kqueue NOT found!")
+    else()
+      message(STATUS "kqueue found!" )
+    endif()
 
-elseif(BUILD_IOS)
-  enable_language(OBJC)
+    find_library(APPKIT_LIBRARY AppKit)
+    if (NOT APPKIT_LIBRARY)
+      message(STATUS "AppKit.framework NOT found!")
+    else()
+      message(STATUS "AppKit.framework found! ${APPKIT_LIBRARY}")
+    endif()
 
-  find_library(FOUNDATION_LIBRARY Foundation REQUIRED)
+    find_library(FOUNDATION_LIBRARY Foundation)
+    if (NOT FOUNDATION_LIBRARY)
+      message(STATUS "Foundation.framework NOT found!")
+    else()
+      message(STATUS "Foundation.framework found! ${FOUNDATION_LIBRARY}")
+    endif()
 
-  target_sources(cc20 PRIVATE
-      src/emppIOS.mm
-      src/lib/crypto_rand.hpp
-  )
+    find_library(UIKIT_LIBRARY UIKit)
+    if (NOT UIKIT_LIBRARY)
+      message(STATUS "UIKit.framework NOT found!")
+    else()
+      message(STATUS "UIKit.framework found! ${UIKIT_LIBRARY}")
+    endif()
 
-  target_include_directories(cc20 PUBLIC
-      src/empp.hpp
-      src/emppIOS.h
-  )
+    # set(CMAKE_INSTALL_PREFIX ./libs)
+    # Hook up XCTest for the supported plaforms (all but WatchOS)
+#    if(NOT PLATFORM MATCHES ".*WATCHOS.*")
+#      # Use the standard find_package, broken between 3.14.0 and 3.14.4 at least for XCtest...
+#      find_package(XCTest)
+#      # Fallback: Try to find XCtest as host package via toochain macro (should always work)
+#      find_host_package(XCTest REQUIRED)
+#    endif()
 
-  target_link_libraries(cc20 PUBLIC ${FOUNDATION_LIBRARY})
-  target_compile_definitions(cc20 PUBLIC ANDROID)
+    # Includes
+    include_directories(${PDM_INCLUDES})
 
-  set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/pdm-native-lib/libs CACHE PATH "Install path" FORCE)
+    # include_directories(${cc20-app_SOURCE_DIR})
 
-  install(TARGETS cc20
-      LIBRARY DESTINATION ios/pdm-lib
-      ARCHIVE DESTINATION ios/pdm-lib/static
-  )
-  install(FILES ${PDM_HEADERS} DESTINATION include)
+    # Make sure try_compile() works
+    include(CheckTypeSize)
+    check_type_size(time_t SIZEOF_TIME_T)
 
-elseif(BUILD_ANDROID)
-  target_sources(cc20 PRIVATE ../java/com/pdmnotes/com_pdmnotes_PdmCrypt.c)
-  target_include_directories(cc20 PUBLIC ../java/com/pdmnotes/)
-  target_compile_definitions(cc20 PUBLIC ANDROID)
-endif()
+    # Source files
+    set(SOURCES ${PDM_SOURCES})
 
-target_compile_features(cc20 PUBLIC cxx_std_17)
+    # Headers
+    set(HEADERS ${PDM_INCLUDE_FILES})
+
+    # Library
+    if(BUILD_SHARED)
+      add_library (cc20 SHARED ${SOURCES} ${HEADERS})
+      target_link_libraries(cc20 ${FOUNDATION_LIBRARY})
+      target_compile_definitions(cc20 PUBLIC IS_BUILDING_SHARED ANDROID )
+      message(STATUS "Building shared version...")
+    else()
+      add_library (cc20 STATIC ${SOURCES} ${HEADERS})
+      target_link_libraries(cc20 ${FOUNDATION_LIBRARY})
+      message(STATUS "Building static version...")
+    endif()
+
+    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+      set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/pdm-native-lib/libs CACHE PATH "Install path" FORCE)
+    endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+
+    set(PDM_OPTIONS ${PDM_OPTIONS} ANDROID)
+
+#    list(APPEND PDM_OPTIONS ANDROID)
+    target_compile_definitions(cc20 PUBLIC ${PDM_OPTIONS})
+    target_compile_options(cc20 PUBLIC ${PDM_COMPILER_FLAGS} -DANDROID)
+    target_include_directories(cc20
+        PUBLIC
+        ${PDM_INCLUDES}
+    )
+    # Executable
+    if(PLATFORM MATCHES "MAC.*")
+      set(APP_NAME TestApp)
+      add_executable (${APP_NAME} MACOSX_BUNDLE main.cpp)
+      set_target_properties(${APP_NAME} PROPERTIES
+              BUNDLE True
+              MACOSX_BUNDLE_GUI_IDENTIFIER leetal.com.helloworld
+              MACOSX_BUNDLE_BUNDLE_NAME helloworld
+              MACOSX_BUNDLE_BUNDLE_VERSION "0.1"
+              MACOSX_BUNDLE_SHORT_VERSION_STRING "0.1"
+              )
+      # Link the library with the executable
+      target_link_libraries(${APP_NAME} example)
+    endif()
+
+    # Debug symbols set in XCode project
+#    set_xcode_property(cc20 GCC_GENERATE_DEBUGGING_SYMBOLS YES "All")
+
+    # Installation
+    if(PLATFORM MATCHES "MAC.*")
+      install(TARGETS ${APP_NAME}
+              BUNDLE DESTINATION . COMPONENT Runtime
+              RUNTIME DESTINATION bin COMPONENT Runtime
+              LIBRARY DESTINATION lib
+              ARCHIVE DESTINATION lib/static)
+
+      # Note Mac specific extension .app
+      set(APPS "\${CMAKE_INSTALL_PREFIX}/${APP_NAME}.app")
+
+      # Directories to look for dependencies
+      set(DIRS ${CMAKE_BINARY_DIR})
+
+      install(CODE "include(BundleUtilities)
+        fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
+
+      set(CPACK_GENERATOR "DRAGNDROP")
+      include(CPack)
+    else()
+      install(TARGETS cc20
+              LIBRARY DESTINATION ios/pdm-lib
+              ARCHIVE DESTINATION ios/pdm-lib/static)
+    endif()
+    install (FILES ${HEADERS} DESTINATION include)
+
+# DONE IOS
+ else() # DESKTOP
+
+#     LIBRARY COMPILE FINISH
+MESSAGE( STATUS "Will run: DESKTOP"  )
+
+     add_executable(cc20 src/desktop.cpp)
+
+     target_compile_options(
+         cc20 PUBLIC
+         -g -lpthread -m64 -O3
+     )
+
+     if(${PDM_BUILD_TYPE} MATCHES Four)
+         set(PDM_OPTIONS ${PDM_OPTIONS} FOURCORE)
+         message(STATUS "PDM build 4 cores ")
+     elseif(${PDM_BUILD_TYPE} MATCHES Single)
+         set(PDM_OPTIONS ${PDM_OPTIONS} SINGLETHREADING)
+         message(STATUS "PDM build single-threaded ")
+     else()
+         message(STATUS "PDM build multi-thread (30 core)")
+     endif()
+     set(PDM_OPTIONS ${PDM_OPTIONS} )
+     target_compile_definitions(cc20 PUBLIC WINDOWS LINUX HAS_MAIN ${PDM_OPTIONS})
+     target_include_directories(cc20 PUBLIC
+         src/include
+         src/lib
+         src/lib/cpp-mmf
+         src/lib/poly1305-donna-master/
+         src/lib/ecc/
+         )
+     #
+     add_subdirectory(src/lib)
+     add_subdirectory(src/cc20core)
+     target_link_libraries(c20_multi c20_lib)
+     target_link_libraries(cc20 c20_lib  c20_multi)
+     #install(TARGETS cc20 )
+
+
+ endif()
