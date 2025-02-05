@@ -89,11 +89,11 @@ private:
   }
 
   static void print_stats(const uint8_t* a,size_t size,int binary=1) {
-    std::string ac ; ac.resize(size); memcpy(ac.data(),a,size);
-    std::cout<< "Size : \""<<ac.size()<<"\""<<std::endl;
-    if(!binary)std::cout<< "Plain: "<<ac<<std::endl;
-    std::cout<< " Hax : \""<<stoh(ac)<<"\""<<std::endl;
-    std::cout<< "Hash : \""<<get_hash(ac)<<"\""<<std::endl;
+//    std::string ac ; ac.resize(size); memcpy(ac.data(),a,size);
+//    std::cout<< "Size : \""<<ac.size()<<"\""<<std::endl;
+//    if(!binary)std::cout<< "Plain: "<<ac<<std::endl;
+//    std::cout<< " Hax : \""<<stoh(ac)<<"\""<<std::endl;
+//    std::cout<< "Hash : \""<<get_hash(ac)<<"\""<<std::endl;
   }
 };
 #endif
