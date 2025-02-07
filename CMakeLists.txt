@@ -129,14 +129,14 @@ set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
     set(PDM_INCLUDE_FILES
         ${PDM_INCLUDE_FILES}
         ${CMAKE_CURRENT_SOURCE_DIR}/src/empp.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/emppIOS.h
+
     )
     set(PDM_SOURCES 
         ${PDM_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/emppIOS.mm
+
         src/lib/crypto_rand.hpp)
 
-
+if (APPLE)
     # Checks sanity
     include(CheckCXXSymbolExists)
     check_cxx_symbol_exists(kqueue sys/event.h HAVE_KQUEUE)
@@ -175,6 +175,7 @@ set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
 #      # Fallback: Try to find XCtest as host package via toochain macro (should always work)
 #      find_host_package(XCTest REQUIRED)
 #    endif()
+endif()
 
     # Includes
     include_directories(${PDM_INCLUDES})
@@ -194,12 +195,16 @@ set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
     # Library
     if(BUILD_SHARED)
       add_library (cc20 SHARED ${SOURCES} ${HEADERS})
+      if (APPLE)
       target_link_libraries(cc20 ${FOUNDATION_LIBRARY})
+      endif()
       target_compile_definitions(cc20 PUBLIC IS_BUILDING_SHARED ANDROID )
       message(STATUS "Building shared version...")
     else()
       add_library (cc20 STATIC ${SOURCES} ${HEADERS})
+if (APPLE)
       target_link_libraries(cc20 ${FOUNDATION_LIBRARY})
+endif()
       message(STATUS "Building static version...")
     endif()
 
