@@ -14,12 +14,17 @@ MESSAGE( STATUS "CMAKE_OBJC_FLAGS: " ${CMAKE_OBJC_FLAGS} )
 #  MESSAGE( STATUS "Making PDM test platform for desktop." )
 #  set (PDM_TEST_PLATFORM DESKTOP) # Adds an executable, unset to build for mobile
 #endif()
+option(SINGLETHREADING "Single thread encryption" OFF)
 
 #set (PDM_BUILD_TYPE  MOBILE) # android or ios
 if (APPLE)
-set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
+    set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
+else ()
+    set (PDM_BUILD_TYPE  MOBILE_IOS) # WIN
 endif()
 #set (PDM_BUILD_TYPE_MOBILE  ANDROID)# Uncomment to build for android
+
+
 
 # Core source files
 set(PDM_SOURCES ${PDM_SOURCES}
@@ -99,9 +104,12 @@ set(PDM_INCLUDE_FILES
     )
 
 set(PDM_OPTIONS PUBLIC  LINUX ${PDM_OPTIONS})
-set(PDM_COMPILER_FLAGS -g -lpthread -O3)
+set(PDM_COMPILER_FLAGS -g -lpthread -O3 )
 
-set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
+
+
+
+#set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
  if(${PDM_BUILD_TYPE} STREQUAL MOBILE)
 
    MESSAGE( STATUS "Will run: MOBILE"  )
@@ -119,6 +127,9 @@ set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
      target_sources(cc20 PRIVATE  ${PDM_SOURCES})
      target_compile_definitions(cc20 ${PDM_OPTIONS})
      target_compile_options(cc20 PUBLIC ${PDM_COMPILER_FLAGS})
+   if (SINGLETHREADING)
+       target_compile_definitions(cc20 PUBLIC SINGLETHREADING)
+   endif()
      target_include_directories(cc20
          PUBLIC
          ${PDM_INCLUDES}
@@ -209,7 +220,9 @@ if (APPLE)
 endif()
       message(STATUS "Building static version...")
     endif()
-
+if (SINGLETHREADING)
+    target_compile_definitions(cc20 PUBLIC SINGLETHREADING)
+endif()
     if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
       set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/pdm-native-lib/libs CACHE PATH "Install path")
     endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
