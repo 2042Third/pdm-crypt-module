@@ -106,7 +106,21 @@ set(PDM_INCLUDE_FILES
 set(PDM_OPTIONS PUBLIC  LINUX ${PDM_OPTIONS})
 set(PDM_COMPILER_FLAGS -g -lpthread -O3 )
 
+if(APPLE)
+  # Detect the architecture
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64")
+    set(ARCH_ARM64 TRUE)
+    message(STATUS "Building for ARM64 (Apple Silicon)")
+  else()
+    set(ARCH_X86_64 TRUE)
+    message(STATUS "Building for x86_64 (Intel)")
+  endif()
+endif()
 
+if(APPLE)
+  # Create a universal binary
+  set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")
+endif()
 
 
 #set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
@@ -139,12 +153,15 @@ set(PDM_COMPILER_FLAGS -g -lpthread -O3 )
 #     set(SDK_VERSION 13.0)
     MESSAGE( STATUS "Will run: MOBILE_IOS"  )
 
+
+
+
     set(PDM_INCLUDE_FILES
         ${PDM_INCLUDE_FILES}
         ${CMAKE_CURRENT_SOURCE_DIR}/src/empp.hpp
 
     )
-    set(PDM_SOURCES 
+    set(PDM_SOURCES
         ${PDM_SOURCES}
 
         src/lib/crypto_rand.hpp)
@@ -195,6 +212,7 @@ endif()
 
     # include_directories(${cc20-app_SOURCE_DIR})
 
+
     # Make sure try_compile() works
     include(CheckTypeSize)
     check_type_size(time_t SIZEOF_TIME_T)
@@ -218,6 +236,12 @@ endif()
 if (APPLE)
       target_link_libraries(cc20 ${FOUNDATION_LIBRARY})
 endif()
+      if(APPLE)
+        # Set architecture for the target
+        set_target_properties(cc20 PROPERTIES
+            OSX_ARCHITECTURES "${CMAKE_OSX_ARCHITECTURES}"
+        )
+      endif()
       message(STATUS "Building static version...")
     endif()
 if (SINGLETHREADING)
