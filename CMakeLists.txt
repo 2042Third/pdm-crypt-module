@@ -5,7 +5,7 @@ project(cc20-ios )
 #enable_testing()
 
 enable_language(CXX)
-enable_language(OBJC)
+#enable_language(OBJC)
 
 MESSAGE( STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS} )
 MESSAGE( STATUS "CMAKE_OBJC_FLAGS: " ${CMAKE_OBJC_FLAGS} )
@@ -16,7 +16,9 @@ MESSAGE( STATUS "CMAKE_OBJC_FLAGS: " ${CMAKE_OBJC_FLAGS} )
 #endif()
 
 #set (PDM_BUILD_TYPE  MOBILE) # android or ios
+if (APPLE)
 set (PDM_BUILD_TYPE  MOBILE_IOS) # IOS
+endif()
 #set (PDM_BUILD_TYPE_MOBILE  ANDROID)# Uncomment to build for android
 
 # Core source files
