@@ -3,3 +3,4 @@
 c20*
 build/*
 **/build/*
+cmake-build*
